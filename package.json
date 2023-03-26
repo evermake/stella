@@ -1,0 +1,11 @@
+{
+  "name": "stella-implementation-in-typescript",
+  "version": "0.1.0",
+  "dependencies": {
+    "antlr4": "~4.9.3"
+  },
+  "devDependencies": {
+    "@types/antlr4": "~4.11.2",
+    "typescript": "^5.0.2"
+  }
+}
