@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Generated from stellaParser.g4 by ANTLR 4.12.0
 // noinspection ES6UnusedImports,JSUnusedGlobalSymbols,JSUnusedLocalSymbols
 
