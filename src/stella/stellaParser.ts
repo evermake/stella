@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Generated from stellaParser.g4 by ANTLR 4.12.0
 // noinspection ES6UnusedImports,JSUnusedGlobalSymbols,JSUnusedLocalSymbols
 
@@ -12,6 +13,8 @@ import {
 	Interval, IntervalSet
 } from 'antlr4';
 import stellaParserListener from "./stellaParserListener.js";
+import stellaParserVisitor from "./stellaParserVisitor.js";
+
 // for running tests with parameters, TODO: discuss strategy for typed parameters in CI
 // eslint-disable-next-line no-unused-vars
 type int = number;
@@ -138,7 +141,7 @@ export default class stellaParser extends Parser {
                                                             "'true'", "'type'", 
                                                             "'unfold'", 
                                                             "'variant'", 
-                                                            "'with'", "'\\u00B5'" ];
+                                                            "'with'", "'\\u00C2\\u00B5'" ];
 	public static readonly symbolicNames: (string | null)[] = [ null, "COMMA", 
                                                              "SEMICOLON", 
                                                              "LPAREN", "RPAREN", 
@@ -2400,6 +2403,14 @@ export class Start_ProgramContext extends ParserRuleContext {
 	 		listener.exitStart_Program(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitStart_Program) {
+			return visitor.visitStart_Program(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2428,6 +2439,14 @@ export class Start_ExprContext extends ParserRuleContext {
 	 		listener.exitStart_Expr(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitStart_Expr) {
+			return visitor.visitStart_Expr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2454,6 +2473,14 @@ export class Start_TypeContext extends ParserRuleContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitStart_Type) {
 	 		listener.exitStart_Type(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitStart_Type) {
+			return visitor.visitStart_Type(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2496,6 +2523,14 @@ export class ProgramContext extends ParserRuleContext {
 	 		listener.exitProgram(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitProgram) {
+			return visitor.visitProgram(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2533,6 +2568,14 @@ export class LanguageCoreContext extends LanguageDeclContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitLanguageCore) {
 	 		listener.exitLanguageCore(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitLanguageCore) {
+			return visitor.visitLanguageCore(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2585,6 +2628,14 @@ export class AnExtensionContext extends ExtensionContext {
 	 		listener.exitAnExtension(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitAnExtension) {
+			return visitor.visitAnExtension(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2630,6 +2681,14 @@ export class DeclTypeAliasContext extends DeclContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitDeclTypeAlias) {
 	 		listener.exitDeclTypeAlias(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitDeclTypeAlias) {
+			return visitor.visitDeclTypeAlias(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2721,6 +2780,14 @@ export class DeclFunContext extends DeclContext {
 	 		listener.exitDeclFun(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitDeclFun) {
+			return visitor.visitDeclFun(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2754,6 +2821,14 @@ export class InlineAnnotationContext extends AnnotationContext {
 	 		listener.exitInlineAnnotation(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitInlineAnnotation) {
+			return visitor.visitInlineAnnotation(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -2784,6 +2859,14 @@ export class ParamDeclContext extends ParserRuleContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitParamDecl) {
 	 		listener.exitParamDecl(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitParamDecl) {
+			return visitor.visitParamDecl(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2829,6 +2912,14 @@ export class IsEmptyContext extends ExprContext {
 	 		listener.exitIsEmpty(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitIsEmpty) {
+			return visitor.visitIsEmpty(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class FoldContext extends ExprContext {
 	public _type_!: StellatypeContext;
@@ -2862,6 +2953,14 @@ export class FoldContext extends ExprContext {
 	 		listener.exitFold(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitFold) {
+			return visitor.visitFold(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class AddContext extends ExprContext {
 	constructor(parser: stellaParser, ctx: ExprContext) {
@@ -2885,6 +2984,14 @@ export class AddContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitAdd) {
 	 		listener.exitAdd(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitAdd) {
+			return visitor.visitAdd(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2916,6 +3023,14 @@ export class IsZeroContext extends ExprContext {
 	 		listener.exitIsZero(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitIsZero) {
+			return visitor.visitIsZero(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class LessThanOrEqualContext extends ExprContext {
 	public _left!: ExprContext;
@@ -2941,6 +3056,14 @@ export class LessThanOrEqualContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitLessThanOrEqual) {
 	 		listener.exitLessThanOrEqual(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitLessThanOrEqual) {
+			return visitor.visitLessThanOrEqual(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -2972,6 +3095,14 @@ export class SuccContext extends ExprContext {
 	 		listener.exitSucc(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitSucc) {
+			return visitor.visitSucc(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class VarContext extends ExprContext {
 	public _name!: Token;
@@ -2990,6 +3121,14 @@ export class VarContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitVar) {
 	 		listener.exitVar(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitVar) {
+			return visitor.visitVar(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3019,6 +3158,14 @@ export class GreaterThanOrEqualContext extends ExprContext {
 	 		listener.exitGreaterThanOrEqual(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitGreaterThanOrEqual) {
+			return visitor.visitGreaterThanOrEqual(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class LessThanContext extends ExprContext {
 	public _left!: ExprContext;
@@ -3044,6 +3191,14 @@ export class LessThanContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitLessThan) {
 	 		listener.exitLessThan(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitLessThan) {
+			return visitor.visitLessThan(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3075,6 +3230,14 @@ export class LogicNotContext extends ExprContext {
 	 		listener.exitLogicNot(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitLogicNot) {
+			return visitor.visitLogicNot(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class DotRecordContext extends ExprContext {
 	public _expr_!: ExprContext;
@@ -3102,6 +3265,14 @@ export class DotRecordContext extends ExprContext {
 	 		listener.exitDotRecord(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitDotRecord) {
+			return visitor.visitDotRecord(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class ParenthesisedExprContext extends ExprContext {
 	constructor(parser: stellaParser, ctx: ExprContext) {
@@ -3125,6 +3296,14 @@ export class ParenthesisedExprContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitParenthesisedExpr) {
 	 		listener.exitParenthesisedExpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitParenthesisedExpr) {
+			return visitor.visitParenthesisedExpr(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3154,6 +3333,14 @@ export class GreaterThanContext extends ExprContext {
 	 		listener.exitGreaterThan(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitGreaterThan) {
+			return visitor.visitGreaterThan(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class EqualContext extends ExprContext {
 	public _left!: ExprContext;
@@ -3179,6 +3366,14 @@ export class EqualContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitEqual) {
 	 		listener.exitEqual(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitEqual) {
+			return visitor.visitEqual(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3210,6 +3405,14 @@ export class TailContext extends ExprContext {
 	 		listener.exitTail(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTail) {
+			return visitor.visitTail(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class MultiplyContext extends ExprContext {
 	constructor(parser: stellaParser, ctx: ExprContext) {
@@ -3233,6 +3436,14 @@ export class MultiplyContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitMultiply) {
 	 		listener.exitMultiply(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitMultiply) {
+			return visitor.visitMultiply(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3274,6 +3485,14 @@ export class RecordContext extends ExprContext {
 	 		listener.exitRecord(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitRecord) {
+			return visitor.visitRecord(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class ListContext extends ExprContext {
 	public _expr!: ExprContext;
@@ -3307,6 +3526,14 @@ export class ListContext extends ExprContext {
 	 		listener.exitList(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitList) {
+			return visitor.visitList(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class LogicAndContext extends ExprContext {
 	constructor(parser: stellaParser, ctx: ExprContext) {
@@ -3332,6 +3559,14 @@ export class LogicAndContext extends ExprContext {
 	 		listener.exitLogicAnd(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitLogicAnd) {
+			return visitor.visitLogicAnd(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class LogicOrContext extends ExprContext {
 	constructor(parser: stellaParser, ctx: ExprContext) {
@@ -3355,6 +3590,14 @@ export class LogicOrContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitLogicOr) {
 	 		listener.exitLogicOr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitLogicOr) {
+			return visitor.visitLogicOr(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3386,6 +3629,14 @@ export class HeadContext extends ExprContext {
 	 		listener.exitHead(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitHead) {
+			return visitor.visitHead(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class NotEqualContext extends ExprContext {
 	public _left!: ExprContext;
@@ -3411,6 +3662,14 @@ export class NotEqualContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitNotEqual) {
 	 		listener.exitNotEqual(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitNotEqual) {
+			return visitor.visitNotEqual(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3440,6 +3699,14 @@ export class PredContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitPred) {
 	 		listener.exitPred(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitPred) {
+			return visitor.visitPred(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3484,6 +3751,14 @@ export class MatchContext extends ExprContext {
 	 		listener.exitMatch(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitMatch) {
+			return visitor.visitMatch(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class TypeAscContext extends ExprContext {
 	public _expr_!: ExprContext;
@@ -3509,6 +3784,14 @@ export class TypeAscContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitTypeAsc) {
 	 		listener.exitTypeAsc(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeAsc) {
+			return visitor.visitTypeAsc(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3551,6 +3834,14 @@ export class NatRecContext extends ExprContext {
 	 		listener.exitNatRec(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitNatRec) {
+			return visitor.visitNatRec(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class ConstFalseContext extends ExprContext {
 	constructor(parser: stellaParser, ctx: ExprContext) {
@@ -3568,6 +3859,14 @@ export class ConstFalseContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitConstFalse) {
 	 		listener.exitConstFalse(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitConstFalse) {
+			return visitor.visitConstFalse(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3622,6 +3921,14 @@ export class AbstractionContext extends ExprContext {
 	 		listener.exitAbstraction(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitAbstraction) {
+			return visitor.visitAbstraction(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class ConstIntContext extends ExprContext {
 	public _n!: Token;
@@ -3640,6 +3947,14 @@ export class ConstIntContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitConstInt) {
 	 		listener.exitConstInt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitConstInt) {
+			return visitor.visitConstInt(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3675,6 +3990,14 @@ export class UnfoldContext extends ExprContext {
 	 		listener.exitUnfold(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitUnfold) {
+			return visitor.visitUnfold(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class VariantContext extends ExprContext {
 	public _label!: Token;
@@ -3708,6 +4031,14 @@ export class VariantContext extends ExprContext {
 	 		listener.exitVariant(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitVariant) {
+			return visitor.visitVariant(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class ConstTrueContext extends ExprContext {
 	constructor(parser: stellaParser, ctx: ExprContext) {
@@ -3725,6 +4056,14 @@ export class ConstTrueContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitConstTrue) {
 	 		listener.exitConstTrue(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitConstTrue) {
+			return visitor.visitConstTrue(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3754,6 +4093,14 @@ export class DotTupleContext extends ExprContext {
 	 		listener.exitDotTuple(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitDotTuple) {
+			return visitor.visitDotTuple(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class FixContext extends ExprContext {
 	public _expr_!: ExprContext;
@@ -3781,6 +4128,14 @@ export class FixContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitFix) {
 	 		listener.exitFix(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitFix) {
+			return visitor.visitFix(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3820,6 +4175,14 @@ export class LetContext extends ExprContext {
 	 		listener.exitLet(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitLet) {
+			return visitor.visitLet(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class IfContext extends ExprContext {
 	public _condition!: ExprContext;
@@ -3852,6 +4215,14 @@ export class IfContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitIf) {
 	 		listener.exitIf(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitIf) {
+			return visitor.visitIf(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3891,6 +4262,14 @@ export class ApplicationContext extends ExprContext {
 	 		listener.exitApplication(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitApplication) {
+			return visitor.visitApplication(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class TupleContext extends ExprContext {
 	public _expr!: ExprContext;
@@ -3925,6 +4304,14 @@ export class TupleContext extends ExprContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitTuple) {
 	 		listener.exitTuple(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTuple) {
+			return visitor.visitTuple(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -3963,6 +4350,14 @@ export class ConsListContext extends ExprContext {
 	 		listener.exitConsList(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitConsList) {
+			return visitor.visitConsList(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -3995,6 +4390,14 @@ export class BindingContext extends ParserRuleContext {
 	 		listener.exitBinding(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitBinding) {
+			return visitor.visitBinding(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -4023,6 +4426,14 @@ export class Match_caseContext extends ParserRuleContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitMatch_case) {
 	 		listener.exitMatch_case(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitMatch_case) {
+			return visitor.visitMatch_case(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -4057,6 +4468,14 @@ export class PatternIntContext extends PatternContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitPatternInt) {
 	 		listener.exitPatternInt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitPatternInt) {
+			return visitor.visitPatternInt(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -4095,6 +4514,14 @@ export class PatternConsContext extends PatternContext {
 	 		listener.exitPatternCons(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitPatternCons) {
+			return visitor.visitPatternCons(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class PatternTrueContext extends PatternContext {
 	constructor(parser: stellaParser, ctx: PatternContext) {
@@ -4112,6 +4539,14 @@ export class PatternTrueContext extends PatternContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitPatternTrue) {
 	 		listener.exitPatternTrue(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitPatternTrue) {
+			return visitor.visitPatternTrue(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -4150,6 +4585,14 @@ export class PatternTupleContext extends PatternContext {
 	 		listener.exitPatternTuple(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitPatternTuple) {
+			return visitor.visitPatternTuple(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class PatternListContext extends PatternContext {
 	public _pattern!: PatternContext;
@@ -4186,6 +4629,14 @@ export class PatternListContext extends PatternContext {
 	 		listener.exitPatternList(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitPatternList) {
+			return visitor.visitPatternList(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class PatternVarContext extends PatternContext {
 	public _name!: Token;
@@ -4204,6 +4655,14 @@ export class PatternVarContext extends PatternContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitPatternVar) {
 	 		listener.exitPatternVar(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitPatternVar) {
+			return visitor.visitPatternVar(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -4245,6 +4704,14 @@ export class PatternRecordContext extends PatternContext {
 	 		listener.exitPatternRecord(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitPatternRecord) {
+			return visitor.visitPatternRecord(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class ParenthesisedPatternContext extends PatternContext {
 	constructor(parser: stellaParser, ctx: PatternContext) {
@@ -4268,6 +4735,14 @@ export class ParenthesisedPatternContext extends PatternContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitParenthesisedPattern) {
 	 		listener.exitParenthesisedPattern(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitParenthesisedPattern) {
+			return visitor.visitParenthesisedPattern(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -4302,6 +4777,14 @@ export class PatternVariantContext extends PatternContext {
 	 		listener.exitPatternVariant(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitPatternVariant) {
+			return visitor.visitPatternVariant(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class PatternSuccContext extends PatternContext {
 	public _n!: PatternContext;
@@ -4331,6 +4814,14 @@ export class PatternSuccContext extends PatternContext {
 	 		listener.exitPatternSucc(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitPatternSucc) {
+			return visitor.visitPatternSucc(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class PatternFalseContext extends PatternContext {
 	constructor(parser: stellaParser, ctx: PatternContext) {
@@ -4348,6 +4839,14 @@ export class PatternFalseContext extends PatternContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitPatternFalse) {
 	 		listener.exitPatternFalse(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitPatternFalse) {
+			return visitor.visitPatternFalse(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -4379,6 +4878,14 @@ export class LabelledPatternContext extends ParserRuleContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitLabelledPattern) {
 	 		listener.exitLabelledPattern(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitLabelledPattern) {
+			return visitor.visitLabelledPattern(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -4428,6 +4935,14 @@ export class TypeTupleContext extends StellatypeContext {
 	 		listener.exitTypeTuple(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeTuple) {
+			return visitor.visitTypeTuple(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class TypeVarContext extends StellatypeContext {
 	public _name!: Token;
@@ -4446,6 +4961,14 @@ export class TypeVarContext extends StellatypeContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitTypeVar) {
 	 		listener.exitTypeVar(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeVar) {
+			return visitor.visitTypeVar(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -4487,6 +5010,14 @@ export class TypeVariantContext extends StellatypeContext {
 	 		listener.exitTypeVariant(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeVariant) {
+			return visitor.visitTypeVariant(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class TypeUnitContext extends StellatypeContext {
 	constructor(parser: stellaParser, ctx: StellatypeContext) {
@@ -4504,6 +5035,14 @@ export class TypeUnitContext extends StellatypeContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitTypeUnit) {
 	 		listener.exitTypeUnit(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeUnit) {
+			return visitor.visitTypeUnit(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -4525,6 +5064,14 @@ export class TypeBoolContext extends StellatypeContext {
 	 		listener.exitTypeBool(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeBool) {
+			return visitor.visitTypeBool(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class TypeNatContext extends StellatypeContext {
 	constructor(parser: stellaParser, ctx: StellatypeContext) {
@@ -4542,6 +5089,14 @@ export class TypeNatContext extends StellatypeContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitTypeNat) {
 	 		listener.exitTypeNat(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeNat) {
+			return visitor.visitTypeNat(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -4572,6 +5127,14 @@ export class TypeRecContext extends StellatypeContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitTypeRec) {
 	 		listener.exitTypeRec(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeRec) {
+			return visitor.visitTypeRec(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -4617,6 +5180,14 @@ export class TypeFunContext extends StellatypeContext {
 	 		listener.exitTypeFun(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeFun) {
+			return visitor.visitTypeFun(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class TypeRecordContext extends StellatypeContext {
 	public _recordFieldType!: RecordFieldTypeContext;
@@ -4656,6 +5227,14 @@ export class TypeRecordContext extends StellatypeContext {
 	 		listener.exitTypeRecord(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeRecord) {
+			return visitor.visitTypeRecord(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class TypeListContext extends StellatypeContext {
 	public _stellatype!: StellatypeContext;
@@ -4692,6 +5271,14 @@ export class TypeListContext extends StellatypeContext {
 	 		listener.exitTypeList(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeList) {
+			return visitor.visitTypeList(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 export class TypeSumContext extends StellatypeContext {
 	public _left!: StellatypeContext;
@@ -4717,6 +5304,14 @@ export class TypeSumContext extends StellatypeContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitTypeSum) {
 	 		listener.exitTypeSum(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeSum) {
+			return visitor.visitTypeSum(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }
@@ -4751,6 +5346,14 @@ export class RecordFieldTypeContext extends ParserRuleContext {
 	 		listener.exitRecordFieldType(this);
 		}
 	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitRecordFieldType) {
+			return visitor.visitRecordFieldType(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
 }
 
 
@@ -4781,6 +5384,14 @@ export class VariantFieldTypeContext extends ParserRuleContext {
 	public exitRule(listener: stellaParserListener): void {
 	    if(listener.exitVariantFieldType) {
 	 		listener.exitVariantFieldType(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitVariantFieldType) {
+			return visitor.visitVariantFieldType(this);
+		} else {
+			return visitor.visitChildren(this);
 		}
 	}
 }

@@ -1,5 +1,31 @@
-const world = 'world';
+import { CommonTokenStream, CharStream, FileStream } from 'antlr4';
+import StellaLexer from './src/stella/stellaLexer';
+import StellaParser from './src/stella/stellaParser';
+import { AstPrinter } from './visitors';
 
-export function hello(who: string = world): string {
-  return `Hello ${who}! `;
+let inputStream: CharStream;
+
+if (process.argv.length === 2) {
+  // Example code
+  inputStream = new CharStream(
+    'language core;\n' +
+      'fn add_two(n : Nat) -> Nat {\n' +
+      '  return succ(succ(n));\n' +
+      '}\n\n' +
+      'fn main(n : Nat) -> Nat {\n' +
+      '  return add_two(n);\n' +
+      '}\n'
+  );
+} else if (process.argv.length === 3) {
+  inputStream = new FileStream(process.argv[2]);
+} else {
+  throw 'Usage: node index.js [path/to/file.stella]';
 }
+
+const lexer = new StellaLexer(inputStream);
+let tokenStream = new CommonTokenStream(lexer);
+let parser = new StellaParser(tokenStream);
+
+// The entry point for parsing is a "program"
+const program = parser.program();
+program.accept(new AstPrinter());
