@@ -16,7 +16,7 @@ languageDecl: 'language' 'core' ';' # LanguageCore;
 extension:
     EXTEND WITH extensionNames += ExtensionName (
         ',' extensionNames += ExtensionName
-    ) ';' # AnExtension;
+    )* ';' # AnExtension;
 
 decl: (annotations += annotation)* 'fn' name = StellaIdent '(' (
         paramDecls += paramDecl (',' paramDecls += paramDecl)*
