@@ -1,7 +1,7 @@
 import { CommonTokenStream, CharStream, FileStream } from 'antlr4';
 import StellaLexer from './src/stella/stellaLexer';
 import StellaParser from './src/stella/stellaParser';
-import { AstPrinter } from './visitors';
+import { AstTransformer } from './visitors';
 
 let inputStream: CharStream;
 
@@ -9,6 +9,8 @@ if (process.argv.length === 2) {
   // Example code
   inputStream = new CharStream(
     'language core;\n' +
+      'extend with #numeric-literals, #records;\n' +
+      'extend with #tuples;\n' +
       'fn add_two(n : Nat) -> Nat {\n' +
       '  return succ(succ(n));\n' +
       '}\n\n' +
@@ -28,4 +30,7 @@ let parser = new StellaParser(tokenStream);
 
 // The entry point for parsing is a "program"
 const program = parser.program();
-program.accept(new AstPrinter());
+
+const t = new AstTransformer();
+const ast = t.visitProgram(program);
+console.log(JSON.stringify(ast, null, 4));
