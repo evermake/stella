@@ -73,6 +73,7 @@ import { TypeUnitContext } from "./stellaParser";
 import { TypeBoolContext } from "./stellaParser";
 import { TypeNatContext } from "./stellaParser";
 import { TypeRecContext } from "./stellaParser";
+import { TypeParensContext } from "./stellaParser";
 import { TypeFunContext } from "./stellaParser";
 import { TypeRecordContext } from "./stellaParser";
 import { TypeListContext } from "./stellaParser";
@@ -910,6 +911,18 @@ export default class stellaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTypeRec?: (ctx: TypeRecContext) => void;
+	/**
+	 * Enter a parse tree produced by the `TypeParens`
+	 * labeled alternative in `stellaParser.stellatype`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeParens?: (ctx: TypeParensContext) => void;
+	/**
+	 * Exit a parse tree produced by the `TypeParens`
+	 * labeled alternative in `stellaParser.stellatype`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeParens?: (ctx: TypeParensContext) => void;
 	/**
 	 * Enter a parse tree produced by the `TypeFun`
 	 * labeled alternative in `stellaParser.stellatype`.

@@ -14,7 +14,7 @@ program:
 languageDecl: 'language' 'core' ';' # LanguageCore;
 
 extension:
-    EXTEND WITH extensionNames += ExtensionName (
+    'extend' 'with' extensionNames += ExtensionName (
         ',' extensionNames += ExtensionName
     )* ';' # AnExtension;
 
@@ -60,7 +60,7 @@ expr:
     | expr_ = expr 'as' type_ = stellatype # TypeAsc
     | 'fn' '(' (
         paramDecls += paramDecl (',' paramDecls += paramDecl)*
-    )? ')' '{' 'return' returnExpr = expr '}'       # Abstraction
+    )? ')' '{' 'return' returnExpr = expr ';' '}'       # Abstraction
     | '{' (exprs += expr (',' exprs += expr)*)? '}' # Tuple
     | 'record' '{' (
         bindings += binding (',' bindings += binding)*
@@ -126,7 +126,8 @@ stellatype:
     )? '}'                                                      # TypeVariant
     | '[' (types += stellatype (',' types += stellatype)*)? ']' # TypeList
     | 'Unit'                                                    # TypeUnit
-    | name = StellaIdent                                        # TypeVar;
+    | name = StellaIdent                                        # TypeVar
+    | '(' stellatype ')' # TypeParens;
 
 recordFieldType: label = StellaIdent ':' type_ = stellatype;
 variantFieldType: label = StellaIdent (':' type_ = stellatype)?;

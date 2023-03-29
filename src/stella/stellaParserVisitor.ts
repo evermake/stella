@@ -73,6 +73,7 @@ import { TypeUnitContext } from "./stellaParser";
 import { TypeBoolContext } from "./stellaParser";
 import { TypeNatContext } from "./stellaParser";
 import { TypeRecContext } from "./stellaParser";
+import { TypeParensContext } from "./stellaParser";
 import { TypeFunContext } from "./stellaParser";
 import { TypeRecordContext } from "./stellaParser";
 import { TypeListContext } from "./stellaParser";
@@ -571,6 +572,13 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 * @return the visitor result
 	 */
 	visitTypeRec?: (ctx: TypeRecContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `TypeParens`
+	 * labeled alternative in `stellaParser.stellatype`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTypeParens?: (ctx: TypeParensContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `TypeFun`
 	 * labeled alternative in `stellaParser.stellatype`.

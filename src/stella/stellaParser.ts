@@ -648,7 +648,7 @@ export default class stellaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 290;
+			this.state = 291;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case 56:
@@ -930,6 +930,8 @@ export default class stellaParser extends Parser {
 				this.state = 214;
 				(localctx as AbstractionContext)._returnExpr = this.expr(0);
 				this.state = 215;
+				this.match(stellaParser.SEMICOLON);
+				this.state = 216;
 				this.match(stellaParser.RBRACE);
 				}
 				break;
@@ -938,37 +940,37 @@ export default class stellaParser extends Parser {
 				localctx = new TupleContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 217;
+				this.state = 218;
 				this.match(stellaParser.LBRACE);
-				this.state = 226;
+				this.state = 227;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 528492584) !== 0) || ((((_la - 35)) & ~0x1F) === 0 && ((1 << (_la - 35)) & 1353019889) !== 0)) {
 					{
-					this.state = 218;
+					this.state = 219;
 					(localctx as TupleContext)._expr = this.expr(0);
 					(localctx as TupleContext)._exprs.push((localctx as TupleContext)._expr);
-					this.state = 223;
+					this.state = 224;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					while (_la===1) {
 						{
 						{
-						this.state = 219;
-						this.match(stellaParser.COMMA);
 						this.state = 220;
+						this.match(stellaParser.COMMA);
+						this.state = 221;
 						(localctx as TupleContext)._expr = this.expr(0);
 						(localctx as TupleContext)._exprs.push((localctx as TupleContext)._expr);
 						}
 						}
-						this.state = 225;
+						this.state = 226;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 					}
 					}
 				}
 
-				this.state = 228;
+				this.state = 229;
 				this.match(stellaParser.RBRACE);
 				}
 				break;
@@ -977,39 +979,39 @@ export default class stellaParser extends Parser {
 				localctx = new RecordContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 229;
-				this.match(stellaParser.RECORD);
 				this.state = 230;
+				this.match(stellaParser.RECORD);
+				this.state = 231;
 				this.match(stellaParser.LBRACE);
-				this.state = 239;
+				this.state = 240;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la===63) {
 					{
-					this.state = 231;
+					this.state = 232;
 					(localctx as RecordContext)._binding = this.binding();
 					(localctx as RecordContext)._bindings.push((localctx as RecordContext)._binding);
-					this.state = 236;
+					this.state = 237;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					while (_la===1) {
 						{
 						{
-						this.state = 232;
-						this.match(stellaParser.COMMA);
 						this.state = 233;
+						this.match(stellaParser.COMMA);
+						this.state = 234;
 						(localctx as RecordContext)._binding = this.binding();
 						(localctx as RecordContext)._bindings.push((localctx as RecordContext)._binding);
 						}
 						}
-						this.state = 238;
+						this.state = 239;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 					}
 					}
 				}
 
-				this.state = 241;
+				this.state = 242;
 				this.match(stellaParser.RBRACE);
 				}
 				break;
@@ -1018,23 +1020,23 @@ export default class stellaParser extends Parser {
 				localctx = new VariantContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 242;
-				this.match(stellaParser.LANGLEBAR);
 				this.state = 243;
+				this.match(stellaParser.LANGLEBAR);
+				this.state = 244;
 				(localctx as VariantContext)._label = this.match(stellaParser.StellaIdent);
-				this.state = 246;
+				this.state = 247;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la===7) {
 					{
-					this.state = 244;
-					this.match(stellaParser.EQUALS);
 					this.state = 245;
+					this.match(stellaParser.EQUALS);
+					this.state = 246;
 					(localctx as VariantContext)._rhs = this.expr(0);
 					}
 				}
 
-				this.state = 248;
+				this.state = 249;
 				this.match(stellaParser.RANGLEBAR);
 				}
 				break;
@@ -1043,41 +1045,41 @@ export default class stellaParser extends Parser {
 				localctx = new MatchContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 249;
-				this.match(stellaParser.MATCH);
 				this.state = 250;
-				this.expr(0);
+				this.match(stellaParser.MATCH);
 				this.state = 251;
+				this.expr(0);
+				this.state = 252;
 				this.match(stellaParser.LBRACE);
-				this.state = 260;
+				this.state = 261;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 10280) !== 0) || ((((_la - 35)) & ~0x1F) === 0 && ((1 << (_la - 35)) & 1344602129) !== 0)) {
 					{
-					this.state = 252;
+					this.state = 253;
 					(localctx as MatchContext)._match_case = this.match_case();
 					(localctx as MatchContext)._cases.push((localctx as MatchContext)._match_case);
-					this.state = 257;
+					this.state = 258;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					while (_la===2) {
 						{
 						{
-						this.state = 253;
-						this.match(stellaParser.SEMICOLON);
 						this.state = 254;
+						this.match(stellaParser.SEMICOLON);
+						this.state = 255;
 						(localctx as MatchContext)._match_case = this.match_case();
 						(localctx as MatchContext)._cases.push((localctx as MatchContext)._match_case);
 						}
 						}
-						this.state = 259;
+						this.state = 260;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 					}
 					}
 				}
 
-				this.state = 262;
+				this.state = 263;
 				this.match(stellaParser.RBRACE);
 				}
 				break;
@@ -1086,27 +1088,27 @@ export default class stellaParser extends Parser {
 				localctx = new ListContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 264;
+				this.state = 265;
 				this.match(stellaParser.LBRACKET);
-				this.state = 269;
+				this.state = 270;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 528492584) !== 0) || ((((_la - 35)) & ~0x1F) === 0 && ((1 << (_la - 35)) & 1353019889) !== 0)) {
 					{
-					this.state = 265;
+					this.state = 266;
 					(localctx as ListContext)._expr = this.expr(0);
 					(localctx as ListContext)._exprs.push((localctx as ListContext)._expr);
 					{
-					this.state = 266;
-					this.match(stellaParser.COMMA);
 					this.state = 267;
+					this.match(stellaParser.COMMA);
+					this.state = 268;
 					(localctx as ListContext)._expr = this.expr(0);
 					(localctx as ListContext)._exprs.push((localctx as ListContext)._expr);
 					}
 					}
 				}
 
-				this.state = 271;
+				this.state = 272;
 				this.match(stellaParser.RBRACKET);
 				}
 				break;
@@ -1115,17 +1117,17 @@ export default class stellaParser extends Parser {
 				localctx = new IfContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 272;
-				this.match(stellaParser.IF);
 				this.state = 273;
-				(localctx as IfContext)._condition = this.expr(0);
+				this.match(stellaParser.IF);
 				this.state = 274;
-				this.match(stellaParser.THEN);
+				(localctx as IfContext)._condition = this.expr(0);
 				this.state = 275;
-				(localctx as IfContext)._thenExpr = this.expr(0);
+				this.match(stellaParser.THEN);
 				this.state = 276;
-				this.match(stellaParser.ELSE);
+				(localctx as IfContext)._thenExpr = this.expr(0);
 				this.state = 277;
+				this.match(stellaParser.ELSE);
+				this.state = 278;
 				(localctx as IfContext)._elseExpr = this.expr(3);
 				}
 				break;
@@ -1134,17 +1136,17 @@ export default class stellaParser extends Parser {
 				localctx = new LetContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 279;
-				this.match(stellaParser.LET);
 				this.state = 280;
-				(localctx as LetContext)._var_ = this.match(stellaParser.StellaIdent);
+				this.match(stellaParser.LET);
 				this.state = 281;
-				this.match(stellaParser.EQUALS);
+				(localctx as LetContext)._var_ = this.match(stellaParser.StellaIdent);
 				this.state = 282;
-				(localctx as LetContext)._value = this.expr(0);
+				this.match(stellaParser.EQUALS);
 				this.state = 283;
-				this.match(stellaParser.IN);
+				(localctx as LetContext)._value = this.expr(0);
 				this.state = 284;
+				this.match(stellaParser.IN);
+				this.state = 285;
 				(localctx as LetContext)._body = this.expr(2);
 				}
 				break;
@@ -1153,11 +1155,11 @@ export default class stellaParser extends Parser {
 				localctx = new ParenthesisedExprContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 286;
-				this.match(stellaParser.LPAREN);
 				this.state = 287;
-				this.expr(0);
+				this.match(stellaParser.LPAREN);
 				this.state = 288;
+				this.expr(0);
+				this.state = 289;
 				this.match(stellaParser.RPAREN);
 				}
 				break;
@@ -1165,7 +1167,7 @@ export default class stellaParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			this._ctx.stop = this._input.LT(-1);
-			this.state = 346;
+			this.state = 347;
 			this._errHandler.sync(this);
 			_alt = this._interp.adaptivePredict(this._input, 24, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
@@ -1175,20 +1177,20 @@ export default class stellaParser extends Parser {
 					}
 					_prevctx = localctx;
 					{
-					this.state = 344;
+					this.state = 345;
 					this._errHandler.sync(this);
 					switch ( this._interp.adaptivePredict(this._input, 23, this._ctx) ) {
 					case 1:
 						{
 						localctx = new MultiplyContext(this, new ExprContext(this, _parentctx, _parentState));
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 292;
+						this.state = 293;
 						if (!(this.precpred(this._ctx, 20))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 20)");
 						}
-						this.state = 293;
-						this.match(stellaParser.TIMES);
 						this.state = 294;
+						this.match(stellaParser.TIMES);
+						this.state = 295;
 						this.expr(21);
 						}
 						break;
@@ -1196,13 +1198,13 @@ export default class stellaParser extends Parser {
 						{
 						localctx = new LogicAndContext(this, new ExprContext(this, _parentctx, _parentState));
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 295;
+						this.state = 296;
 						if (!(this.precpred(this._ctx, 19))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 19)");
 						}
-						this.state = 296;
-						this.match(stellaParser.AND);
 						this.state = 297;
+						this.match(stellaParser.AND);
+						this.state = 298;
 						this.expr(20);
 						}
 						break;
@@ -1210,13 +1212,13 @@ export default class stellaParser extends Parser {
 						{
 						localctx = new AddContext(this, new ExprContext(this, _parentctx, _parentState));
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 298;
+						this.state = 299;
 						if (!(this.precpred(this._ctx, 18))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 18)");
 						}
-						this.state = 299;
-						this.match(stellaParser.PLUS);
 						this.state = 300;
+						this.match(stellaParser.PLUS);
+						this.state = 301;
 						this.expr(19);
 						}
 						break;
@@ -1224,13 +1226,13 @@ export default class stellaParser extends Parser {
 						{
 						localctx = new LogicOrContext(this, new ExprContext(this, _parentctx, _parentState));
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 301;
+						this.state = 302;
 						if (!(this.precpred(this._ctx, 17))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 17)");
 						}
-						this.state = 302;
-						this.match(stellaParser.OR);
 						this.state = 303;
+						this.match(stellaParser.OR);
+						this.state = 304;
 						this.expr(18);
 						}
 						break;
@@ -1239,13 +1241,13 @@ export default class stellaParser extends Parser {
 						localctx = new LessThanContext(this, new ExprContext(this, _parentctx, _parentState));
 						(localctx as LessThanContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 304;
+						this.state = 305;
 						if (!(this.precpred(this._ctx, 9))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 9)");
 						}
-						this.state = 305;
-						this.match(stellaParser.LE);
 						this.state = 306;
+						this.match(stellaParser.LE);
+						this.state = 307;
 						(localctx as LessThanContext)._right = this.expr(10);
 						}
 						break;
@@ -1254,13 +1256,13 @@ export default class stellaParser extends Parser {
 						localctx = new LessThanOrEqualContext(this, new ExprContext(this, _parentctx, _parentState));
 						(localctx as LessThanOrEqualContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 307;
+						this.state = 308;
 						if (!(this.precpred(this._ctx, 8))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 8)");
 						}
-						this.state = 308;
-						this.match(stellaParser.LEQ);
 						this.state = 309;
+						this.match(stellaParser.LEQ);
+						this.state = 310;
 						(localctx as LessThanOrEqualContext)._right = this.expr(9);
 						}
 						break;
@@ -1269,13 +1271,13 @@ export default class stellaParser extends Parser {
 						localctx = new GreaterThanContext(this, new ExprContext(this, _parentctx, _parentState));
 						(localctx as GreaterThanContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 310;
+						this.state = 311;
 						if (!(this.precpred(this._ctx, 7))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 7)");
 						}
-						this.state = 311;
-						this.match(stellaParser.GE);
 						this.state = 312;
+						this.match(stellaParser.GE);
+						this.state = 313;
 						(localctx as GreaterThanContext)._right = this.expr(8);
 						}
 						break;
@@ -1284,13 +1286,13 @@ export default class stellaParser extends Parser {
 						localctx = new GreaterThanOrEqualContext(this, new ExprContext(this, _parentctx, _parentState));
 						(localctx as GreaterThanOrEqualContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 313;
+						this.state = 314;
 						if (!(this.precpred(this._ctx, 6))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 6)");
 						}
-						this.state = 314;
-						this.match(stellaParser.GEQ);
 						this.state = 315;
+						this.match(stellaParser.GEQ);
+						this.state = 316;
 						(localctx as GreaterThanOrEqualContext)._right = this.expr(7);
 						}
 						break;
@@ -1299,13 +1301,13 @@ export default class stellaParser extends Parser {
 						localctx = new EqualContext(this, new ExprContext(this, _parentctx, _parentState));
 						(localctx as EqualContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 316;
+						this.state = 317;
 						if (!(this.precpred(this._ctx, 5))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 5)");
 						}
-						this.state = 317;
-						this.match(stellaParser.EQ);
 						this.state = 318;
+						this.match(stellaParser.EQ);
+						this.state = 319;
 						(localctx as EqualContext)._right = this.expr(6);
 						}
 						break;
@@ -1314,13 +1316,13 @@ export default class stellaParser extends Parser {
 						localctx = new NotEqualContext(this, new ExprContext(this, _parentctx, _parentState));
 						(localctx as NotEqualContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 319;
+						this.state = 320;
 						if (!(this.precpred(this._ctx, 4))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 4)");
 						}
-						this.state = 320;
-						this.match(stellaParser.NEQ);
 						this.state = 321;
+						this.match(stellaParser.NEQ);
+						this.state = 322;
 						(localctx as NotEqualContext)._right = this.expr(5);
 						}
 						break;
@@ -1329,13 +1331,13 @@ export default class stellaParser extends Parser {
 						localctx = new DotRecordContext(this, new ExprContext(this, _parentctx, _parentState));
 						(localctx as DotRecordContext)._expr_ = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 322;
+						this.state = 323;
 						if (!(this.precpred(this._ctx, 39))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 39)");
 						}
-						this.state = 323;
-						this.match(stellaParser.DOT);
 						this.state = 324;
+						this.match(stellaParser.DOT);
+						this.state = 325;
 						(localctx as DotRecordContext)._label = this.match(stellaParser.StellaIdent);
 						}
 						break;
@@ -1344,13 +1346,13 @@ export default class stellaParser extends Parser {
 						localctx = new DotTupleContext(this, new ExprContext(this, _parentctx, _parentState));
 						(localctx as DotTupleContext)._expr_ = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 325;
+						this.state = 326;
 						if (!(this.precpred(this._ctx, 38))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 38)");
 						}
-						this.state = 326;
-						this.match(stellaParser.DOT);
 						this.state = 327;
+						this.match(stellaParser.DOT);
+						this.state = 328;
 						(localctx as DotTupleContext)._index = this.match(stellaParser.INTEGER);
 						}
 						break;
@@ -1359,41 +1361,41 @@ export default class stellaParser extends Parser {
 						localctx = new ApplicationContext(this, new ExprContext(this, _parentctx, _parentState));
 						(localctx as ApplicationContext)._fun = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 328;
+						this.state = 329;
 						if (!(this.precpred(this._ctx, 21))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 21)");
 						}
-						this.state = 329;
+						this.state = 330;
 						this.match(stellaParser.LPAREN);
-						this.state = 338;
+						this.state = 339;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 						if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 528492584) !== 0) || ((((_la - 35)) & ~0x1F) === 0 && ((1 << (_la - 35)) & 1353019889) !== 0)) {
 							{
-							this.state = 330;
+							this.state = 331;
 							(localctx as ApplicationContext)._expr = this.expr(0);
 							(localctx as ApplicationContext)._args.push((localctx as ApplicationContext)._expr);
-							this.state = 335;
+							this.state = 336;
 							this._errHandler.sync(this);
 							_la = this._input.LA(1);
 							while (_la===1) {
 								{
 								{
-								this.state = 331;
-								this.match(stellaParser.COMMA);
 								this.state = 332;
+								this.match(stellaParser.COMMA);
+								this.state = 333;
 								(localctx as ApplicationContext)._expr = this.expr(0);
 								(localctx as ApplicationContext)._args.push((localctx as ApplicationContext)._expr);
 								}
 								}
-								this.state = 337;
+								this.state = 338;
 								this._errHandler.sync(this);
 								_la = this._input.LA(1);
 							}
 							}
 						}
 
-						this.state = 340;
+						this.state = 341;
 						this.match(stellaParser.RPAREN);
 						}
 						break;
@@ -1402,20 +1404,20 @@ export default class stellaParser extends Parser {
 						localctx = new TypeAscContext(this, new ExprContext(this, _parentctx, _parentState));
 						(localctx as TypeAscContext)._expr_ = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
-						this.state = 341;
+						this.state = 342;
 						if (!(this.precpred(this._ctx, 16))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 16)");
 						}
-						this.state = 342;
-						this.match(stellaParser.AS);
 						this.state = 343;
+						this.match(stellaParser.AS);
+						this.state = 344;
 						(localctx as TypeAscContext)._type_ = this.stellatype(0);
 						}
 						break;
 					}
 					}
 				}
-				this.state = 348;
+				this.state = 349;
 				this._errHandler.sync(this);
 				_alt = this._interp.adaptivePredict(this._input, 24, this._ctx);
 			}
@@ -1442,11 +1444,11 @@ export default class stellaParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 349;
-			localctx._name = this.match(stellaParser.StellaIdent);
 			this.state = 350;
-			this.match(stellaParser.EQUALS);
+			localctx._name = this.match(stellaParser.StellaIdent);
 			this.state = 351;
+			this.match(stellaParser.EQUALS);
+			this.state = 352;
 			localctx._rhs = this.expr(0);
 			}
 		}
@@ -1471,11 +1473,11 @@ export default class stellaParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 353;
-			this.pattern();
 			this.state = 354;
-			this.match(stellaParser.DOUBLEARROW);
+			this.pattern();
 			this.state = 355;
+			this.match(stellaParser.DOUBLEARROW);
+			this.state = 356;
 			this.expr(0);
 			}
 		}
@@ -1499,30 +1501,30 @@ export default class stellaParser extends Parser {
 		this.enterRule(localctx, 24, stellaParser.RULE_pattern);
 		let _la: number;
 		try {
-			this.state = 421;
+			this.state = 422;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case 11:
 				localctx = new PatternVariantContext(this, localctx);
 				this.enterOuterAlt(localctx, 1);
 				{
-				this.state = 357;
-				this.match(stellaParser.LANGLEBAR);
 				this.state = 358;
+				this.match(stellaParser.LANGLEBAR);
+				this.state = 359;
 				(localctx as PatternVariantContext)._label = this.match(stellaParser.StellaIdent);
-				this.state = 361;
+				this.state = 362;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la===7) {
 					{
-					this.state = 359;
-					this.match(stellaParser.EQUALS);
 					this.state = 360;
+					this.match(stellaParser.EQUALS);
+					this.state = 361;
 					this.pattern();
 					}
 				}
 
-				this.state = 363;
+				this.state = 364;
 				this.match(stellaParser.RANGLEBAR);
 				}
 				break;
@@ -1530,37 +1532,37 @@ export default class stellaParser extends Parser {
 				localctx = new PatternTupleContext(this, localctx);
 				this.enterOuterAlt(localctx, 2);
 				{
-				this.state = 364;
+				this.state = 365;
 				this.match(stellaParser.LBRACE);
-				this.state = 373;
+				this.state = 374;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 10280) !== 0) || ((((_la - 35)) & ~0x1F) === 0 && ((1 << (_la - 35)) & 1344602129) !== 0)) {
 					{
-					this.state = 365;
+					this.state = 366;
 					(localctx as PatternTupleContext)._pattern = this.pattern();
 					(localctx as PatternTupleContext)._patterns.push((localctx as PatternTupleContext)._pattern);
-					this.state = 370;
+					this.state = 371;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					while (_la===1) {
 						{
 						{
-						this.state = 366;
-						this.match(stellaParser.COMMA);
 						this.state = 367;
+						this.match(stellaParser.COMMA);
+						this.state = 368;
 						(localctx as PatternTupleContext)._pattern = this.pattern();
 						(localctx as PatternTupleContext)._patterns.push((localctx as PatternTupleContext)._pattern);
 						}
 						}
-						this.state = 372;
+						this.state = 373;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 					}
 					}
 				}
 
-				this.state = 375;
+				this.state = 376;
 				this.match(stellaParser.RBRACE);
 				}
 				break;
@@ -1568,39 +1570,39 @@ export default class stellaParser extends Parser {
 				localctx = new PatternRecordContext(this, localctx);
 				this.enterOuterAlt(localctx, 3);
 				{
-				this.state = 376;
-				this.match(stellaParser.RECORD);
 				this.state = 377;
+				this.match(stellaParser.RECORD);
+				this.state = 378;
 				this.match(stellaParser.LBRACE);
-				this.state = 386;
+				this.state = 387;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la===63) {
 					{
-					this.state = 378;
+					this.state = 379;
 					(localctx as PatternRecordContext)._labelledPattern = this.labelledPattern();
 					(localctx as PatternRecordContext)._patterns.push((localctx as PatternRecordContext)._labelledPattern);
-					this.state = 383;
+					this.state = 384;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					while (_la===1) {
 						{
 						{
-						this.state = 379;
-						this.match(stellaParser.COMMA);
 						this.state = 380;
+						this.match(stellaParser.COMMA);
+						this.state = 381;
 						(localctx as PatternRecordContext)._labelledPattern = this.labelledPattern();
 						(localctx as PatternRecordContext)._patterns.push((localctx as PatternRecordContext)._labelledPattern);
 						}
 						}
-						this.state = 385;
+						this.state = 386;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 					}
 					}
 				}
 
-				this.state = 388;
+				this.state = 389;
 				this.match(stellaParser.RBRACE);
 				}
 				break;
@@ -1608,37 +1610,37 @@ export default class stellaParser extends Parser {
 				localctx = new PatternListContext(this, localctx);
 				this.enterOuterAlt(localctx, 4);
 				{
-				this.state = 389;
+				this.state = 390;
 				this.match(stellaParser.LBRACKET);
-				this.state = 398;
+				this.state = 399;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 10280) !== 0) || ((((_la - 35)) & ~0x1F) === 0 && ((1 << (_la - 35)) & 1344602129) !== 0)) {
 					{
-					this.state = 390;
+					this.state = 391;
 					(localctx as PatternListContext)._pattern = this.pattern();
 					(localctx as PatternListContext)._patterns.push((localctx as PatternListContext)._pattern);
-					this.state = 395;
+					this.state = 396;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					while (_la===1) {
 						{
 						{
-						this.state = 391;
-						this.match(stellaParser.COMMA);
 						this.state = 392;
+						this.match(stellaParser.COMMA);
+						this.state = 393;
 						(localctx as PatternListContext)._pattern = this.pattern();
 						(localctx as PatternListContext)._patterns.push((localctx as PatternListContext)._pattern);
 						}
 						}
-						this.state = 397;
+						this.state = 398;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 					}
 					}
 				}
 
-				this.state = 400;
+				this.state = 401;
 				this.match(stellaParser.RBRACKET);
 				}
 				break;
@@ -1646,17 +1648,17 @@ export default class stellaParser extends Parser {
 				localctx = new PatternConsContext(this, localctx);
 				this.enterOuterAlt(localctx, 5);
 				{
-				this.state = 401;
-				this.match(stellaParser.CONS);
 				this.state = 402;
-				this.match(stellaParser.LPAREN);
+				this.match(stellaParser.CONS);
 				this.state = 403;
-				(localctx as PatternConsContext)._head = this.pattern();
+				this.match(stellaParser.LPAREN);
 				this.state = 404;
-				this.match(stellaParser.COMMA);
+				(localctx as PatternConsContext)._head = this.pattern();
 				this.state = 405;
-				(localctx as PatternConsContext)._tail = this.pattern();
+				this.match(stellaParser.COMMA);
 				this.state = 406;
+				(localctx as PatternConsContext)._tail = this.pattern();
+				this.state = 407;
 				this.match(stellaParser.RPAREN);
 				}
 				break;
@@ -1664,7 +1666,7 @@ export default class stellaParser extends Parser {
 				localctx = new PatternFalseContext(this, localctx);
 				this.enterOuterAlt(localctx, 6);
 				{
-				this.state = 408;
+				this.state = 409;
 				this.match(stellaParser.FALSE);
 				}
 				break;
@@ -1672,7 +1674,7 @@ export default class stellaParser extends Parser {
 				localctx = new PatternTrueContext(this, localctx);
 				this.enterOuterAlt(localctx, 7);
 				{
-				this.state = 409;
+				this.state = 410;
 				this.match(stellaParser.TRUE);
 				}
 				break;
@@ -1680,7 +1682,7 @@ export default class stellaParser extends Parser {
 				localctx = new PatternIntContext(this, localctx);
 				this.enterOuterAlt(localctx, 8);
 				{
-				this.state = 410;
+				this.state = 411;
 				(localctx as PatternIntContext)._n = this.match(stellaParser.INTEGER);
 				}
 				break;
@@ -1688,13 +1690,13 @@ export default class stellaParser extends Parser {
 				localctx = new PatternSuccContext(this, localctx);
 				this.enterOuterAlt(localctx, 9);
 				{
-				this.state = 411;
-				this.match(stellaParser.SUCC);
 				this.state = 412;
-				this.match(stellaParser.LPAREN);
+				this.match(stellaParser.SUCC);
 				this.state = 413;
-				(localctx as PatternSuccContext)._n = this.pattern();
+				this.match(stellaParser.LPAREN);
 				this.state = 414;
+				(localctx as PatternSuccContext)._n = this.pattern();
+				this.state = 415;
 				this.match(stellaParser.RPAREN);
 				}
 				break;
@@ -1702,7 +1704,7 @@ export default class stellaParser extends Parser {
 				localctx = new PatternVarContext(this, localctx);
 				this.enterOuterAlt(localctx, 10);
 				{
-				this.state = 416;
+				this.state = 417;
 				(localctx as PatternVarContext)._name = this.match(stellaParser.StellaIdent);
 				}
 				break;
@@ -1710,11 +1712,11 @@ export default class stellaParser extends Parser {
 				localctx = new ParenthesisedPatternContext(this, localctx);
 				this.enterOuterAlt(localctx, 11);
 				{
-				this.state = 417;
-				this.match(stellaParser.LPAREN);
 				this.state = 418;
-				this.pattern();
+				this.match(stellaParser.LPAREN);
 				this.state = 419;
+				this.pattern();
+				this.state = 420;
 				this.match(stellaParser.RPAREN);
 				}
 				break;
@@ -1743,11 +1745,11 @@ export default class stellaParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 423;
-			localctx._label = this.match(stellaParser.StellaIdent);
 			this.state = 424;
-			this.match(stellaParser.EQUALS);
+			localctx._label = this.match(stellaParser.StellaIdent);
 			this.state = 425;
+			this.match(stellaParser.EQUALS);
+			this.state = 426;
 			this.pattern();
 			}
 		}
@@ -1785,7 +1787,7 @@ export default class stellaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 497;
+			this.state = 502;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case 30:
@@ -1794,7 +1796,7 @@ export default class stellaParser extends Parser {
 				this._ctx = localctx;
 				_prevctx = localctx;
 
-				this.state = 428;
+				this.state = 429;
 				this.match(stellaParser.TYPE_BOOL);
 				}
 				break;
@@ -1803,7 +1805,7 @@ export default class stellaParser extends Parser {
 				localctx = new TypeNatContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 429;
+				this.state = 430;
 				this.match(stellaParser.TYPE_NAT);
 				}
 				break;
@@ -1812,44 +1814,44 @@ export default class stellaParser extends Parser {
 				localctx = new TypeFunContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 430;
-				this.match(stellaParser.FN);
 				this.state = 431;
+				this.match(stellaParser.FN);
+				this.state = 432;
 				this.match(stellaParser.LPAREN);
-				this.state = 440;
+				this.state = 441;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 3221233696) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & 2819097089) !== 0)) {
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 3221233704) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & 2819097089) !== 0)) {
 					{
-					this.state = 432;
+					this.state = 433;
 					(localctx as TypeFunContext)._stellatype = this.stellatype(0);
 					(localctx as TypeFunContext)._paramTypes.push((localctx as TypeFunContext)._stellatype);
-					this.state = 437;
+					this.state = 438;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					while (_la===1) {
 						{
 						{
-						this.state = 433;
-						this.match(stellaParser.COMMA);
 						this.state = 434;
+						this.match(stellaParser.COMMA);
+						this.state = 435;
 						(localctx as TypeFunContext)._stellatype = this.stellatype(0);
 						(localctx as TypeFunContext)._paramTypes.push((localctx as TypeFunContext)._stellatype);
 						}
 						}
-						this.state = 439;
+						this.state = 440;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 					}
 					}
 				}
 
-				this.state = 442;
-				this.match(stellaParser.RPAREN);
 				this.state = 443;
-				this.match(stellaParser.ARROW);
+				this.match(stellaParser.RPAREN);
 				this.state = 444;
-				(localctx as TypeFunContext)._returnType = this.stellatype(9);
+				this.match(stellaParser.ARROW);
+				this.state = 445;
+				(localctx as TypeFunContext)._returnType = this.stellatype(10);
 				}
 				break;
 			case 61:
@@ -1857,14 +1859,14 @@ export default class stellaParser extends Parser {
 				localctx = new TypeRecContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 445;
-				this.match(stellaParser.MU);
 				this.state = 446;
-				(localctx as TypeRecContext)._var_ = this.match(stellaParser.StellaIdent);
+				this.match(stellaParser.MU);
 				this.state = 447;
-				this.match(stellaParser.DOT);
+				(localctx as TypeRecContext)._var_ = this.match(stellaParser.StellaIdent);
 				this.state = 448;
-				(localctx as TypeRecContext)._type_ = this.stellatype(8);
+				this.match(stellaParser.DOT);
+				this.state = 449;
+				(localctx as TypeRecContext)._type_ = this.stellatype(9);
 				}
 				break;
 			case 5:
@@ -1872,27 +1874,27 @@ export default class stellaParser extends Parser {
 				localctx = new TypeTupleContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 449;
+				this.state = 450;
 				this.match(stellaParser.LBRACE);
-				this.state = 454;
+				this.state = 455;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 3221233696) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & 2819097089) !== 0)) {
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 3221233704) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & 2819097089) !== 0)) {
 					{
-					this.state = 450;
+					this.state = 451;
 					(localctx as TypeTupleContext)._stellatype = this.stellatype(0);
 					(localctx as TypeTupleContext)._types.push((localctx as TypeTupleContext)._stellatype);
 					{
-					this.state = 451;
-					this.match(stellaParser.COMMA);
 					this.state = 452;
+					this.match(stellaParser.COMMA);
+					this.state = 453;
 					(localctx as TypeTupleContext)._stellatype = this.stellatype(0);
 					(localctx as TypeTupleContext)._types.push((localctx as TypeTupleContext)._stellatype);
 					}
 					}
 				}
 
-				this.state = 456;
+				this.state = 457;
 				this.match(stellaParser.RBRACE);
 				}
 				break;
@@ -1901,39 +1903,39 @@ export default class stellaParser extends Parser {
 				localctx = new TypeRecordContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 457;
-				this.match(stellaParser.RECORD);
 				this.state = 458;
+				this.match(stellaParser.RECORD);
+				this.state = 459;
 				this.match(stellaParser.LBRACE);
-				this.state = 467;
+				this.state = 468;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la===63) {
 					{
-					this.state = 459;
+					this.state = 460;
 					(localctx as TypeRecordContext)._recordFieldType = this.recordFieldType();
 					(localctx as TypeRecordContext)._fieldTypes.push((localctx as TypeRecordContext)._recordFieldType);
-					this.state = 464;
+					this.state = 465;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					while (_la===1) {
 						{
 						{
-						this.state = 460;
-						this.match(stellaParser.COMMA);
 						this.state = 461;
+						this.match(stellaParser.COMMA);
+						this.state = 462;
 						(localctx as TypeRecordContext)._recordFieldType = this.recordFieldType();
 						(localctx as TypeRecordContext)._fieldTypes.push((localctx as TypeRecordContext)._recordFieldType);
 						}
 						}
-						this.state = 466;
+						this.state = 467;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 					}
 					}
 				}
 
-				this.state = 469;
+				this.state = 470;
 				this.match(stellaParser.RBRACE);
 				}
 				break;
@@ -1942,39 +1944,39 @@ export default class stellaParser extends Parser {
 				localctx = new TypeVariantContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 470;
-				this.match(stellaParser.VARIANT);
 				this.state = 471;
+				this.match(stellaParser.VARIANT);
+				this.state = 472;
 				this.match(stellaParser.LBRACE);
-				this.state = 480;
+				this.state = 481;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la===63) {
 					{
-					this.state = 472;
+					this.state = 473;
 					(localctx as TypeVariantContext)._variantFieldType = this.variantFieldType();
 					(localctx as TypeVariantContext)._fieldTypes.push((localctx as TypeVariantContext)._variantFieldType);
-					this.state = 477;
+					this.state = 478;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					while (_la===1) {
 						{
 						{
-						this.state = 473;
-						this.match(stellaParser.COMMA);
 						this.state = 474;
+						this.match(stellaParser.COMMA);
+						this.state = 475;
 						(localctx as TypeVariantContext)._variantFieldType = this.variantFieldType();
 						(localctx as TypeVariantContext)._fieldTypes.push((localctx as TypeVariantContext)._variantFieldType);
 						}
 						}
-						this.state = 479;
+						this.state = 480;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 					}
 					}
 				}
 
-				this.state = 482;
+				this.state = 483;
 				this.match(stellaParser.RBRACE);
 				}
 				break;
@@ -1983,37 +1985,37 @@ export default class stellaParser extends Parser {
 				localctx = new TypeListContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 483;
+				this.state = 484;
 				this.match(stellaParser.LBRACKET);
-				this.state = 492;
+				this.state = 493;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 3221233696) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & 2819097089) !== 0)) {
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 3221233704) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & 2819097089) !== 0)) {
 					{
-					this.state = 484;
+					this.state = 485;
 					(localctx as TypeListContext)._stellatype = this.stellatype(0);
 					(localctx as TypeListContext)._types.push((localctx as TypeListContext)._stellatype);
-					this.state = 489;
+					this.state = 490;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 					while (_la===1) {
 						{
 						{
-						this.state = 485;
-						this.match(stellaParser.COMMA);
 						this.state = 486;
+						this.match(stellaParser.COMMA);
+						this.state = 487;
 						(localctx as TypeListContext)._stellatype = this.stellatype(0);
 						(localctx as TypeListContext)._types.push((localctx as TypeListContext)._stellatype);
 						}
 						}
-						this.state = 491;
+						this.state = 492;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 					}
 					}
 				}
 
-				this.state = 494;
+				this.state = 495;
 				this.match(stellaParser.RBRACKET);
 				}
 				break;
@@ -2022,7 +2024,7 @@ export default class stellaParser extends Parser {
 				localctx = new TypeUnitContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 495;
+				this.state = 496;
 				this.match(stellaParser.TYPE_UNIT);
 				}
 				break;
@@ -2031,15 +2033,28 @@ export default class stellaParser extends Parser {
 				localctx = new TypeVarContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
-				this.state = 496;
+				this.state = 497;
 				(localctx as TypeVarContext)._name = this.match(stellaParser.StellaIdent);
+				}
+				break;
+			case 3:
+				{
+				localctx = new TypeParensContext(this, localctx);
+				this._ctx = localctx;
+				_prevctx = localctx;
+				this.state = 498;
+				this.match(stellaParser.LPAREN);
+				this.state = 499;
+				this.stellatype(0);
+				this.state = 500;
+				this.match(stellaParser.RPAREN);
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
 			this._ctx.stop = this._input.LT(-1);
-			this.state = 504;
+			this.state = 509;
 			this._errHandler.sync(this);
 			_alt = this._interp.adaptivePredict(this._input, 43, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
@@ -2053,18 +2068,18 @@ export default class stellaParser extends Parser {
 					localctx = new TypeSumContext(this, new StellatypeContext(this, _parentctx, _parentState));
 					(localctx as TypeSumContext)._left = _prevctx;
 					this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_stellatype);
-					this.state = 499;
-					if (!(this.precpred(this._ctx, 7))) {
-						throw this.createFailedPredicateException("this.precpred(this._ctx, 7)");
+					this.state = 504;
+					if (!(this.precpred(this._ctx, 8))) {
+						throw this.createFailedPredicateException("this.precpred(this._ctx, 8)");
 					}
-					this.state = 500;
+					this.state = 505;
 					this.match(stellaParser.PLUS);
-					this.state = 501;
-					(localctx as TypeSumContext)._right = this.stellatype(8);
+					this.state = 506;
+					(localctx as TypeSumContext)._right = this.stellatype(9);
 					}
 					}
 				}
-				this.state = 506;
+				this.state = 511;
 				this._errHandler.sync(this);
 				_alt = this._interp.adaptivePredict(this._input, 43, this._ctx);
 			}
@@ -2091,11 +2106,11 @@ export default class stellaParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 507;
+			this.state = 512;
 			localctx._label = this.match(stellaParser.StellaIdent);
-			this.state = 508;
+			this.state = 513;
 			this.match(stellaParser.COLON);
-			this.state = 509;
+			this.state = 514;
 			localctx._type_ = this.stellatype(0);
 			}
 		}
@@ -2121,16 +2136,16 @@ export default class stellaParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 511;
+			this.state = 516;
 			localctx._label = this.match(stellaParser.StellaIdent);
-			this.state = 514;
+			this.state = 519;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===8) {
 				{
-				this.state = 512;
+				this.state = 517;
 				this.match(stellaParser.COLON);
-				this.state = 513;
+				this.state = 518;
 				localctx._type_ = this.stellatype(0);
 				}
 			}
@@ -2197,12 +2212,12 @@ export default class stellaParser extends Parser {
 	private stellatype_sempred(localctx: StellatypeContext, predIndex: number): boolean {
 		switch (predIndex) {
 		case 14:
-			return this.precpred(this._ctx, 7);
+			return this.precpred(this._ctx, 8);
 		}
 		return true;
 	}
 
-	public static readonly _serializedATN: number[] = [4,1,67,517,2,0,7,0,2,
+	public static readonly _serializedATN: number[] = [4,1,67,522,2,0,7,0,2,
 	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,7,7,2,8,7,8,2,9,7,9,2,
 	10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,2,15,7,15,2,16,7,16,1,0,
 	1,0,1,0,1,1,1,1,1,1,1,2,1,2,1,2,1,3,1,3,5,3,46,8,3,10,3,12,3,49,9,3,1,3,
@@ -2216,165 +2231,167 @@ export default class stellaParser extends Parser {
 	9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,
 	9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,
 	9,1,9,1,9,1,9,1,9,1,9,5,9,205,8,9,10,9,12,9,208,9,9,3,9,210,8,9,1,9,1,9,
-	1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,5,9,222,8,9,10,9,12,9,225,9,9,3,9,227,8,
-	9,1,9,1,9,1,9,1,9,1,9,1,9,5,9,235,8,9,10,9,12,9,238,9,9,3,9,240,8,9,1,9,
-	1,9,1,9,1,9,1,9,3,9,247,8,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,5,9,256,8,9,10,
-	9,12,9,259,9,9,3,9,261,8,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,3,9,270,8,9,1,9,
+	1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,5,9,223,8,9,10,9,12,9,226,9,9,3,9,228,
+	8,9,1,9,1,9,1,9,1,9,1,9,1,9,5,9,236,8,9,10,9,12,9,239,9,9,3,9,241,8,9,1,
+	9,1,9,1,9,1,9,1,9,3,9,248,8,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,5,9,257,8,9,10,
+	9,12,9,260,9,9,3,9,262,8,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,3,9,271,8,9,1,9,
 	1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,
-	3,9,291,8,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,
+	3,9,292,8,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,
 	1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,
-	1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,5,9,334,8,9,10,9,12,9,337,9,9,3,9,339,8,
-	9,1,9,1,9,1,9,1,9,5,9,345,8,9,10,9,12,9,348,9,9,1,10,1,10,1,10,1,10,1,11,
-	1,11,1,11,1,11,1,12,1,12,1,12,1,12,3,12,362,8,12,1,12,1,12,1,12,1,12,1,
-	12,5,12,369,8,12,10,12,12,12,372,9,12,3,12,374,8,12,1,12,1,12,1,12,1,12,
-	1,12,1,12,5,12,382,8,12,10,12,12,12,385,9,12,3,12,387,8,12,1,12,1,12,1,
-	12,1,12,1,12,5,12,394,8,12,10,12,12,12,397,9,12,3,12,399,8,12,1,12,1,12,
+	1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,5,9,335,8,9,10,9,12,9,338,9,9,3,9,340,8,
+	9,1,9,1,9,1,9,1,9,5,9,346,8,9,10,9,12,9,349,9,9,1,10,1,10,1,10,1,10,1,11,
+	1,11,1,11,1,11,1,12,1,12,1,12,1,12,3,12,363,8,12,1,12,1,12,1,12,1,12,1,
+	12,5,12,370,8,12,10,12,12,12,373,9,12,3,12,375,8,12,1,12,1,12,1,12,1,12,
+	1,12,1,12,5,12,383,8,12,10,12,12,12,386,9,12,3,12,388,8,12,1,12,1,12,1,
+	12,1,12,1,12,5,12,395,8,12,10,12,12,12,398,9,12,3,12,400,8,12,1,12,1,12,
 	1,12,1,12,1,12,1,12,1,12,1,12,1,12,1,12,1,12,1,12,1,12,1,12,1,12,1,12,1,
-	12,1,12,1,12,1,12,1,12,3,12,422,8,12,1,13,1,13,1,13,1,13,1,14,1,14,1,14,
-	1,14,1,14,1,14,1,14,1,14,5,14,436,8,14,10,14,12,14,439,9,14,3,14,441,8,
-	14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,3,14,455,
-	8,14,1,14,1,14,1,14,1,14,1,14,1,14,5,14,463,8,14,10,14,12,14,466,9,14,3,
-	14,468,8,14,1,14,1,14,1,14,1,14,1,14,1,14,5,14,476,8,14,10,14,12,14,479,
-	9,14,3,14,481,8,14,1,14,1,14,1,14,1,14,1,14,5,14,488,8,14,10,14,12,14,491,
-	9,14,3,14,493,8,14,1,14,1,14,1,14,3,14,498,8,14,1,14,1,14,1,14,5,14,503,
-	8,14,10,14,12,14,506,9,14,1,15,1,15,1,15,1,15,1,16,1,16,1,16,3,16,515,8,
-	16,1,16,0,2,18,28,17,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,0,0,
-	596,0,34,1,0,0,0,2,37,1,0,0,0,4,40,1,0,0,0,6,43,1,0,0,0,8,56,1,0,0,0,10,
-	60,1,0,0,0,12,118,1,0,0,0,14,120,1,0,0,0,16,122,1,0,0,0,18,290,1,0,0,0,
-	20,349,1,0,0,0,22,353,1,0,0,0,24,421,1,0,0,0,26,423,1,0,0,0,28,497,1,0,
-	0,0,30,507,1,0,0,0,32,511,1,0,0,0,34,35,3,6,3,0,35,36,5,0,0,1,36,1,1,0,
-	0,0,37,38,3,18,9,0,38,39,5,0,0,1,39,3,1,0,0,0,40,41,3,28,14,0,41,42,5,0,
-	0,1,42,5,1,0,0,0,43,47,3,8,4,0,44,46,3,10,5,0,45,44,1,0,0,0,46,49,1,0,0,
-	0,47,45,1,0,0,0,47,48,1,0,0,0,48,53,1,0,0,0,49,47,1,0,0,0,50,52,3,12,6,
-	0,51,50,1,0,0,0,52,55,1,0,0,0,53,51,1,0,0,0,53,54,1,0,0,0,54,7,1,0,0,0,
-	55,53,1,0,0,0,56,57,5,46,0,0,57,58,5,36,0,0,58,59,5,2,0,0,59,9,1,0,0,0,
-	60,61,5,38,0,0,61,62,5,60,0,0,62,67,5,64,0,0,63,64,5,1,0,0,64,66,5,64,0,
-	0,65,63,1,0,0,0,66,69,1,0,0,0,67,65,1,0,0,0,67,68,1,0,0,0,68,70,1,0,0,0,
-	69,67,1,0,0,0,70,71,5,2,0,0,71,11,1,0,0,0,72,74,3,14,7,0,73,72,1,0,0,0,
-	74,77,1,0,0,0,75,73,1,0,0,0,75,76,1,0,0,0,76,78,1,0,0,0,77,75,1,0,0,0,78,
-	79,5,41,0,0,79,80,5,63,0,0,80,89,5,3,0,0,81,86,3,16,8,0,82,83,5,1,0,0,83,
-	85,3,16,8,0,84,82,1,0,0,0,85,88,1,0,0,0,86,84,1,0,0,0,86,87,1,0,0,0,87,
-	90,1,0,0,0,88,86,1,0,0,0,89,81,1,0,0,0,89,90,1,0,0,0,90,91,1,0,0,0,91,94,
-	5,4,0,0,92,93,5,9,0,0,93,95,3,28,14,0,94,92,1,0,0,0,94,95,1,0,0,0,95,98,
-	1,0,0,0,96,97,5,55,0,0,97,99,3,28,14,0,98,96,1,0,0,0,98,99,1,0,0,0,99,100,
-	1,0,0,0,100,104,5,5,0,0,101,103,3,12,6,0,102,101,1,0,0,0,103,106,1,0,0,
-	0,104,102,1,0,0,0,104,105,1,0,0,0,105,107,1,0,0,0,106,104,1,0,0,0,107,108,
-	5,52,0,0,108,109,3,18,9,0,109,110,5,2,0,0,110,111,5,6,0,0,111,119,1,0,0,
-	0,112,113,5,57,0,0,113,114,5,63,0,0,114,115,5,7,0,0,115,116,3,28,14,0,116,
-	117,5,2,0,0,117,119,1,0,0,0,118,75,1,0,0,0,118,112,1,0,0,0,119,13,1,0,0,
-	0,120,121,5,45,0,0,121,15,1,0,0,0,122,123,5,63,0,0,123,124,5,8,0,0,124,
-	125,3,28,14,0,125,17,1,0,0,0,126,127,6,9,-1,0,127,291,5,56,0,0,128,291,
-	5,39,0,0,129,291,5,65,0,0,130,291,5,63,0,0,131,132,5,35,0,0,132,133,5,3,
-	0,0,133,134,3,18,9,0,134,135,5,1,0,0,135,136,3,18,9,0,136,137,5,4,0,0,137,
-	291,1,0,0,0,138,139,5,23,0,0,139,140,5,3,0,0,140,141,3,18,9,0,141,142,5,
-	4,0,0,142,291,1,0,0,0,143,144,5,24,0,0,144,145,5,3,0,0,145,146,3,18,9,0,
-	146,147,5,4,0,0,147,291,1,0,0,0,148,149,5,25,0,0,149,150,5,3,0,0,150,151,
-	3,18,9,0,151,152,5,4,0,0,152,291,1,0,0,0,153,154,5,53,0,0,154,155,5,3,0,
-	0,155,156,3,18,9,0,156,157,5,4,0,0,157,291,1,0,0,0,158,159,5,49,0,0,159,
-	160,5,3,0,0,160,161,3,18,9,0,161,162,5,4,0,0,162,291,1,0,0,0,163,164,5,
-	26,0,0,164,165,5,3,0,0,165,166,3,18,9,0,166,167,5,4,0,0,167,291,1,0,0,0,
-	168,169,5,27,0,0,169,170,5,3,0,0,170,171,3,18,9,0,171,172,5,4,0,0,172,291,
-	1,0,0,0,173,174,5,40,0,0,174,175,5,3,0,0,175,176,3,18,9,0,176,177,5,4,0,
-	0,177,291,1,0,0,0,178,179,5,28,0,0,179,180,5,3,0,0,180,181,3,18,9,0,181,
-	182,5,1,0,0,182,183,3,18,9,0,183,184,5,1,0,0,184,185,3,18,9,0,185,186,5,
-	4,0,0,186,291,1,0,0,0,187,188,5,42,0,0,188,189,5,13,0,0,189,190,3,28,14,
-	0,190,191,5,14,0,0,191,192,3,18,9,23,192,291,1,0,0,0,193,194,5,58,0,0,194,
-	195,5,13,0,0,195,196,3,28,14,0,196,197,5,14,0,0,197,198,3,18,9,22,198,291,
-	1,0,0,0,199,200,5,41,0,0,200,209,5,3,0,0,201,206,3,16,8,0,202,203,5,1,0,
-	0,203,205,3,16,8,0,204,202,1,0,0,0,205,208,1,0,0,0,206,204,1,0,0,0,206,
-	207,1,0,0,0,207,210,1,0,0,0,208,206,1,0,0,0,209,201,1,0,0,0,209,210,1,0,
-	0,0,210,211,1,0,0,0,211,212,5,4,0,0,212,213,5,5,0,0,213,214,5,52,0,0,214,
-	215,3,18,9,0,215,216,5,6,0,0,216,291,1,0,0,0,217,226,5,5,0,0,218,223,3,
-	18,9,0,219,220,5,1,0,0,220,222,3,18,9,0,221,219,1,0,0,0,222,225,1,0,0,0,
-	223,221,1,0,0,0,223,224,1,0,0,0,224,227,1,0,0,0,225,223,1,0,0,0,226,218,
-	1,0,0,0,226,227,1,0,0,0,227,228,1,0,0,0,228,291,5,6,0,0,229,230,5,51,0,
-	0,230,239,5,5,0,0,231,236,3,20,10,0,232,233,5,1,0,0,233,235,3,20,10,0,234,
-	232,1,0,0,0,235,238,1,0,0,0,236,234,1,0,0,0,236,237,1,0,0,0,237,240,1,0,
-	0,0,238,236,1,0,0,0,239,231,1,0,0,0,239,240,1,0,0,0,240,241,1,0,0,0,241,
-	291,5,6,0,0,242,243,5,11,0,0,243,246,5,63,0,0,244,245,5,7,0,0,245,247,3,
-	18,9,0,246,244,1,0,0,0,246,247,1,0,0,0,247,248,1,0,0,0,248,291,5,12,0,0,
-	249,250,5,48,0,0,250,251,3,18,9,0,251,260,5,5,0,0,252,257,3,22,11,0,253,
-	254,5,2,0,0,254,256,3,22,11,0,255,253,1,0,0,0,256,259,1,0,0,0,257,255,1,
-	0,0,0,257,258,1,0,0,0,258,261,1,0,0,0,259,257,1,0,0,0,260,252,1,0,0,0,260,
-	261,1,0,0,0,261,262,1,0,0,0,262,263,5,6,0,0,263,291,1,0,0,0,264,269,5,13,
-	0,0,265,266,3,18,9,0,266,267,5,1,0,0,267,268,3,18,9,0,268,270,1,0,0,0,269,
-	265,1,0,0,0,269,270,1,0,0,0,270,271,1,0,0,0,271,291,5,14,0,0,272,273,5,
-	43,0,0,273,274,3,18,9,0,274,275,5,54,0,0,275,276,3,18,9,0,276,277,5,37,
-	0,0,277,278,3,18,9,3,278,291,1,0,0,0,279,280,5,47,0,0,280,281,5,63,0,0,
-	281,282,5,7,0,0,282,283,3,18,9,0,283,284,5,44,0,0,284,285,3,18,9,2,285,
-	291,1,0,0,0,286,287,5,3,0,0,287,288,3,18,9,0,288,289,5,4,0,0,289,291,1,
-	0,0,0,290,126,1,0,0,0,290,128,1,0,0,0,290,129,1,0,0,0,290,130,1,0,0,0,290,
-	131,1,0,0,0,290,138,1,0,0,0,290,143,1,0,0,0,290,148,1,0,0,0,290,153,1,0,
-	0,0,290,158,1,0,0,0,290,163,1,0,0,0,290,168,1,0,0,0,290,173,1,0,0,0,290,
-	178,1,0,0,0,290,187,1,0,0,0,290,193,1,0,0,0,290,199,1,0,0,0,290,217,1,0,
-	0,0,290,229,1,0,0,0,290,242,1,0,0,0,290,249,1,0,0,0,290,264,1,0,0,0,290,
-	272,1,0,0,0,290,279,1,0,0,0,290,286,1,0,0,0,291,346,1,0,0,0,292,293,10,
-	20,0,0,293,294,5,22,0,0,294,345,3,18,9,21,295,296,10,19,0,0,296,297,5,33,
-	0,0,297,345,3,18,9,20,298,299,10,18,0,0,299,300,5,21,0,0,300,345,3,18,9,
-	19,301,302,10,17,0,0,302,303,5,50,0,0,303,345,3,18,9,18,304,305,10,9,0,
-	0,305,306,5,15,0,0,306,345,3,18,9,10,307,308,10,8,0,0,308,309,5,16,0,0,
-	309,345,3,18,9,9,310,311,10,7,0,0,311,312,5,17,0,0,312,345,3,18,9,8,313,
-	314,10,6,0,0,314,315,5,18,0,0,315,345,3,18,9,7,316,317,10,5,0,0,317,318,
-	5,19,0,0,318,345,3,18,9,6,319,320,10,4,0,0,320,321,5,20,0,0,321,345,3,18,
-	9,5,322,323,10,39,0,0,323,324,5,29,0,0,324,345,5,63,0,0,325,326,10,38,0,
-	0,326,327,5,29,0,0,327,345,5,65,0,0,328,329,10,21,0,0,329,338,5,3,0,0,330,
-	335,3,18,9,0,331,332,5,1,0,0,332,334,3,18,9,0,333,331,1,0,0,0,334,337,1,
-	0,0,0,335,333,1,0,0,0,335,336,1,0,0,0,336,339,1,0,0,0,337,335,1,0,0,0,338,
-	330,1,0,0,0,338,339,1,0,0,0,339,340,1,0,0,0,340,345,5,4,0,0,341,342,10,
-	16,0,0,342,343,5,34,0,0,343,345,3,28,14,0,344,292,1,0,0,0,344,295,1,0,0,
-	0,344,298,1,0,0,0,344,301,1,0,0,0,344,304,1,0,0,0,344,307,1,0,0,0,344,310,
-	1,0,0,0,344,313,1,0,0,0,344,316,1,0,0,0,344,319,1,0,0,0,344,322,1,0,0,0,
-	344,325,1,0,0,0,344,328,1,0,0,0,344,341,1,0,0,0,345,348,1,0,0,0,346,344,
-	1,0,0,0,346,347,1,0,0,0,347,19,1,0,0,0,348,346,1,0,0,0,349,350,5,63,0,0,
-	350,351,5,7,0,0,351,352,3,18,9,0,352,21,1,0,0,0,353,354,3,24,12,0,354,355,
-	5,10,0,0,355,356,3,18,9,0,356,23,1,0,0,0,357,358,5,11,0,0,358,361,5,63,
-	0,0,359,360,5,7,0,0,360,362,3,24,12,0,361,359,1,0,0,0,361,362,1,0,0,0,362,
-	363,1,0,0,0,363,422,5,12,0,0,364,373,5,5,0,0,365,370,3,24,12,0,366,367,
-	5,1,0,0,367,369,3,24,12,0,368,366,1,0,0,0,369,372,1,0,0,0,370,368,1,0,0,
-	0,370,371,1,0,0,0,371,374,1,0,0,0,372,370,1,0,0,0,373,365,1,0,0,0,373,374,
-	1,0,0,0,374,375,1,0,0,0,375,422,5,6,0,0,376,377,5,51,0,0,377,386,5,5,0,
-	0,378,383,3,26,13,0,379,380,5,1,0,0,380,382,3,26,13,0,381,379,1,0,0,0,382,
-	385,1,0,0,0,383,381,1,0,0,0,383,384,1,0,0,0,384,387,1,0,0,0,385,383,1,0,
-	0,0,386,378,1,0,0,0,386,387,1,0,0,0,387,388,1,0,0,0,388,422,5,6,0,0,389,
-	398,5,13,0,0,390,395,3,24,12,0,391,392,5,1,0,0,392,394,3,24,12,0,393,391,
-	1,0,0,0,394,397,1,0,0,0,395,393,1,0,0,0,395,396,1,0,0,0,396,399,1,0,0,0,
-	397,395,1,0,0,0,398,390,1,0,0,0,398,399,1,0,0,0,399,400,1,0,0,0,400,422,
-	5,14,0,0,401,402,5,35,0,0,402,403,5,3,0,0,403,404,3,24,12,0,404,405,5,1,
-	0,0,405,406,3,24,12,0,406,407,5,4,0,0,407,422,1,0,0,0,408,422,5,39,0,0,
-	409,422,5,56,0,0,410,422,5,65,0,0,411,412,5,53,0,0,412,413,5,3,0,0,413,
-	414,3,24,12,0,414,415,5,4,0,0,415,422,1,0,0,0,416,422,5,63,0,0,417,418,
-	5,3,0,0,418,419,3,24,12,0,419,420,5,4,0,0,420,422,1,0,0,0,421,357,1,0,0,
-	0,421,364,1,0,0,0,421,376,1,0,0,0,421,389,1,0,0,0,421,401,1,0,0,0,421,408,
-	1,0,0,0,421,409,1,0,0,0,421,410,1,0,0,0,421,411,1,0,0,0,421,416,1,0,0,0,
-	421,417,1,0,0,0,422,25,1,0,0,0,423,424,5,63,0,0,424,425,5,7,0,0,425,426,
-	3,24,12,0,426,27,1,0,0,0,427,428,6,14,-1,0,428,498,5,30,0,0,429,498,5,31,
-	0,0,430,431,5,41,0,0,431,440,5,3,0,0,432,437,3,28,14,0,433,434,5,1,0,0,
-	434,436,3,28,14,0,435,433,1,0,0,0,436,439,1,0,0,0,437,435,1,0,0,0,437,438,
-	1,0,0,0,438,441,1,0,0,0,439,437,1,0,0,0,440,432,1,0,0,0,440,441,1,0,0,0,
-	441,442,1,0,0,0,442,443,5,4,0,0,443,444,5,9,0,0,444,498,3,28,14,9,445,446,
-	5,61,0,0,446,447,5,63,0,0,447,448,5,29,0,0,448,498,3,28,14,8,449,454,5,
-	5,0,0,450,451,3,28,14,0,451,452,5,1,0,0,452,453,3,28,14,0,453,455,1,0,0,
-	0,454,450,1,0,0,0,454,455,1,0,0,0,455,456,1,0,0,0,456,498,5,6,0,0,457,458,
-	5,51,0,0,458,467,5,5,0,0,459,464,3,30,15,0,460,461,5,1,0,0,461,463,3,30,
-	15,0,462,460,1,0,0,0,463,466,1,0,0,0,464,462,1,0,0,0,464,465,1,0,0,0,465,
-	468,1,0,0,0,466,464,1,0,0,0,467,459,1,0,0,0,467,468,1,0,0,0,468,469,1,0,
-	0,0,469,498,5,6,0,0,470,471,5,59,0,0,471,480,5,5,0,0,472,477,3,32,16,0,
-	473,474,5,1,0,0,474,476,3,32,16,0,475,473,1,0,0,0,476,479,1,0,0,0,477,475,
-	1,0,0,0,477,478,1,0,0,0,478,481,1,0,0,0,479,477,1,0,0,0,480,472,1,0,0,0,
-	480,481,1,0,0,0,481,482,1,0,0,0,482,498,5,6,0,0,483,492,5,13,0,0,484,489,
-	3,28,14,0,485,486,5,1,0,0,486,488,3,28,14,0,487,485,1,0,0,0,488,491,1,0,
-	0,0,489,487,1,0,0,0,489,490,1,0,0,0,490,493,1,0,0,0,491,489,1,0,0,0,492,
-	484,1,0,0,0,492,493,1,0,0,0,493,494,1,0,0,0,494,498,5,14,0,0,495,498,5,
-	32,0,0,496,498,5,63,0,0,497,427,1,0,0,0,497,429,1,0,0,0,497,430,1,0,0,0,
-	497,445,1,0,0,0,497,449,1,0,0,0,497,457,1,0,0,0,497,470,1,0,0,0,497,483,
-	1,0,0,0,497,495,1,0,0,0,497,496,1,0,0,0,498,504,1,0,0,0,499,500,10,7,0,
-	0,500,501,5,21,0,0,501,503,3,28,14,8,502,499,1,0,0,0,503,506,1,0,0,0,504,
-	502,1,0,0,0,504,505,1,0,0,0,505,29,1,0,0,0,506,504,1,0,0,0,507,508,5,63,
-	0,0,508,509,5,8,0,0,509,510,3,28,14,0,510,31,1,0,0,0,511,514,5,63,0,0,512,
-	513,5,8,0,0,513,515,3,28,14,0,514,512,1,0,0,0,514,515,1,0,0,0,515,33,1,
-	0,0,0,45,47,53,67,75,86,89,94,98,104,118,206,209,223,226,236,239,246,257,
-	260,269,290,335,338,344,346,361,370,373,383,386,395,398,421,437,440,454,
-	464,467,477,480,489,492,497,504,514];
+	12,1,12,1,12,1,12,1,12,3,12,423,8,12,1,13,1,13,1,13,1,13,1,14,1,14,1,14,
+	1,14,1,14,1,14,1,14,1,14,5,14,437,8,14,10,14,12,14,440,9,14,3,14,442,8,
+	14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,3,14,456,
+	8,14,1,14,1,14,1,14,1,14,1,14,1,14,5,14,464,8,14,10,14,12,14,467,9,14,3,
+	14,469,8,14,1,14,1,14,1,14,1,14,1,14,1,14,5,14,477,8,14,10,14,12,14,480,
+	9,14,3,14,482,8,14,1,14,1,14,1,14,1,14,1,14,5,14,489,8,14,10,14,12,14,492,
+	9,14,3,14,494,8,14,1,14,1,14,1,14,1,14,1,14,1,14,1,14,3,14,503,8,14,1,14,
+	1,14,1,14,5,14,508,8,14,10,14,12,14,511,9,14,1,15,1,15,1,15,1,15,1,16,1,
+	16,1,16,3,16,520,8,16,1,16,0,2,18,28,17,0,2,4,6,8,10,12,14,16,18,20,22,
+	24,26,28,30,32,0,0,602,0,34,1,0,0,0,2,37,1,0,0,0,4,40,1,0,0,0,6,43,1,0,
+	0,0,8,56,1,0,0,0,10,60,1,0,0,0,12,118,1,0,0,0,14,120,1,0,0,0,16,122,1,0,
+	0,0,18,291,1,0,0,0,20,350,1,0,0,0,22,354,1,0,0,0,24,422,1,0,0,0,26,424,
+	1,0,0,0,28,502,1,0,0,0,30,512,1,0,0,0,32,516,1,0,0,0,34,35,3,6,3,0,35,36,
+	5,0,0,1,36,1,1,0,0,0,37,38,3,18,9,0,38,39,5,0,0,1,39,3,1,0,0,0,40,41,3,
+	28,14,0,41,42,5,0,0,1,42,5,1,0,0,0,43,47,3,8,4,0,44,46,3,10,5,0,45,44,1,
+	0,0,0,46,49,1,0,0,0,47,45,1,0,0,0,47,48,1,0,0,0,48,53,1,0,0,0,49,47,1,0,
+	0,0,50,52,3,12,6,0,51,50,1,0,0,0,52,55,1,0,0,0,53,51,1,0,0,0,53,54,1,0,
+	0,0,54,7,1,0,0,0,55,53,1,0,0,0,56,57,5,46,0,0,57,58,5,36,0,0,58,59,5,2,
+	0,0,59,9,1,0,0,0,60,61,5,38,0,0,61,62,5,60,0,0,62,67,5,64,0,0,63,64,5,1,
+	0,0,64,66,5,64,0,0,65,63,1,0,0,0,66,69,1,0,0,0,67,65,1,0,0,0,67,68,1,0,
+	0,0,68,70,1,0,0,0,69,67,1,0,0,0,70,71,5,2,0,0,71,11,1,0,0,0,72,74,3,14,
+	7,0,73,72,1,0,0,0,74,77,1,0,0,0,75,73,1,0,0,0,75,76,1,0,0,0,76,78,1,0,0,
+	0,77,75,1,0,0,0,78,79,5,41,0,0,79,80,5,63,0,0,80,89,5,3,0,0,81,86,3,16,
+	8,0,82,83,5,1,0,0,83,85,3,16,8,0,84,82,1,0,0,0,85,88,1,0,0,0,86,84,1,0,
+	0,0,86,87,1,0,0,0,87,90,1,0,0,0,88,86,1,0,0,0,89,81,1,0,0,0,89,90,1,0,0,
+	0,90,91,1,0,0,0,91,94,5,4,0,0,92,93,5,9,0,0,93,95,3,28,14,0,94,92,1,0,0,
+	0,94,95,1,0,0,0,95,98,1,0,0,0,96,97,5,55,0,0,97,99,3,28,14,0,98,96,1,0,
+	0,0,98,99,1,0,0,0,99,100,1,0,0,0,100,104,5,5,0,0,101,103,3,12,6,0,102,101,
+	1,0,0,0,103,106,1,0,0,0,104,102,1,0,0,0,104,105,1,0,0,0,105,107,1,0,0,0,
+	106,104,1,0,0,0,107,108,5,52,0,0,108,109,3,18,9,0,109,110,5,2,0,0,110,111,
+	5,6,0,0,111,119,1,0,0,0,112,113,5,57,0,0,113,114,5,63,0,0,114,115,5,7,0,
+	0,115,116,3,28,14,0,116,117,5,2,0,0,117,119,1,0,0,0,118,75,1,0,0,0,118,
+	112,1,0,0,0,119,13,1,0,0,0,120,121,5,45,0,0,121,15,1,0,0,0,122,123,5,63,
+	0,0,123,124,5,8,0,0,124,125,3,28,14,0,125,17,1,0,0,0,126,127,6,9,-1,0,127,
+	292,5,56,0,0,128,292,5,39,0,0,129,292,5,65,0,0,130,292,5,63,0,0,131,132,
+	5,35,0,0,132,133,5,3,0,0,133,134,3,18,9,0,134,135,5,1,0,0,135,136,3,18,
+	9,0,136,137,5,4,0,0,137,292,1,0,0,0,138,139,5,23,0,0,139,140,5,3,0,0,140,
+	141,3,18,9,0,141,142,5,4,0,0,142,292,1,0,0,0,143,144,5,24,0,0,144,145,5,
+	3,0,0,145,146,3,18,9,0,146,147,5,4,0,0,147,292,1,0,0,0,148,149,5,25,0,0,
+	149,150,5,3,0,0,150,151,3,18,9,0,151,152,5,4,0,0,152,292,1,0,0,0,153,154,
+	5,53,0,0,154,155,5,3,0,0,155,156,3,18,9,0,156,157,5,4,0,0,157,292,1,0,0,
+	0,158,159,5,49,0,0,159,160,5,3,0,0,160,161,3,18,9,0,161,162,5,4,0,0,162,
+	292,1,0,0,0,163,164,5,26,0,0,164,165,5,3,0,0,165,166,3,18,9,0,166,167,5,
+	4,0,0,167,292,1,0,0,0,168,169,5,27,0,0,169,170,5,3,0,0,170,171,3,18,9,0,
+	171,172,5,4,0,0,172,292,1,0,0,0,173,174,5,40,0,0,174,175,5,3,0,0,175,176,
+	3,18,9,0,176,177,5,4,0,0,177,292,1,0,0,0,178,179,5,28,0,0,179,180,5,3,0,
+	0,180,181,3,18,9,0,181,182,5,1,0,0,182,183,3,18,9,0,183,184,5,1,0,0,184,
+	185,3,18,9,0,185,186,5,4,0,0,186,292,1,0,0,0,187,188,5,42,0,0,188,189,5,
+	13,0,0,189,190,3,28,14,0,190,191,5,14,0,0,191,192,3,18,9,23,192,292,1,0,
+	0,0,193,194,5,58,0,0,194,195,5,13,0,0,195,196,3,28,14,0,196,197,5,14,0,
+	0,197,198,3,18,9,22,198,292,1,0,0,0,199,200,5,41,0,0,200,209,5,3,0,0,201,
+	206,3,16,8,0,202,203,5,1,0,0,203,205,3,16,8,0,204,202,1,0,0,0,205,208,1,
+	0,0,0,206,204,1,0,0,0,206,207,1,0,0,0,207,210,1,0,0,0,208,206,1,0,0,0,209,
+	201,1,0,0,0,209,210,1,0,0,0,210,211,1,0,0,0,211,212,5,4,0,0,212,213,5,5,
+	0,0,213,214,5,52,0,0,214,215,3,18,9,0,215,216,5,2,0,0,216,217,5,6,0,0,217,
+	292,1,0,0,0,218,227,5,5,0,0,219,224,3,18,9,0,220,221,5,1,0,0,221,223,3,
+	18,9,0,222,220,1,0,0,0,223,226,1,0,0,0,224,222,1,0,0,0,224,225,1,0,0,0,
+	225,228,1,0,0,0,226,224,1,0,0,0,227,219,1,0,0,0,227,228,1,0,0,0,228,229,
+	1,0,0,0,229,292,5,6,0,0,230,231,5,51,0,0,231,240,5,5,0,0,232,237,3,20,10,
+	0,233,234,5,1,0,0,234,236,3,20,10,0,235,233,1,0,0,0,236,239,1,0,0,0,237,
+	235,1,0,0,0,237,238,1,0,0,0,238,241,1,0,0,0,239,237,1,0,0,0,240,232,1,0,
+	0,0,240,241,1,0,0,0,241,242,1,0,0,0,242,292,5,6,0,0,243,244,5,11,0,0,244,
+	247,5,63,0,0,245,246,5,7,0,0,246,248,3,18,9,0,247,245,1,0,0,0,247,248,1,
+	0,0,0,248,249,1,0,0,0,249,292,5,12,0,0,250,251,5,48,0,0,251,252,3,18,9,
+	0,252,261,5,5,0,0,253,258,3,22,11,0,254,255,5,2,0,0,255,257,3,22,11,0,256,
+	254,1,0,0,0,257,260,1,0,0,0,258,256,1,0,0,0,258,259,1,0,0,0,259,262,1,0,
+	0,0,260,258,1,0,0,0,261,253,1,0,0,0,261,262,1,0,0,0,262,263,1,0,0,0,263,
+	264,5,6,0,0,264,292,1,0,0,0,265,270,5,13,0,0,266,267,3,18,9,0,267,268,5,
+	1,0,0,268,269,3,18,9,0,269,271,1,0,0,0,270,266,1,0,0,0,270,271,1,0,0,0,
+	271,272,1,0,0,0,272,292,5,14,0,0,273,274,5,43,0,0,274,275,3,18,9,0,275,
+	276,5,54,0,0,276,277,3,18,9,0,277,278,5,37,0,0,278,279,3,18,9,3,279,292,
+	1,0,0,0,280,281,5,47,0,0,281,282,5,63,0,0,282,283,5,7,0,0,283,284,3,18,
+	9,0,284,285,5,44,0,0,285,286,3,18,9,2,286,292,1,0,0,0,287,288,5,3,0,0,288,
+	289,3,18,9,0,289,290,5,4,0,0,290,292,1,0,0,0,291,126,1,0,0,0,291,128,1,
+	0,0,0,291,129,1,0,0,0,291,130,1,0,0,0,291,131,1,0,0,0,291,138,1,0,0,0,291,
+	143,1,0,0,0,291,148,1,0,0,0,291,153,1,0,0,0,291,158,1,0,0,0,291,163,1,0,
+	0,0,291,168,1,0,0,0,291,173,1,0,0,0,291,178,1,0,0,0,291,187,1,0,0,0,291,
+	193,1,0,0,0,291,199,1,0,0,0,291,218,1,0,0,0,291,230,1,0,0,0,291,243,1,0,
+	0,0,291,250,1,0,0,0,291,265,1,0,0,0,291,273,1,0,0,0,291,280,1,0,0,0,291,
+	287,1,0,0,0,292,347,1,0,0,0,293,294,10,20,0,0,294,295,5,22,0,0,295,346,
+	3,18,9,21,296,297,10,19,0,0,297,298,5,33,0,0,298,346,3,18,9,20,299,300,
+	10,18,0,0,300,301,5,21,0,0,301,346,3,18,9,19,302,303,10,17,0,0,303,304,
+	5,50,0,0,304,346,3,18,9,18,305,306,10,9,0,0,306,307,5,15,0,0,307,346,3,
+	18,9,10,308,309,10,8,0,0,309,310,5,16,0,0,310,346,3,18,9,9,311,312,10,7,
+	0,0,312,313,5,17,0,0,313,346,3,18,9,8,314,315,10,6,0,0,315,316,5,18,0,0,
+	316,346,3,18,9,7,317,318,10,5,0,0,318,319,5,19,0,0,319,346,3,18,9,6,320,
+	321,10,4,0,0,321,322,5,20,0,0,322,346,3,18,9,5,323,324,10,39,0,0,324,325,
+	5,29,0,0,325,346,5,63,0,0,326,327,10,38,0,0,327,328,5,29,0,0,328,346,5,
+	65,0,0,329,330,10,21,0,0,330,339,5,3,0,0,331,336,3,18,9,0,332,333,5,1,0,
+	0,333,335,3,18,9,0,334,332,1,0,0,0,335,338,1,0,0,0,336,334,1,0,0,0,336,
+	337,1,0,0,0,337,340,1,0,0,0,338,336,1,0,0,0,339,331,1,0,0,0,339,340,1,0,
+	0,0,340,341,1,0,0,0,341,346,5,4,0,0,342,343,10,16,0,0,343,344,5,34,0,0,
+	344,346,3,28,14,0,345,293,1,0,0,0,345,296,1,0,0,0,345,299,1,0,0,0,345,302,
+	1,0,0,0,345,305,1,0,0,0,345,308,1,0,0,0,345,311,1,0,0,0,345,314,1,0,0,0,
+	345,317,1,0,0,0,345,320,1,0,0,0,345,323,1,0,0,0,345,326,1,0,0,0,345,329,
+	1,0,0,0,345,342,1,0,0,0,346,349,1,0,0,0,347,345,1,0,0,0,347,348,1,0,0,0,
+	348,19,1,0,0,0,349,347,1,0,0,0,350,351,5,63,0,0,351,352,5,7,0,0,352,353,
+	3,18,9,0,353,21,1,0,0,0,354,355,3,24,12,0,355,356,5,10,0,0,356,357,3,18,
+	9,0,357,23,1,0,0,0,358,359,5,11,0,0,359,362,5,63,0,0,360,361,5,7,0,0,361,
+	363,3,24,12,0,362,360,1,0,0,0,362,363,1,0,0,0,363,364,1,0,0,0,364,423,5,
+	12,0,0,365,374,5,5,0,0,366,371,3,24,12,0,367,368,5,1,0,0,368,370,3,24,12,
+	0,369,367,1,0,0,0,370,373,1,0,0,0,371,369,1,0,0,0,371,372,1,0,0,0,372,375,
+	1,0,0,0,373,371,1,0,0,0,374,366,1,0,0,0,374,375,1,0,0,0,375,376,1,0,0,0,
+	376,423,5,6,0,0,377,378,5,51,0,0,378,387,5,5,0,0,379,384,3,26,13,0,380,
+	381,5,1,0,0,381,383,3,26,13,0,382,380,1,0,0,0,383,386,1,0,0,0,384,382,1,
+	0,0,0,384,385,1,0,0,0,385,388,1,0,0,0,386,384,1,0,0,0,387,379,1,0,0,0,387,
+	388,1,0,0,0,388,389,1,0,0,0,389,423,5,6,0,0,390,399,5,13,0,0,391,396,3,
+	24,12,0,392,393,5,1,0,0,393,395,3,24,12,0,394,392,1,0,0,0,395,398,1,0,0,
+	0,396,394,1,0,0,0,396,397,1,0,0,0,397,400,1,0,0,0,398,396,1,0,0,0,399,391,
+	1,0,0,0,399,400,1,0,0,0,400,401,1,0,0,0,401,423,5,14,0,0,402,403,5,35,0,
+	0,403,404,5,3,0,0,404,405,3,24,12,0,405,406,5,1,0,0,406,407,3,24,12,0,407,
+	408,5,4,0,0,408,423,1,0,0,0,409,423,5,39,0,0,410,423,5,56,0,0,411,423,5,
+	65,0,0,412,413,5,53,0,0,413,414,5,3,0,0,414,415,3,24,12,0,415,416,5,4,0,
+	0,416,423,1,0,0,0,417,423,5,63,0,0,418,419,5,3,0,0,419,420,3,24,12,0,420,
+	421,5,4,0,0,421,423,1,0,0,0,422,358,1,0,0,0,422,365,1,0,0,0,422,377,1,0,
+	0,0,422,390,1,0,0,0,422,402,1,0,0,0,422,409,1,0,0,0,422,410,1,0,0,0,422,
+	411,1,0,0,0,422,412,1,0,0,0,422,417,1,0,0,0,422,418,1,0,0,0,423,25,1,0,
+	0,0,424,425,5,63,0,0,425,426,5,7,0,0,426,427,3,24,12,0,427,27,1,0,0,0,428,
+	429,6,14,-1,0,429,503,5,30,0,0,430,503,5,31,0,0,431,432,5,41,0,0,432,441,
+	5,3,0,0,433,438,3,28,14,0,434,435,5,1,0,0,435,437,3,28,14,0,436,434,1,0,
+	0,0,437,440,1,0,0,0,438,436,1,0,0,0,438,439,1,0,0,0,439,442,1,0,0,0,440,
+	438,1,0,0,0,441,433,1,0,0,0,441,442,1,0,0,0,442,443,1,0,0,0,443,444,5,4,
+	0,0,444,445,5,9,0,0,445,503,3,28,14,10,446,447,5,61,0,0,447,448,5,63,0,
+	0,448,449,5,29,0,0,449,503,3,28,14,9,450,455,5,5,0,0,451,452,3,28,14,0,
+	452,453,5,1,0,0,453,454,3,28,14,0,454,456,1,0,0,0,455,451,1,0,0,0,455,456,
+	1,0,0,0,456,457,1,0,0,0,457,503,5,6,0,0,458,459,5,51,0,0,459,468,5,5,0,
+	0,460,465,3,30,15,0,461,462,5,1,0,0,462,464,3,30,15,0,463,461,1,0,0,0,464,
+	467,1,0,0,0,465,463,1,0,0,0,465,466,1,0,0,0,466,469,1,0,0,0,467,465,1,0,
+	0,0,468,460,1,0,0,0,468,469,1,0,0,0,469,470,1,0,0,0,470,503,5,6,0,0,471,
+	472,5,59,0,0,472,481,5,5,0,0,473,478,3,32,16,0,474,475,5,1,0,0,475,477,
+	3,32,16,0,476,474,1,0,0,0,477,480,1,0,0,0,478,476,1,0,0,0,478,479,1,0,0,
+	0,479,482,1,0,0,0,480,478,1,0,0,0,481,473,1,0,0,0,481,482,1,0,0,0,482,483,
+	1,0,0,0,483,503,5,6,0,0,484,493,5,13,0,0,485,490,3,28,14,0,486,487,5,1,
+	0,0,487,489,3,28,14,0,488,486,1,0,0,0,489,492,1,0,0,0,490,488,1,0,0,0,490,
+	491,1,0,0,0,491,494,1,0,0,0,492,490,1,0,0,0,493,485,1,0,0,0,493,494,1,0,
+	0,0,494,495,1,0,0,0,495,503,5,14,0,0,496,503,5,32,0,0,497,503,5,63,0,0,
+	498,499,5,3,0,0,499,500,3,28,14,0,500,501,5,4,0,0,501,503,1,0,0,0,502,428,
+	1,0,0,0,502,430,1,0,0,0,502,431,1,0,0,0,502,446,1,0,0,0,502,450,1,0,0,0,
+	502,458,1,0,0,0,502,471,1,0,0,0,502,484,1,0,0,0,502,496,1,0,0,0,502,497,
+	1,0,0,0,502,498,1,0,0,0,503,509,1,0,0,0,504,505,10,8,0,0,505,506,5,21,0,
+	0,506,508,3,28,14,9,507,504,1,0,0,0,508,511,1,0,0,0,509,507,1,0,0,0,509,
+	510,1,0,0,0,510,29,1,0,0,0,511,509,1,0,0,0,512,513,5,63,0,0,513,514,5,8,
+	0,0,514,515,3,28,14,0,515,31,1,0,0,0,516,519,5,63,0,0,517,518,5,8,0,0,518,
+	520,3,28,14,0,519,517,1,0,0,0,519,520,1,0,0,0,520,33,1,0,0,0,45,47,53,67,
+	75,86,89,94,98,104,118,206,209,224,227,237,240,247,258,261,270,291,336,
+	339,345,347,362,371,374,384,387,396,399,422,438,441,455,465,468,478,481,
+	490,493,502,509,519];
 
 	private static __ATN: ATN;
 	public static get _ATN(): ATN {
@@ -3908,6 +3925,9 @@ export class AbstractionContext extends ExprContext {
 	public RETURN(): TerminalNode {
 		return this.getToken(stellaParser.RETURN, 0);
 	}
+	public SEMICOLON(): TerminalNode {
+		return this.getToken(stellaParser.SEMICOLON, 0);
+	}
 	public RBRACE(): TerminalNode {
 		return this.getToken(stellaParser.RBRACE, 0);
 	}
@@ -5148,6 +5168,39 @@ export class TypeRecContext extends StellatypeContext {
 	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
 		if (visitor.visitTypeRec) {
 			return visitor.visitTypeRec(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class TypeParensContext extends StellatypeContext {
+	constructor(parser: stellaParser, ctx: StellatypeContext) {
+		super(parser, ctx.parentCtx, ctx.invokingState);
+		super.copyFrom(ctx);
+	}
+	public LPAREN(): TerminalNode {
+		return this.getToken(stellaParser.LPAREN, 0);
+	}
+	public stellatype(): StellatypeContext {
+		return this.getTypedRuleContext(StellatypeContext, 0) as StellatypeContext;
+	}
+	public RPAREN(): TerminalNode {
+		return this.getToken(stellaParser.RPAREN, 0);
+	}
+	public enterRule(listener: stellaParserListener): void {
+	    if(listener.enterTypeParens) {
+	 		listener.enterTypeParens(this);
+		}
+	}
+	public exitRule(listener: stellaParserListener): void {
+	    if(listener.exitTypeParens) {
+	 		listener.exitTypeParens(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitTypeParens) {
+			return visitor.visitTypeParens(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
