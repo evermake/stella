@@ -14,43 +14,23 @@ export interface FunctionType {
 
 export type Type = 'Nat' | 'Bool' | FunctionType;
 
-export interface Succ {
-  type: 'Succ';
-  expr: Expr;
-}
 export interface Cons {
   type: 'Cons';
   head: Expr;
   tail: Expr;
 }
-export interface ListHead {
-  type: 'ListHead';
+type UnaryFunction<T extends Exclude<string, T>> = {
+  type: T;
   expr: Expr;
-}
-export interface ListTail {
-  type: 'ListTail';
-  expr: Expr;
-}
-export interface ListIsEmpty {
-  type: 'ListIsEmpty';
-  expr: Expr;
-}
-export interface Not {
-  type: 'Not';
-  expr: Expr;
-}
-export interface NatPred {
-  type: 'NatPred';
-  expr: Expr;
-}
-export interface NatIsZero {
-  type: 'NatIsZero';
-  expr: Expr;
-}
-export interface Fix {
-  type: 'Fix';
-  expr: Expr;
-}
+};
+export type Succ = UnaryFunction<'Succ'>;
+export type ListHead = UnaryFunction<'ListHead'>;
+export type ListTail = UnaryFunction<'ListTail'>;
+export type ListIsEmpty = UnaryFunction<'ListIsEmpty'>;
+export type Not = UnaryFunction<'Not'>;
+export type NatPred = UnaryFunction<'NatPred'>;
+export type NatIsZero = UnaryFunction<'NatIsZero'>;
+export type Fix = UnaryFunction<'Fix'>;
 export interface NatRec {
   type: 'NatRec';
   n: Expr;
