@@ -21,9 +21,9 @@ extension:
 decl: (annotations += annotation)* 'fn' name = StellaIdent '(' (
         paramDecls += paramDecl (',' paramDecls += paramDecl)*
     )? ')' ('->' returnType = stellatype)? (
-        'throws' throwType = stellatype
-    )? '{' (localDecls += decl)* 'return' returnExpr = expr ';' '}' # DeclFun
-    | 'type' name = StellaIdent '=' atype = stellatype ';'          # DeclTypeAlias;
+        'throws' throwTypes+= stellatype (',' throwTypes+=stellatype)*
+    )? '{' (localDecls += decl)* 'return' returnExpr = expr '}' # DeclFun
+    | 'type' name = StellaIdent '=' atype = stellatype          # DeclTypeAlias;
 
 annotation: 'inline' # InlineAnnotation;
 paramDecl: name = StellaIdent ':' paramType = stellatype;
@@ -34,9 +34,12 @@ expr:
     | expr_ = expr '.' index = INTEGER   # DotTuple
     | 'true'                             # ConstTrue
     | 'false'                            # ConstFalse
+    | 'unit'                             # ConstUnit
     | n = INTEGER                        # ConstInt
     | name = StellaIdent                 # Var
     // expr
+    | 'inl' '(' expr_=expr ')'                     # Inl
+    | 'inr' '(' expr_=expr ')'                     # Inr
     | 'cons' '(' head = expr ',' tail = expr ')'                     # ConsList
     | 'List::head' '(' list = expr ')'                               # Head
     | 'List::isempty' '(' list = expr ')'                            # IsEmpty
@@ -53,21 +56,23 @@ expr:
     | fun = expr '(' (args += expr (',' args += expr)*)? ')' # Application
     // expr
     | expr '*' expr   # Multiply
+    | expr '/' expr   # Divide
     | expr 'and' expr # LogicAnd
     // expr
     | expr '+' expr                        # Add
+    | expr '-' expr                        # Subtract
     | expr 'or' expr                       # LogicOr
     | expr_ = expr 'as' type_ = stellatype # TypeAsc
     | 'fn' '(' (
         paramDecls += paramDecl (',' paramDecls += paramDecl)*
-    )? ')' '{' 'return' returnExpr = expr ';' '}'       # Abstraction
+    )? ')' '{' 'return' returnExpr = expr '}'       # Abstraction
     | '{' (exprs += expr (',' exprs += expr)*)? '}' # Tuple
-    | 'record' '{' (
+    | '{' (
         bindings += binding (',' bindings += binding)*
     )? '}'                                            # Record
     | '<|' label = StellaIdent ('=' rhs = expr)? '|>' # Variant
     | 'match' expr '{' (
-        cases += match_case (';' cases += match_case)*
+        cases += match_case ('|' cases += match_case)*
     )? '}'                                         # match
     | '[' (exprs += expr (',' exprs += expr))? ']' # List
     // expr
@@ -79,8 +84,13 @@ expr:
     | left = expr '!=' right = expr # NotEqual
     // expr
     | 'if' condition = expr 'then' thenExpr = expr 'else' elseExpr = expr # If
-    | 'let' var = StellaIdent '=' value = expr 'in' body = expr           # Let
-    | '(' expr ')'                                                        # ParenthesisedExpr;
+    | 'let' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # Let
+    | 'letrec' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # Let
+    | '(' expr ')'                                                        # ParenthesisedExpr
+    | expr ';' expr # Sequence
+    | expr ';' # TerminatingSemicolon;
+
+patternBinding: pat=pattern '=' rhs=expr ;
 
 binding: name = StellaIdent '=' rhs = expr;
 
@@ -88,8 +98,10 @@ match_case: pattern '=>' expr;
 
 pattern:
     '<|' label = StellaIdent ('=' pattern)? '|>'                # PatternVariant
+    | 'inl' '(' pat=pattern ')' # PatternInl
+    | 'inr' '(' pat=pattern ')' # PatternInr
     | '{' (patterns += pattern (',' patterns += pattern)*)? '}' # PatternTuple
-    | 'record' '{' (
+    | '{' (
         patterns += labelledPattern (
             ',' patterns += labelledPattern
         )*
@@ -98,6 +110,7 @@ pattern:
     | 'cons' '(' head = pattern ',' tail = pattern ')'          # PatternCons
     | 'false'                                                   # PatternFalse
     | 'true'                                                    # PatternTrue
+    | 'unit'                                                    # PatternUnit
     | n = INTEGER                                               # PatternInt
     | 'succ' '(' n = pattern ')'                                # PatternSucc
     | name = StellaIdent                                        # PatternVar
@@ -114,12 +127,12 @@ stellatype:
     | 'µ' var = StellaIdent '.' type_ = stellatype             # TypeRec
     | left = stellatype '+' right = stellatype                 # TypeSum
     | '{' (types += stellatype (',' types += stellatype))? '}' # TypeTuple
-    | 'record' '{' (
+    | '{' (
         fieldTypes += recordFieldType (
             ',' fieldTypes += recordFieldType
         )*
     )? '}' # TypeRecord
-    | 'variant' '{' (
+    | '{' (
         fieldTypes += variantFieldType (
             ',' fieldTypes += variantFieldType
         )*
