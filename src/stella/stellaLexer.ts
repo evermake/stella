@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Generated from src/stella/stellaLexer.g4 by ANTLR 4.12.0
 // noinspection ES6UnusedImports,JSUnusedGlobalSymbols,JSUnusedLocalSymbols
 import {
