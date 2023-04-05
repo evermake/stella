@@ -1253,14 +1253,14 @@ export default class stellaParser extends Parser {
 				break;
 			case 28:
 				{
-				localctx = new LetContext(this, localctx);
+				localctx = new LetRecContext(this, localctx);
 				this._ctx = localctx;
 				_prevctx = localctx;
 				this.state = 307;
 				this.match(stellaParser.Surrogate_id_SYMB_52);
 				this.state = 308;
-				(localctx as LetContext)._patternBinding = this.patternBinding();
-				(localctx as LetContext)._patternBindings.push((localctx as LetContext)._patternBinding);
+				(localctx as LetRecContext)._patternBinding = this.patternBinding();
+				(localctx as LetRecContext)._patternBindings.push((localctx as LetRecContext)._patternBinding);
 				this.state = 313;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
@@ -1270,8 +1270,8 @@ export default class stellaParser extends Parser {
 					this.state = 309;
 					this.match(stellaParser.Surrogate_id_SYMB_0);
 					this.state = 310;
-					(localctx as LetContext)._patternBinding = this.patternBinding();
-					(localctx as LetContext)._patternBindings.push((localctx as LetContext)._patternBinding);
+					(localctx as LetRecContext)._patternBinding = this.patternBinding();
+					(localctx as LetRecContext)._patternBindings.push((localctx as LetRecContext)._patternBinding);
 					}
 					}
 					this.state = 315;
@@ -1281,7 +1281,7 @@ export default class stellaParser extends Parser {
 				this.state = 316;
 				this.match(stellaParser.Surrogate_id_SYMB_46);
 				this.state = 317;
-				(localctx as LetContext)._body = this.expr(4);
+				(localctx as LetRecContext)._body = this.expr(4);
 				}
 				break;
 			case 29:
@@ -3981,6 +3981,54 @@ export class LogicAndContext extends ExprContext {
 		}
 	}
 }
+export class LetRecContext extends ExprContext {
+	public _patternBinding!: PatternBindingContext;
+	public _patternBindings: PatternBindingContext[] = [];
+	public _body!: ExprContext;
+	constructor(parser: stellaParser, ctx: ExprContext) {
+		super(parser, ctx.parentCtx, ctx.invokingState);
+		super.copyFrom(ctx);
+	}
+	public Surrogate_id_SYMB_52(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_52, 0);
+	}
+	public Surrogate_id_SYMB_46(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_46, 0);
+	}
+	public patternBinding_list(): PatternBindingContext[] {
+		return this.getTypedRuleContexts(PatternBindingContext) as PatternBindingContext[];
+	}
+	public patternBinding(i: number): PatternBindingContext {
+		return this.getTypedRuleContext(PatternBindingContext, i) as PatternBindingContext;
+	}
+	public expr(): ExprContext {
+		return this.getTypedRuleContext(ExprContext, 0) as ExprContext;
+	}
+	public Surrogate_id_SYMB_0_list(): TerminalNode[] {
+	    	return this.getTokens(stellaParser.Surrogate_id_SYMB_0);
+	}
+	public Surrogate_id_SYMB_0(i: number): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_0, i);
+	}
+	public enterRule(listener: stellaParserListener): void {
+	    if(listener.enterLetRec) {
+	 		listener.enterLetRec(this);
+		}
+	}
+	public exitRule(listener: stellaParserListener): void {
+	    if(listener.exitLetRec) {
+	 		listener.exitLetRec(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitLetRec) {
+			return visitor.visitLetRec(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
 export class LogicOrContext extends ExprContext {
 	public _lhs!: ExprContext;
 	public _rhs!: ExprContext;
@@ -4707,9 +4755,6 @@ export class LetContext extends ExprContext {
 	}
 	public Surrogate_id_SYMB_0(i: number): TerminalNode {
 		return this.getToken(stellaParser.Surrogate_id_SYMB_0, i);
-	}
-	public Surrogate_id_SYMB_52(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_52, 0);
 	}
 	public enterRule(listener: stellaParserListener): void {
 	    if(listener.enterLet) {

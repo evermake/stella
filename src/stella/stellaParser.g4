@@ -85,7 +85,7 @@ expr:
     // expr
     | 'if' condition = expr 'then' thenExpr = expr 'else' elseExpr = expr # If
     | 'let' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # Let
-    | 'letrec' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # Let
+    | 'letrec' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # LetRec
     | '(' expr ')'                                                        # ParenthesisedExpr
     | expr ';' expr # Sequence
     | expr ';' # TerminatingSemicolon;

@@ -35,6 +35,7 @@ import { MultiplyContext } from "./stellaParser";
 import { RecordContext } from "./stellaParser";
 import { ListContext } from "./stellaParser";
 import { LogicAndContext } from "./stellaParser";
+import { LetRecContext } from "./stellaParser";
 import { LogicOrContext } from "./stellaParser";
 import { HeadContext } from "./stellaParser";
 import { TerminatingSemicolonContext } from "./stellaParser";
@@ -472,6 +473,18 @@ export default class stellaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitLogicAnd?: (ctx: LogicAndContext) => void;
+	/**
+	 * Enter a parse tree produced by the `LetRec`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	enterLetRec?: (ctx: LetRecContext) => void;
+	/**
+	 * Exit a parse tree produced by the `LetRec`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	exitLetRec?: (ctx: LetRecContext) => void;
 	/**
 	 * Enter a parse tree produced by the `LogicOr`
 	 * labeled alternative in `stellaParser.expr`.
