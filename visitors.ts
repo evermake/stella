@@ -404,43 +404,43 @@ export class AstTransformer extends StellaVisitor<Node> {
   visitMultiply: (ctx: MultiplyContext) => Multiply = (ctx) => {
     return {
       type: 'Multiply',
-      lhs: this.visitExpr(ctx._lhs),
-      rhs: this.visitExpr(ctx._rhs),
+      left: this.visitExpr(ctx._lhs),
+      right: this.visitExpr(ctx._rhs),
     };
   };
   visitDivide: (ctx: DivideContext) => Divide = (ctx) => {
     return {
       type: 'Divide',
-      lhs: this.visitExpr(ctx._lhs),
-      rhs: this.visitExpr(ctx._rhs),
+      left: this.visitExpr(ctx._lhs),
+      right: this.visitExpr(ctx._rhs),
     };
   };
   visitLogicAnd: (ctx: LogicAndContext) => LogicalAnd = (ctx) => {
     return {
       type: 'LogicalAnd',
-      lhs: this.visitExpr(ctx._lhs),
-      rhs: this.visitExpr(ctx._rhs),
+      left: this.visitExpr(ctx._lhs),
+      right: this.visitExpr(ctx._rhs),
     };
   };
   visitAdd: (ctx: AddContext) => Add = (ctx) => {
     return {
       type: 'Add',
-      lhs: this.visitExpr(ctx._lhs),
-      rhs: this.visitExpr(ctx._rhs),
+      left: this.visitExpr(ctx._lhs),
+      right: this.visitExpr(ctx._rhs),
     };
   };
   visitSubtract: (ctx: SubtractContext) => Subtract = (ctx) => {
     return {
       type: 'Subtract',
-      lhs: this.visitExpr(ctx._lhs),
-      rhs: this.visitExpr(ctx._rhs),
+      left: this.visitExpr(ctx._lhs),
+      right: this.visitExpr(ctx._rhs),
     };
   };
   visitLogicOr: (ctx: LogicOrContext) => LogicalOr = (ctx) => {
     return {
       type: 'LogicalOr',
-      lhs: this.visitExpr(ctx._lhs),
-      rhs: this.visitExpr(ctx._rhs),
+      left: this.visitExpr(ctx._lhs),
+      right: this.visitExpr(ctx._rhs),
     };
   };
   visitAbstraction: (ctx: AbstractionContext) => Abstraction = (ctx) => {

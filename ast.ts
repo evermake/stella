@@ -114,8 +114,8 @@ export interface TypeAscription {
 }
 type BinaryOp<T extends Exclude<string, T>> = {
   type: T;
-  lhs: Expr;
-  rhs: Expr;
+  left: Expr;
+  right: Expr;
 };
 export type Multiply = BinaryOp<'Multiply'>;
 export type Divide = BinaryOp<'Divide'>;
