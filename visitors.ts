@@ -128,7 +128,11 @@ export class AstTransformer extends StellaVisitor<Node> {
     return {
       type: 'DeclFun',
       name: ctx._name.text,
+      annotations: ctx._annotations.map((a) => a.getText()),
+      nestedDeclarations: ctx.decl_list().map(this.visitDecl),
       parameters: ctx.paramDecl_list().map(this.visitParamDecl),
+      returnType: ctx._returnType && this.visitType(ctx._returnType),
+      throwTypes: ctx._throwTypes.map(this.visitType),
       returnValue: this.visitExpr(ctx._returnExpr),
     };
   };

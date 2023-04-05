@@ -5,6 +5,22 @@ export type Extension = `#${string}`;
 
 export type Decl = DeclFun | DeclTypeAlias;
 
+// TODO: integrate language extensions in the types
+// Examples:
+/*
+export type NullaryFunctionExtension = { nullary: true };
+export type MultiparamFunctionExtension = { multiparam: true };
+type ParamType<Extension = {}> = Extension extends MultiparamFunctionExtension &
+  NullaryFunctionExtension
+  ? ParamDecl[]
+  : Extension extends NullaryFunctionExtension
+  ? [] | [ParamDecl]
+  : Extension extends MultiparamFunctionExtension
+  ? ParamDecl[]
+  : [ParamDecl];
+type Param = ParamType<NullaryFunctionExtension>;
+*/
+
 // ---- Types
 
 type SimpleType<T extends Exclude<string, T>> = {
@@ -113,10 +129,17 @@ export interface ParamDecl {
   paramType: Type;
 }
 
+type Annotation = string;
+
 export interface DeclFun {
   type: 'DeclFun';
+  annotations: Annotation[];
   name: Identifier;
   returnType?: Type;
+  /** Only present if the `#exceptions` extension is enabled */
+  throwTypes: Type[];
+  /** Only present if the `#nested-function-declarations` extension is enabled */
+  nestedDeclarations: Decl[];
   // TODO: handle multi-param and nullary extensions being enabled, and make [ParamDecl] (tuple type with 1 element) the default
   parameters: ParamDecl[];
   returnValue: Expr;
