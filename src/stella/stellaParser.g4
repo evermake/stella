@@ -55,13 +55,13 @@ expr:
     // expr
     | fun = expr '(' (args += expr (',' args += expr)*)? ')' # Application
     // expr
-    | expr '*' expr   # Multiply
-    | expr '/' expr   # Divide
-    | expr 'and' expr # LogicAnd
+    | lhs=expr '*' rhs=expr   # Multiply
+    | lhs=expr '/' rhs=expr   # Divide
+    | lhs=expr 'and' rhs=expr # LogicAnd
     // expr
-    | expr '+' expr                        # Add
-    | expr '-' expr                        # Subtract
-    | expr 'or' expr                       # LogicOr
+    | lhs=expr '+' rhs=expr                        # Add
+    | lhs=expr '-' rhs=expr                        # Subtract
+    | lhs=expr 'or' rhs=expr                       # LogicOr
     | expr_ = expr 'as' type_ = stellatype # TypeAsc
     | 'fn' '(' (
         paramDecls += paramDecl (',' paramDecls += paramDecl)*

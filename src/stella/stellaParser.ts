@@ -1,5 +1,5 @@
 // @ts-nocheck
-// Generated from src/stella/stellaParser.g4 by ANTLR 4.12.0
+// Generated from stellaParser.g4 by ANTLR 4.12.0
 // noinspection ES6UnusedImports,JSUnusedGlobalSymbols,JSUnusedLocalSymbols
 
 import {
@@ -112,121 +112,121 @@ export default class stellaParser extends Parser {
 	public static readonly RULE_stellatype = 15;
 	public static readonly RULE_recordFieldType = 16;
 	public static readonly RULE_variantFieldType = 17;
-	public static readonly literalNames: (string | null)[] = [ null, "','",
-                                                            "';'", "'('",
-                                                            "')'", "'{'",
-                                                            "'}'", "'='",
-                                                            "':'", "'->'",
-                                                            "'=>'", "'|'",
-                                                            "'<|'", "'|>'",
-                                                            "'['", "']'",
-                                                            "'<'", "'<='",
-                                                            "'>'", "'>='",
-                                                            "'=='", "'!='",
-                                                            "'+'", "'-'",
-                                                            "'*'", "'/'",
-                                                            "'.'", "'List::head'",
-                                                            "'List::isempty'",
-                                                            "'List::tail'",
-                                                            "'Nat::pred'",
-                                                            "'Nat::iszero'",
-                                                            "'Nat::rec'",
-                                                            "'Bool'", "'Nat'",
-                                                            "'Unit'", "'and'",
-                                                            "'as'", "'cons'",
-                                                            "'core'", "'else'",
-                                                            "'extend'",
-                                                            "'false'", "'fix'",
-                                                            "'fn'", "'fold'",
-                                                            "'if'", "'in'",
-                                                            "'inl'", "'inline'",
-                                                            "'inr'", "'language'",
-                                                            "'let'", "'letrec'",
-                                                            "'match'", "'not'",
-                                                            "'or'", "'return'",
-                                                            "'succ'", "'then'",
-                                                            "'throws'",
-                                                            "'true'", "'type'",
-                                                            "'unfold'",
-                                                            "'unit'", "'with'",
-                                                            "'\\u00B5'" ];
-	public static readonly symbolicNames: (string | null)[] = [ null, "Surrogate_id_SYMB_0",
-                                                             "Surrogate_id_SYMB_1",
-                                                             "Surrogate_id_SYMB_2",
-                                                             "Surrogate_id_SYMB_3",
-                                                             "Surrogate_id_SYMB_4",
-                                                             "Surrogate_id_SYMB_5",
-                                                             "Surrogate_id_SYMB_6",
-                                                             "Surrogate_id_SYMB_7",
-                                                             "Surrogate_id_SYMB_8",
-                                                             "Surrogate_id_SYMB_9",
-                                                             "Surrogate_id_SYMB_10",
-                                                             "Surrogate_id_SYMB_11",
-                                                             "Surrogate_id_SYMB_12",
-                                                             "Surrogate_id_SYMB_13",
-                                                             "Surrogate_id_SYMB_14",
-                                                             "Surrogate_id_SYMB_15",
-                                                             "Surrogate_id_SYMB_16",
-                                                             "Surrogate_id_SYMB_17",
-                                                             "Surrogate_id_SYMB_18",
-                                                             "Surrogate_id_SYMB_19",
-                                                             "Surrogate_id_SYMB_20",
-                                                             "Surrogate_id_SYMB_21",
-                                                             "Surrogate_id_SYMB_22",
-                                                             "Surrogate_id_SYMB_23",
-                                                             "Surrogate_id_SYMB_24",
-                                                             "Surrogate_id_SYMB_25",
-                                                             "Surrogate_id_SYMB_26",
-                                                             "Surrogate_id_SYMB_27",
-                                                             "Surrogate_id_SYMB_28",
-                                                             "Surrogate_id_SYMB_29",
-                                                             "Surrogate_id_SYMB_30",
-                                                             "Surrogate_id_SYMB_31",
-                                                             "Surrogate_id_SYMB_32",
-                                                             "Surrogate_id_SYMB_33",
-                                                             "Surrogate_id_SYMB_34",
-                                                             "Surrogate_id_SYMB_35",
-                                                             "Surrogate_id_SYMB_36",
-                                                             "Surrogate_id_SYMB_37",
-                                                             "Surrogate_id_SYMB_38",
-                                                             "Surrogate_id_SYMB_39",
-                                                             "Surrogate_id_SYMB_40",
-                                                             "Surrogate_id_SYMB_41",
-                                                             "Surrogate_id_SYMB_42",
-                                                             "Surrogate_id_SYMB_43",
-                                                             "Surrogate_id_SYMB_44",
-                                                             "Surrogate_id_SYMB_45",
-                                                             "Surrogate_id_SYMB_46",
-                                                             "Surrogate_id_SYMB_47",
-                                                             "Surrogate_id_SYMB_48",
-                                                             "Surrogate_id_SYMB_49",
-                                                             "Surrogate_id_SYMB_50",
-                                                             "Surrogate_id_SYMB_51",
-                                                             "Surrogate_id_SYMB_52",
-                                                             "Surrogate_id_SYMB_53",
-                                                             "Surrogate_id_SYMB_54",
-                                                             "Surrogate_id_SYMB_55",
-                                                             "Surrogate_id_SYMB_56",
-                                                             "Surrogate_id_SYMB_57",
-                                                             "Surrogate_id_SYMB_58",
-                                                             "Surrogate_id_SYMB_59",
-                                                             "Surrogate_id_SYMB_60",
-                                                             "Surrogate_id_SYMB_61",
-                                                             "Surrogate_id_SYMB_62",
-                                                             "Surrogate_id_SYMB_63",
-                                                             "Surrogate_id_SYMB_64",
-                                                             "Surrogate_id_SYMB_65",
-                                                             "COMMENT_antlr_builtin",
-                                                             "MULTICOMMENT_antlr_builtin",
-                                                             "StellaIdent",
-                                                             "ExtensionName",
-                                                             "INTEGER",
+	public static readonly literalNames: (string | null)[] = [ null, "','", 
+                                                            "';'", "'('", 
+                                                            "')'", "'{'", 
+                                                            "'}'", "'='", 
+                                                            "':'", "'->'", 
+                                                            "'=>'", "'|'", 
+                                                            "'<|'", "'|>'", 
+                                                            "'['", "']'", 
+                                                            "'<'", "'<='", 
+                                                            "'>'", "'>='", 
+                                                            "'=='", "'!='", 
+                                                            "'+'", "'-'", 
+                                                            "'*'", "'/'", 
+                                                            "'.'", "'List::head'", 
+                                                            "'List::isempty'", 
+                                                            "'List::tail'", 
+                                                            "'Nat::pred'", 
+                                                            "'Nat::iszero'", 
+                                                            "'Nat::rec'", 
+                                                            "'Bool'", "'Nat'", 
+                                                            "'Unit'", "'and'", 
+                                                            "'as'", "'cons'", 
+                                                            "'core'", "'else'", 
+                                                            "'extend'", 
+                                                            "'false'", "'fix'", 
+                                                            "'fn'", "'fold'", 
+                                                            "'if'", "'in'", 
+                                                            "'inl'", "'inline'", 
+                                                            "'inr'", "'language'", 
+                                                            "'let'", "'letrec'", 
+                                                            "'match'", "'not'", 
+                                                            "'or'", "'return'", 
+                                                            "'succ'", "'then'", 
+                                                            "'throws'", 
+                                                            "'true'", "'type'", 
+                                                            "'unfold'", 
+                                                            "'unit'", "'with'", 
+                                                            "'\\u00C2\\u00B5'" ];
+	public static readonly symbolicNames: (string | null)[] = [ null, "Surrogate_id_SYMB_0", 
+                                                             "Surrogate_id_SYMB_1", 
+                                                             "Surrogate_id_SYMB_2", 
+                                                             "Surrogate_id_SYMB_3", 
+                                                             "Surrogate_id_SYMB_4", 
+                                                             "Surrogate_id_SYMB_5", 
+                                                             "Surrogate_id_SYMB_6", 
+                                                             "Surrogate_id_SYMB_7", 
+                                                             "Surrogate_id_SYMB_8", 
+                                                             "Surrogate_id_SYMB_9", 
+                                                             "Surrogate_id_SYMB_10", 
+                                                             "Surrogate_id_SYMB_11", 
+                                                             "Surrogate_id_SYMB_12", 
+                                                             "Surrogate_id_SYMB_13", 
+                                                             "Surrogate_id_SYMB_14", 
+                                                             "Surrogate_id_SYMB_15", 
+                                                             "Surrogate_id_SYMB_16", 
+                                                             "Surrogate_id_SYMB_17", 
+                                                             "Surrogate_id_SYMB_18", 
+                                                             "Surrogate_id_SYMB_19", 
+                                                             "Surrogate_id_SYMB_20", 
+                                                             "Surrogate_id_SYMB_21", 
+                                                             "Surrogate_id_SYMB_22", 
+                                                             "Surrogate_id_SYMB_23", 
+                                                             "Surrogate_id_SYMB_24", 
+                                                             "Surrogate_id_SYMB_25", 
+                                                             "Surrogate_id_SYMB_26", 
+                                                             "Surrogate_id_SYMB_27", 
+                                                             "Surrogate_id_SYMB_28", 
+                                                             "Surrogate_id_SYMB_29", 
+                                                             "Surrogate_id_SYMB_30", 
+                                                             "Surrogate_id_SYMB_31", 
+                                                             "Surrogate_id_SYMB_32", 
+                                                             "Surrogate_id_SYMB_33", 
+                                                             "Surrogate_id_SYMB_34", 
+                                                             "Surrogate_id_SYMB_35", 
+                                                             "Surrogate_id_SYMB_36", 
+                                                             "Surrogate_id_SYMB_37", 
+                                                             "Surrogate_id_SYMB_38", 
+                                                             "Surrogate_id_SYMB_39", 
+                                                             "Surrogate_id_SYMB_40", 
+                                                             "Surrogate_id_SYMB_41", 
+                                                             "Surrogate_id_SYMB_42", 
+                                                             "Surrogate_id_SYMB_43", 
+                                                             "Surrogate_id_SYMB_44", 
+                                                             "Surrogate_id_SYMB_45", 
+                                                             "Surrogate_id_SYMB_46", 
+                                                             "Surrogate_id_SYMB_47", 
+                                                             "Surrogate_id_SYMB_48", 
+                                                             "Surrogate_id_SYMB_49", 
+                                                             "Surrogate_id_SYMB_50", 
+                                                             "Surrogate_id_SYMB_51", 
+                                                             "Surrogate_id_SYMB_52", 
+                                                             "Surrogate_id_SYMB_53", 
+                                                             "Surrogate_id_SYMB_54", 
+                                                             "Surrogate_id_SYMB_55", 
+                                                             "Surrogate_id_SYMB_56", 
+                                                             "Surrogate_id_SYMB_57", 
+                                                             "Surrogate_id_SYMB_58", 
+                                                             "Surrogate_id_SYMB_59", 
+                                                             "Surrogate_id_SYMB_60", 
+                                                             "Surrogate_id_SYMB_61", 
+                                                             "Surrogate_id_SYMB_62", 
+                                                             "Surrogate_id_SYMB_63", 
+                                                             "Surrogate_id_SYMB_64", 
+                                                             "Surrogate_id_SYMB_65", 
+                                                             "COMMENT_antlr_builtin", 
+                                                             "MULTICOMMENT_antlr_builtin", 
+                                                             "StellaIdent", 
+                                                             "ExtensionName", 
+                                                             "INTEGER", 
                                                              "WS", "ErrorToken" ];
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
-		"start_Program", "start_Expr", "start_Type", "program", "languageDecl",
-		"extension", "decl", "annotation", "paramDecl", "expr", "patternBinding",
-		"binding", "match_case", "pattern", "labelledPattern", "stellatype", "recordFieldType",
+		"start_Program", "start_Expr", "start_Type", "program", "languageDecl", 
+		"extension", "decl", "annotation", "paramDecl", "expr", "patternBinding", 
+		"binding", "match_case", "pattern", "labelledPattern", "stellatype", "recordFieldType", 
 		"variantFieldType",
 	];
 	public get grammarFileName(): string { return "stellaParser.g4"; }
@@ -1315,6 +1315,7 @@ export default class stellaParser extends Parser {
 					case 1:
 						{
 						localctx = new MultiplyContext(this, new ExprContext(this, _parentctx, _parentState));
+						(localctx as MultiplyContext)._lhs = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 325;
 						if (!(this.precpred(this._ctx, 25))) {
@@ -1323,12 +1324,13 @@ export default class stellaParser extends Parser {
 						this.state = 326;
 						this.match(stellaParser.Surrogate_id_SYMB_23);
 						this.state = 327;
-						this.expr(26);
+						(localctx as MultiplyContext)._rhs = this.expr(26);
 						}
 						break;
 					case 2:
 						{
 						localctx = new DivideContext(this, new ExprContext(this, _parentctx, _parentState));
+						(localctx as DivideContext)._lhs = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 328;
 						if (!(this.precpred(this._ctx, 24))) {
@@ -1337,12 +1339,13 @@ export default class stellaParser extends Parser {
 						this.state = 329;
 						this.match(stellaParser.Surrogate_id_SYMB_24);
 						this.state = 330;
-						this.expr(25);
+						(localctx as DivideContext)._rhs = this.expr(25);
 						}
 						break;
 					case 3:
 						{
 						localctx = new LogicAndContext(this, new ExprContext(this, _parentctx, _parentState));
+						(localctx as LogicAndContext)._lhs = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 331;
 						if (!(this.precpred(this._ctx, 23))) {
@@ -1351,12 +1354,13 @@ export default class stellaParser extends Parser {
 						this.state = 332;
 						this.match(stellaParser.Surrogate_id_SYMB_35);
 						this.state = 333;
-						this.expr(24);
+						(localctx as LogicAndContext)._rhs = this.expr(24);
 						}
 						break;
 					case 4:
 						{
 						localctx = new AddContext(this, new ExprContext(this, _parentctx, _parentState));
+						(localctx as AddContext)._lhs = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 334;
 						if (!(this.precpred(this._ctx, 22))) {
@@ -1365,12 +1369,13 @@ export default class stellaParser extends Parser {
 						this.state = 335;
 						this.match(stellaParser.Surrogate_id_SYMB_21);
 						this.state = 336;
-						this.expr(23);
+						(localctx as AddContext)._rhs = this.expr(23);
 						}
 						break;
 					case 5:
 						{
 						localctx = new SubtractContext(this, new ExprContext(this, _parentctx, _parentState));
+						(localctx as SubtractContext)._lhs = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 337;
 						if (!(this.precpred(this._ctx, 21))) {
@@ -1379,12 +1384,13 @@ export default class stellaParser extends Parser {
 						this.state = 338;
 						this.match(stellaParser.Surrogate_id_SYMB_22);
 						this.state = 339;
-						this.expr(22);
+						(localctx as SubtractContext)._rhs = this.expr(22);
 						}
 						break;
 					case 6:
 						{
 						localctx = new LogicOrContext(this, new ExprContext(this, _parentctx, _parentState));
+						(localctx as LogicOrContext)._lhs = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 340;
 						if (!(this.precpred(this._ctx, 20))) {
@@ -1393,7 +1399,7 @@ export default class stellaParser extends Parser {
 						this.state = 341;
 						this.match(stellaParser.Surrogate_id_SYMB_55);
 						this.state = 342;
-						this.expr(21);
+						(localctx as LogicOrContext)._rhs = this.expr(21);
 						}
 						break;
 					case 7:
@@ -3258,18 +3264,20 @@ export class FoldContext extends ExprContext {
 	}
 }
 export class AddContext extends ExprContext {
+	public _lhs!: ExprContext;
+	public _rhs!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
+	}
+	public Surrogate_id_SYMB_21(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_21, 0);
 	}
 	public expr_list(): ExprContext[] {
 		return this.getTypedRuleContexts(ExprContext) as ExprContext[];
 	}
 	public expr(i: number): ExprContext {
 		return this.getTypedRuleContext(ExprContext, i) as ExprContext;
-	}
-	public Surrogate_id_SYMB_21(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_21, 0);
 	}
 	public enterRule(listener: stellaParserListener): void {
 	    if(listener.enterAdd) {
@@ -3537,18 +3545,20 @@ export class InrContext extends ExprContext {
 	}
 }
 export class DivideContext extends ExprContext {
+	public _lhs!: ExprContext;
+	public _rhs!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
+	}
+	public Surrogate_id_SYMB_24(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_24, 0);
 	}
 	public expr_list(): ExprContext[] {
 		return this.getTypedRuleContexts(ExprContext) as ExprContext[];
 	}
 	public expr(i: number): ExprContext {
 		return this.getTypedRuleContext(ExprContext, i) as ExprContext;
-	}
-	public Surrogate_id_SYMB_24(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_24, 0);
 	}
 	public enterRule(listener: stellaParserListener): void {
 	    if(listener.enterDivide) {
@@ -3817,18 +3827,20 @@ export class TailContext extends ExprContext {
 	}
 }
 export class MultiplyContext extends ExprContext {
+	public _lhs!: ExprContext;
+	public _rhs!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
+	}
+	public Surrogate_id_SYMB_23(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_23, 0);
 	}
 	public expr_list(): ExprContext[] {
 		return this.getTypedRuleContexts(ExprContext) as ExprContext[];
 	}
 	public expr(i: number): ExprContext {
 		return this.getTypedRuleContext(ExprContext, i) as ExprContext;
-	}
-	public Surrogate_id_SYMB_23(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_23, 0);
 	}
 	public enterRule(listener: stellaParserListener): void {
 	    if(listener.enterMultiply) {
@@ -3935,18 +3947,20 @@ export class ListContext extends ExprContext {
 	}
 }
 export class LogicAndContext extends ExprContext {
+	public _lhs!: ExprContext;
+	public _rhs!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
+	}
+	public Surrogate_id_SYMB_35(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_35, 0);
 	}
 	public expr_list(): ExprContext[] {
 		return this.getTypedRuleContexts(ExprContext) as ExprContext[];
 	}
 	public expr(i: number): ExprContext {
 		return this.getTypedRuleContext(ExprContext, i) as ExprContext;
-	}
-	public Surrogate_id_SYMB_35(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_35, 0);
 	}
 	public enterRule(listener: stellaParserListener): void {
 	    if(listener.enterLogicAnd) {
@@ -3968,18 +3982,20 @@ export class LogicAndContext extends ExprContext {
 	}
 }
 export class LogicOrContext extends ExprContext {
+	public _lhs!: ExprContext;
+	public _rhs!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
+	}
+	public Surrogate_id_SYMB_55(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_55, 0);
 	}
 	public expr_list(): ExprContext[] {
 		return this.getTypedRuleContexts(ExprContext) as ExprContext[];
 	}
 	public expr(i: number): ExprContext {
 		return this.getTypedRuleContext(ExprContext, i) as ExprContext;
-	}
-	public Surrogate_id_SYMB_55(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_55, 0);
 	}
 	public enterRule(listener: stellaParserListener): void {
 	    if(listener.enterLogicOr) {
@@ -4629,18 +4645,20 @@ export class FixContext extends ExprContext {
 	}
 }
 export class SubtractContext extends ExprContext {
+	public _lhs!: ExprContext;
+	public _rhs!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
+	}
+	public Surrogate_id_SYMB_22(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_22, 0);
 	}
 	public expr_list(): ExprContext[] {
 		return this.getTypedRuleContexts(ExprContext) as ExprContext[];
 	}
 	public expr(i: number): ExprContext {
 		return this.getTypedRuleContext(ExprContext, i) as ExprContext;
-	}
-	public Surrogate_id_SYMB_22(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_22, 0);
 	}
 	public enterRule(listener: stellaParserListener): void {
 	    if(listener.enterSubtract) {

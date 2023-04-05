@@ -1,4 +1,4 @@
-// Generated from src/stella/stellaParser.g4 by ANTLR 4.12.0
+// Generated from stellaParser.g4 by ANTLR 4.12.0
 
 import {ParseTreeListener} from "antlr4";
 
