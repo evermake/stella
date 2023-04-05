@@ -66,6 +66,19 @@ export interface ConstBool {
   type: 'ConstBool';
   value: boolean;
 }
+export interface ConstUnit {
+  type: 'Unit';
+}
+export interface DotRecord {
+  type: 'DotRecord';
+  expr: Expr;
+  label: Identifier;
+}
+export interface DotTuple {
+  type: 'DotTuple';
+  expr: Expr;
+  index: number;
+}
 export interface NatRec {
   type: 'NatRec';
   n: Expr;
@@ -76,9 +89,16 @@ export interface Var {
   type: 'Var';
   name: Identifier;
 }
+export type Inl = UnaryFunction<'Inl'>;
+export type Inr = UnaryFunction<'Inr'>;
 export interface Fold {
   type: 'Fold';
   foldedType: Type;
+  expr: Expr;
+}
+export interface Unfold {
+  type: 'Unfold';
+  unfoldedType: Type;
   expr: Expr;
 }
 export interface Application {
@@ -87,6 +107,19 @@ export interface Application {
   // TODO: handle type without unary/multi-param extensions enabled
   arguments: Expr[];
 }
+
+type BinaryOp<T extends Exclude<string, T>> = {
+  type: T;
+  lhs: Expr;
+  rhs: Expr;
+};
+export type Multiply = BinaryOp<'Multiply'>;
+export type Divide = BinaryOp<'Divide'>;
+export type LogicalAnd = BinaryOp<'LogicalAnd'>;
+export type Add = BinaryOp<'Add'>;
+export type Subtract = BinaryOp<'Subtract'>;
+export type LogicalOr = BinaryOp<'LogicalOr'>;
+
 export interface Abstraction {
   type: 'Abstraction';
   // TODO: handle type without unary/multi-param extensions enabled
@@ -95,11 +128,14 @@ export interface Abstraction {
 }
 
 export type Expr =
-  // TODO: dot record
-  // TODO: dot tuple
+  | DotRecord
+  | DotTuple
   | ConstBool
+  | ConstUnit
   | ConstInt
   | Var
+  | Inl
+  | Inr
   | Cons
   | ListHead
   | ListIsEmpty
@@ -111,12 +147,14 @@ export type Expr =
   | Fix
   | NatRec
   | Fold
-  // TODO: unfold
+  | Unfold
   | Application
-  // TODO: Multiply
-  // TODO: LogicalAnd
-  // TODO: Add
-  // TODO: LogicalOr
+  | Multiply
+  | Divide
+  | LogicalAnd
+  | Add
+  | Subtract
+  | LogicalOr
   // TODO: TypeAscription
   | Abstraction;
 // TODO: Tuple
