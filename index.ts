@@ -33,4 +33,4 @@ const program = parser.program();
 
 const t = new AstTransformer();
 const ast = t.visitProgram(program);
-console.log(JSON.stringify(ast, null, 4));
+console.log(JSON.stringify(ast, (k, v) => v ?? null, 4));
