@@ -131,6 +131,65 @@ export interface Abstraction {
   returnValue: Expr;
 }
 
+export interface Tuple {
+  type: 'Tuple';
+  exprs: Expr[];
+}
+export interface Binding {
+  type: 'Binding';
+  name: Identifier;
+  expr: Expr;
+}
+export interface Record {
+  type: 'Record';
+  bindings: Binding[];
+}
+export interface Variant {
+  type: 'Variant';
+  label: Identifier;
+  expr: Expr;
+}
+export interface Case {
+  type: 'Cast';
+  pattern: Pattern;
+  expr: Expr;
+}
+export interface Match {
+  type: 'Match';
+  expr: Expr;
+  cases: Case[];
+}
+export interface List {
+  type: 'List';
+  exprs: Expr[];
+}
+export type LessThan = BinaryOp<'LessThan'>;
+export type LessThanOrEqual = BinaryOp<'LessThanOrEqual'>;
+export type GreaterThan = BinaryOp<'GreaterThan'>;
+export type GreaterThanOrEqual = BinaryOp<'GreaterThanOrEqual'>;
+export type Equal = BinaryOp<'Equal'>;
+export type NotEqual = BinaryOp<'NotEqual'>;
+export interface If {
+  type: 'If';
+  condition: Expr;
+  thenExpr: Expr;
+  elseExpr: Expr;
+}
+export interface Let {
+  type: 'Let';
+  patternBindings: PatternBinding[];
+  body: Expr;
+}
+export interface LetRec {
+  type: 'LetRec';
+  patternBindings: PatternBinding[];
+  body: Expr;
+}
+export interface Sequence {
+  type: 'Sequence';
+  exprs: Expr[];
+}
+
 export type Expr =
   | DotRecord
   | DotTuple
@@ -160,9 +219,30 @@ export type Expr =
   | Subtract
   | LogicalOr
   | TypeAscription
-  | Abstraction;
-// TODO: Tuple
+  | Abstraction
+  | Tuple
+  | Record
+  | Variant
+  | Match
+  | List
+  | LessThan
+  | LessThanOrEqual
+  | GreaterThan
+  | GreaterThanOrEqual
+  | Equal
+  | NotEqual
+  | If
+  | Let
+  | LetRec
+  | Sequence;
 
+/** Not yet implemented */
+export type Pattern = unknown; // TODO
+export interface PatternBinding {
+  type: 'PatternBinding';
+  pattern: Pattern;
+  rhs: Expr;
+}
 // ---- Declarations
 
 export interface ParamDecl {
@@ -199,4 +279,4 @@ export interface Program {
   declarations: Decl[];
 }
 
-export type Node = Program | Decl | Expr | ParamDecl | Type;
+export type Node = Program | Decl | Expr | ParamDecl | Type | Binding;

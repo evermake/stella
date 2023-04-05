@@ -41,11 +41,30 @@ import {
   LogicOrContext,
   AbstractionContext,
   TypeAscContext,
+  TupleContext,
+  RecordContext,
+  VariantContext,
+  MatchContext,
+  ListContext,
+  LessThanContext,
+  LessThanOrEqualContext,
+  GreaterThanContext,
+  GreaterThanOrEqualContext,
+  EqualContext,
+  NotEqualContext,
+  IfContext,
+  LetContext,
+  LetRecContext,
+  SequenceContext,
+  BindingContext,
+  Match_caseContext,
+  PatternBindingContext,
 } from './src/stella/stellaParser';
 import type {
   Abstraction,
   Add,
   Application,
+  Binding,
   BoolType,
   Cons,
   ConstBool,
@@ -57,17 +76,27 @@ import type {
   Divide,
   DotRecord,
   DotTuple,
+  Equal,
   Expr,
   Extension,
   Fix,
   Fold,
+  GreaterThan,
+  GreaterThanOrEqual,
+  If,
   Inl,
   Inr,
+  LessThan,
+  LessThanOrEqual,
+  Let,
+  LetRec,
+  List,
   ListHead,
   ListIsEmpty,
   ListTail,
   LogicalAnd,
   LogicalOr,
+  Match,
   Multiply,
   NatIsZero,
   NatPred,
@@ -75,14 +104,20 @@ import type {
   NatType,
   Node,
   Not,
+  NotEqual,
   ParamDecl,
+  PatternBinding,
   Program,
+  Record,
+  Sequence,
   Subtract,
   Succ,
+  Tuple,
   Type,
   TypeAscription,
   Unfold,
   Var,
+  Variant,
 } from './ast';
 
 export class AstPrinter extends StellaVisitor<void> {
@@ -286,9 +321,53 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof AbstractionContext) {
       return this.visitAbstraction(ctx);
     }
-
     if (ctx instanceof TypeAscContext) {
       return this.visitTypeAsc(ctx);
+    }
+    if (ctx instanceof TupleContext) {
+      return this.visitTuple(ctx);
+    }
+    if (ctx instanceof RecordContext) {
+      return this.visitRecord(ctx);
+    }
+    if (ctx instanceof VariantContext) {
+      return this.visitVariant(ctx);
+    }
+    if (ctx instanceof MatchContext) {
+      return this.visitMatch(ctx);
+    }
+    if (ctx instanceof ListContext) {
+      return this.visitList(ctx);
+    }
+    if (ctx instanceof LessThanContext) {
+      return this.visitLessThan(ctx);
+    }
+    if (ctx instanceof LessThanOrEqualContext) {
+      return this.visitLessThanOrEqual(ctx);
+    }
+    if (ctx instanceof GreaterThanContext) {
+      return this.visitGreaterThan(ctx);
+    }
+    if (ctx instanceof GreaterThanOrEqualContext) {
+      return this.visitGreaterThanOrEqual(ctx);
+    }
+    if (ctx instanceof EqualContext) {
+      return this.visitEqual(ctx);
+    }
+    if (ctx instanceof NotEqualContext) {
+      return this.visitNotEqual(ctx);
+    }
+    if (ctx instanceof IfContext) {
+      return this.visitIf(ctx);
+    }
+    if (ctx instanceof LetContext) {
+      return this.visitLet(ctx);
+    }
+    if (ctx instanceof LetRecContext) {
+      return this.visitLetRec(ctx);
+    }
+    if (ctx instanceof SequenceContext) {
+      return this.visitSequence(ctx);
     }
 
     throw new Error('Unknown expression type: ' + ctx.getText());
@@ -512,6 +591,132 @@ export class AstTransformer extends StellaVisitor<Node> {
       type: 'TypeAscription',
       expr: this.visitExpr(ctx._expr_),
       ascribedType: this.visitType(ctx._type_),
+    };
+  };
+
+  visitTuple: (ctx: TupleContext) => Tuple = (ctx) => {
+    return {
+      type: 'Tuple',
+      exprs: ctx._exprs.map(this.visitExpr),
+    };
+  };
+  visitRecord: (ctx: RecordContext) => Record = (ctx) => {
+    return {
+      type: 'Record',
+      bindings: ctx._bindings.map(this.visitBinding),
+    };
+  };
+  visitVariant: (ctx: VariantContext) => Variant = (ctx) => {
+    return {
+      type: 'Variant',
+      label: ctx._label.text,
+      expr: this.visitExpr(ctx._rhs),
+    };
+  };
+  visitMatch: (ctx: MatchContext) => Match = (ctx) => {
+    return {
+      type: 'Match',
+      // TODO: implement visiting match case
+      cases: ctx._cases.map(this.visitMatch_case),
+      expr: this.visitExpr(ctx.expr()),
+    };
+  };
+  visitList: (ctx: ListContext) => List = (ctx) => {
+    return {
+      type: 'List',
+      exprs: ctx.expr_list().map(this.visitExpr),
+    };
+  };
+  visitLessThan: (ctx: LessThanContext) => LessThan = (ctx) => {
+    return {
+      type: 'LessThan',
+      left: this.visitExpr(ctx._left),
+      right: this.visitExpr(ctx._right),
+    };
+  };
+  visitLessThanOrEqual: (ctx: LessThanOrEqualContext) => LessThanOrEqual = (
+    ctx
+  ) => {
+    return {
+      type: 'LessThanOrEqual',
+      left: this.visitExpr(ctx._left),
+      right: this.visitExpr(ctx._right),
+    };
+  };
+  visitGreaterThan: (ctx: GreaterThanContext) => GreaterThan = (ctx) => {
+    return {
+      type: 'GreaterThan',
+      left: this.visitExpr(ctx._left),
+      right: this.visitExpr(ctx._right),
+    };
+  };
+  visitGreaterThanOrEqual: (
+    ctx: GreaterThanOrEqualContext
+  ) => GreaterThanOrEqual = (ctx) => {
+    return {
+      type: 'GreaterThanOrEqual',
+      left: this.visitExpr(ctx._left),
+      right: this.visitExpr(ctx._right),
+    };
+  };
+  visitEqual: (ctx: EqualContext) => Equal = (ctx) => {
+    return {
+      type: 'Equal',
+      left: this.visitExpr(ctx._left),
+      right: this.visitExpr(ctx._right),
+    };
+  };
+  visitNotEqual: (ctx: NotEqualContext) => NotEqual = (ctx) => {
+    return {
+      type: 'NotEqual',
+      left: this.visitExpr(ctx._left),
+      right: this.visitExpr(ctx._right),
+    };
+  };
+  visitIf: (ctx: IfContext) => If = (ctx) => {
+    return {
+      type: 'If',
+      condition: this.visitExpr(ctx._condition),
+      thenExpr: this.visitExpr(ctx._thenExpr),
+      elseExpr: this.visitExpr(ctx._elseExpr),
+    };
+  };
+  visitLet: (ctx: LetContext) => Let = (ctx) => {
+    return {
+      type: 'Let',
+      patternBindings: ctx._patternBindings.map(this.visitPatternBinding),
+      body: this.visitExpr(ctx._body),
+    };
+  };
+  visitLetRec: (ctx: LetRecContext) => LetRec = (ctx) => {
+    return {
+      type: 'LetRec',
+      patternBindings: ctx._patternBindings.map(this.visitPatternBinding),
+      body: this.visitExpr(ctx._body),
+    };
+  };
+  visitPatternBinding: (ctx: PatternBindingContext) => PatternBinding = (
+    ctx
+  ) => {
+    return {
+      type: 'PatternBinding',
+      pattern: ctx._pat,
+      rhs: this.visitExpr(ctx._rhs),
+    };
+  };
+  visitSequence: (ctx: SequenceContext) => Sequence = (ctx) => {
+    return {
+      type: 'Sequence',
+      // TODO: this does not actually flatten all the "Sequence"s into one list. It should do so.
+      exprs: ctx.expr_list().map(this.visitExpr),
+    };
+  };
+
+  visitBinding: (ctx: BindingContext) => Binding = (ctx) => {
+    return {
+      type: 'Binding',
+      name: ctx._name.text,
+      expr: this.visitExpr(ctx._rhs),
     };
   };
 }
