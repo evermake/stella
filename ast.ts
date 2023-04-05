@@ -5,6 +5,14 @@ export type Extension = `#${string}`;
 
 export type Decl = DeclFun | DeclTypeAlias;
 
+// ---- Types
+
+type SimpleType<T extends Exclude<string, T>> = {
+  type: T;
+};
+export type NatType = SimpleType<'Nat'>;
+export type BoolType = SimpleType<'Bool'>;
+export type UnitType = SimpleType<'Unit'>;
 export interface FunctionType {
   type: 'FunctionType';
   // TODO: handle multi-param and nullary extensions being enabled, and make [Type] (tuple type with 1 element) the default
@@ -12,7 +20,10 @@ export interface FunctionType {
   returnType: Type;
 }
 
-export type Type = 'Nat' | 'Bool' | FunctionType;
+export type Type = NatType | BoolType | UnitType | FunctionType;
+// TODO: TypeRec, tuple, record, variant, typelist (?), type var
+
+// ---- Expressions
 
 export interface Cons {
   type: 'Cons';
@@ -31,6 +42,14 @@ export type Not = UnaryFunction<'Not'>;
 export type NatPred = UnaryFunction<'NatPred'>;
 export type NatIsZero = UnaryFunction<'NatIsZero'>;
 export type Fix = UnaryFunction<'Fix'>;
+export interface ConstInt {
+  type: 'ConstInt';
+  value: number;
+}
+export interface ConstBool {
+  type: 'ConstBool';
+  value: boolean;
+}
 export interface NatRec {
   type: 'NatRec';
   n: Expr;
@@ -62,8 +81,8 @@ export interface Abstraction {
 export type Expr =
   // TODO: dot record
   // TODO: dot tuple
-  | boolean
-  | number
+  | ConstBool
+  | ConstInt
   | Var
   | Cons
   | ListHead
@@ -85,6 +104,8 @@ export type Expr =
   // TODO: TypeAscription
   | Abstraction;
 // TODO: Tuple
+
+// ---- Declarations
 
 export interface ParamDecl {
   type: 'ParamDecl';

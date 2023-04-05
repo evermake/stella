@@ -1,7 +1,9 @@
 import StellaVisitor from './src/stella/stellaParserVisitor';
 import {
   ApplicationContext,
+  ConstFalseContext,
   ConstIntContext,
+  ConstTrueContext,
   DeclContext,
   DeclFunContext,
   DeclTypeAliasContext,
@@ -11,17 +13,22 @@ import {
   ProgramContext,
   StellatypeContext,
   SuccContext,
+  TypeBoolContext,
   TypeNatContext,
   VarContext,
   type AnExtensionContext,
 } from './src/stella/stellaParser';
 import type {
   Application,
+  BoolType,
+  ConstBool,
+  ConstInt,
   Decl,
   DeclFun,
   DeclTypeAlias,
   Expr,
   Extension,
+  NatType,
   Node,
   ParamDecl,
   Program,
@@ -147,6 +154,12 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof ConstIntContext) {
       return this.visitConstInt(ctx);
     }
+    if (ctx instanceof ConstTrueContext) {
+      return this.visitConstTrue(ctx);
+    }
+    if (ctx instanceof ConstFalseContext) {
+      return this.visitConstFalse(ctx);
+    }
     if (ctx instanceof VarContext) {
       return this.visitVar(ctx);
     }
@@ -176,8 +189,23 @@ export class AstTransformer extends StellaVisitor<Node> {
     };
   };
 
-  visitConstInt: (ctx: ConstIntContext) => Expr = (ctx) => {
-    return Number(ctx._n.text);
+  visitConstInt: (ctx: ConstIntContext) => ConstInt = (ctx) => {
+    return {
+      type: 'ConstInt',
+      value: Number(ctx._n.text),
+    };
+  };
+  visitConstTrue: (ctx: ConstTrueContext) => ConstBool = (ctx) => {
+    return {
+      type: 'ConstBool',
+      value: true,
+    };
+  };
+  visitConstFalse: (ctx: ConstFalseContext) => ConstBool = (ctx) => {
+    return {
+      type: 'ConstBool',
+      value: false,
+    };
   };
 
   visitParamDecl: (ctx: ParamDeclContext) => ParamDecl = (ctx) => {
@@ -192,8 +220,12 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof TypeNatContext) {
       return this.visitTypeNat(ctx);
     }
+    if (ctx instanceof TypeBoolContext) {
+      return this.visitTypeBool(ctx);
+    }
     throw new Error('Unknown type: ' + ctx);
   };
 
-  visitTypeNat = (ctx: TypeNatContext) => 'Nat' as const;
+  visitTypeNat = (ctx: TypeNatContext) => ({ type: 'Nat' } as NatType);
+  visitTypeBool = (ctx: TypeBoolContext) => ({ type: 'Bool' } as BoolType);
 }
