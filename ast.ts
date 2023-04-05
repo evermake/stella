@@ -107,7 +107,11 @@ export interface Application {
   // TODO: handle type without unary/multi-param extensions enabled
   arguments: Expr[];
 }
-
+export interface TypeAscription {
+  type: 'TypeAscription';
+  expr: Expr;
+  ascribedType: Type;
+}
 type BinaryOp<T extends Exclude<string, T>> = {
   type: T;
   lhs: Expr;
@@ -155,7 +159,7 @@ export type Expr =
   | Add
   | Subtract
   | LogicalOr
-  // TODO: TypeAscription
+  | TypeAscription
   | Abstraction;
 // TODO: Tuple
 

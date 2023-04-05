@@ -40,6 +40,7 @@ import {
   SubtractContext,
   LogicOrContext,
   AbstractionContext,
+  TypeAscContext,
 } from './src/stella/stellaParser';
 import type {
   Abstraction,
@@ -79,6 +80,7 @@ import type {
   Subtract,
   Succ,
   Type,
+  TypeAscription,
   Unfold,
   Var,
 } from './ast';
@@ -284,6 +286,11 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof AbstractionContext) {
       return this.visitAbstraction(ctx);
     }
+
+    if (ctx instanceof TypeAscContext) {
+      return this.visitTypeAsc(ctx);
+    }
+
     throw new Error('Unknown expression type: ' + ctx.getText());
   };
 
@@ -499,4 +506,12 @@ export class AstTransformer extends StellaVisitor<Node> {
 
   visitTypeNat = (ctx: TypeNatContext) => ({ type: 'NatType' } as NatType);
   visitTypeBool = (ctx: TypeBoolContext) => ({ type: 'BoolType' } as BoolType);
+
+  visitTypeAsc: (ctx: TypeAscContext) => TypeAscription = (ctx) => {
+    return {
+      type: 'TypeAscription',
+      expr: this.visitExpr(ctx._expr_),
+      ascribedType: this.visitType(ctx._type_),
+    };
+  };
 }
