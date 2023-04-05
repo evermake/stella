@@ -7,8 +7,8 @@ export type Decl = DeclFun | DeclTypeAlias;
 
 export interface FunctionType {
   type: 'FunctionType';
-  // TODO: handle multi-param and nullary extensions being enabled, and make [ParamDecl] (tuple type with 1 element) the default
-  parameters: ParamDecl[];
+  // TODO: handle multi-param and nullary extensions being enabled, and make [Type] (tuple type with 1 element) the default
+  parametersTypes: Type[];
   returnType: Type;
 }
 
