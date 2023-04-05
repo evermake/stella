@@ -26,9 +26,9 @@ type Param = ParamType<NullaryFunctionExtension>;
 type SimpleType<T extends Exclude<string, T>> = {
   type: T;
 };
-export type NatType = SimpleType<'Nat'>;
-export type BoolType = SimpleType<'Bool'>;
-export type UnitType = SimpleType<'Unit'>;
+export type NatType = SimpleType<'NatType'>;
+export type BoolType = SimpleType<'BoolType'>;
+export type UnitType = SimpleType<'UnitType'>;
 export interface FunctionType {
   type: 'FunctionType';
   // TODO: handle multi-param and nullary extensions being enabled, and make [Type] (tuple type with 1 element) the default

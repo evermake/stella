@@ -230,6 +230,6 @@ export class AstTransformer extends StellaVisitor<Node> {
     throw new Error('Unknown type: ' + ctx);
   };
 
-  visitTypeNat = (ctx: TypeNatContext) => ({ type: 'Nat' } as NatType);
-  visitTypeBool = (ctx: TypeBoolContext) => ({ type: 'Bool' } as BoolType);
+  visitTypeNat = (ctx: TypeNatContext) => ({ type: 'NatType' } as NatType);
+  visitTypeBool = (ctx: TypeBoolContext) => ({ type: 'BoolType' } as BoolType);
 }
