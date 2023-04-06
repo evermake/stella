@@ -23,6 +23,7 @@ import { VarContext } from "./stellaParser";
 import { InlContext } from "./stellaParser";
 import { GreaterThanOrEqualContext } from "./stellaParser";
 import { InrContext } from "./stellaParser";
+import { MatchContext } from "./stellaParser";
 import { DivideContext } from "./stellaParser";
 import { LessThanContext } from "./stellaParser";
 import { LogicNotContext } from "./stellaParser";
@@ -42,7 +43,6 @@ import { TerminatingSemicolonContext } from "./stellaParser";
 import { NotEqualContext } from "./stellaParser";
 import { ConstUnitContext } from "./stellaParser";
 import { PredContext } from "./stellaParser";
-import { MatchContext } from "./stellaParser";
 import { TypeAscContext } from "./stellaParser";
 import { NatRecContext } from "./stellaParser";
 import { SequenceContext } from "./stellaParser";
@@ -62,7 +62,7 @@ import { TupleContext } from "./stellaParser";
 import { ConsListContext } from "./stellaParser";
 import { PatternBindingContext } from "./stellaParser";
 import { BindingContext } from "./stellaParser";
-import { Match_caseContext } from "./stellaParser";
+import { MatchCaseContext } from "./stellaParser";
 import { PatternVariantContext } from "./stellaParser";
 import { PatternInlContext } from "./stellaParser";
 import { PatternInrContext } from "./stellaParser";
@@ -238,6 +238,13 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitInr?: (ctx: InrContext) => Result;
 	/**
+	 * Visit a parse tree produced by the `Match`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMatch?: (ctx: MatchContext) => Result;
+	/**
 	 * Visit a parse tree produced by the `Divide`
 	 * labeled alternative in `stellaParser.expr`.
 	 * @param ctx the parse tree
@@ -371,13 +378,6 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitPred?: (ctx: PredContext) => Result;
 	/**
-	 * Visit a parse tree produced by the `match`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitMatch?: (ctx: MatchContext) => Result;
-	/**
 	 * Visit a parse tree produced by the `TypeAsc`
 	 * labeled alternative in `stellaParser.expr`.
 	 * @param ctx the parse tree
@@ -509,11 +509,11 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitBinding?: (ctx: BindingContext) => Result;
 	/**
-	 * Visit a parse tree produced by `stellaParser.match_case`.
+	 * Visit a parse tree produced by `stellaParser.matchCase`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitMatch_case?: (ctx: Match_caseContext) => Result;
+	visitMatchCase?: (ctx: MatchCaseContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `PatternVariant`
 	 * labeled alternative in `stellaParser.pattern`.

@@ -106,7 +106,7 @@ export default class stellaParser extends Parser {
 	public static readonly RULE_expr = 9;
 	public static readonly RULE_patternBinding = 10;
 	public static readonly RULE_binding = 11;
-	public static readonly RULE_match_case = 12;
+	public static readonly RULE_matchCase = 12;
 	public static readonly RULE_pattern = 13;
 	public static readonly RULE_labelledPattern = 14;
 	public static readonly RULE_stellatype = 15;
@@ -226,7 +226,7 @@ export default class stellaParser extends Parser {
 	public static readonly ruleNames: string[] = [
 		"start_Program", "start_Expr", "start_Type", "program", "languageDecl", 
 		"extension", "decl", "annotation", "paramDecl", "expr", "patternBinding", 
-		"binding", "match_case", "pattern", "labelledPattern", "stellatype", "recordFieldType", 
+		"binding", "matchCase", "pattern", "labelledPattern", "stellatype", "recordFieldType", 
 		"variantFieldType",
 	];
 	public get grammarFileName(): string { return "stellaParser.g4"; }
@@ -1144,8 +1144,8 @@ export default class stellaParser extends Parser {
 				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 20520) !== 0) || ((((_la - 38)) & ~0x1F) === 0 && ((1 << (_la - 38)) & 2224034833) !== 0) || _la===71) {
 					{
 					this.state = 268;
-					(localctx as MatchContext)._match_case = this.match_case();
-					(localctx as MatchContext)._cases.push((localctx as MatchContext)._match_case);
+					(localctx as MatchContext)._matchCase = this.matchCase();
+					(localctx as MatchContext)._cases.push((localctx as MatchContext)._matchCase);
 					this.state = 273;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
@@ -1155,8 +1155,8 @@ export default class stellaParser extends Parser {
 						this.state = 269;
 						this.match(stellaParser.Surrogate_id_SYMB_10);
 						this.state = 270;
-						(localctx as MatchContext)._match_case = this.match_case();
-						(localctx as MatchContext)._cases.push((localctx as MatchContext)._match_case);
+						(localctx as MatchContext)._matchCase = this.matchCase();
+						(localctx as MatchContext)._cases.push((localctx as MatchContext)._matchCase);
 						}
 						}
 						this.state = 275;
@@ -1690,9 +1690,9 @@ export default class stellaParser extends Parser {
 		return localctx;
 	}
 	// @RuleVersion(0)
-	public match_case(): Match_caseContext {
-		let localctx: Match_caseContext = new Match_caseContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 24, stellaParser.RULE_match_case);
+	public matchCase(): MatchCaseContext {
+		let localctx: MatchCaseContext = new MatchCaseContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 24, stellaParser.RULE_matchCase);
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
@@ -3546,6 +3546,56 @@ export class InrContext extends ExprContext {
 		}
 	}
 }
+export class MatchContext extends ExprContext {
+	public _matchCase!: MatchCaseContext;
+	public _cases: MatchCaseContext[] = [];
+	constructor(parser: stellaParser, ctx: ExprContext) {
+		super(parser, ctx.parentCtx, ctx.invokingState);
+		super.copyFrom(ctx);
+	}
+	public Surrogate_id_SYMB_53(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_53, 0);
+	}
+	public expr(): ExprContext {
+		return this.getTypedRuleContext(ExprContext, 0) as ExprContext;
+	}
+	public Surrogate_id_SYMB_4(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_4, 0);
+	}
+	public Surrogate_id_SYMB_5(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_5, 0);
+	}
+	public matchCase_list(): MatchCaseContext[] {
+		return this.getTypedRuleContexts(MatchCaseContext) as MatchCaseContext[];
+	}
+	public matchCase(i: number): MatchCaseContext {
+		return this.getTypedRuleContext(MatchCaseContext, i) as MatchCaseContext;
+	}
+	public Surrogate_id_SYMB_10_list(): TerminalNode[] {
+	    	return this.getTokens(stellaParser.Surrogate_id_SYMB_10);
+	}
+	public Surrogate_id_SYMB_10(i: number): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_10, i);
+	}
+	public enterRule(listener: stellaParserListener): void {
+	    if(listener.enterMatch) {
+	 		listener.enterMatch(this);
+		}
+	}
+	public exitRule(listener: stellaParserListener): void {
+	    if(listener.exitMatch) {
+	 		listener.exitMatch(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
+		if (visitor.visitMatch) {
+			return visitor.visitMatch(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
 export class DivideContext extends ExprContext {
 	public _left!: ExprContext;
 	public _right!: ExprContext;
@@ -4229,56 +4279,6 @@ export class PredContext extends ExprContext {
 	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
 		if (visitor.visitPred) {
 			return visitor.visitPred(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class MatchContext extends ExprContext {
-	public _match_case!: Match_caseContext;
-	public _cases: Match_caseContext[] = [];
-	constructor(parser: stellaParser, ctx: ExprContext) {
-		super(parser, ctx.parentCtx, ctx.invokingState);
-		super.copyFrom(ctx);
-	}
-	public Surrogate_id_SYMB_53(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_53, 0);
-	}
-	public expr(): ExprContext {
-		return this.getTypedRuleContext(ExprContext, 0) as ExprContext;
-	}
-	public Surrogate_id_SYMB_4(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_4, 0);
-	}
-	public Surrogate_id_SYMB_5(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_5, 0);
-	}
-	public match_case_list(): Match_caseContext[] {
-		return this.getTypedRuleContexts(Match_caseContext) as Match_caseContext[];
-	}
-	public match_case(i: number): Match_caseContext {
-		return this.getTypedRuleContext(Match_caseContext, i) as Match_caseContext;
-	}
-	public Surrogate_id_SYMB_10_list(): TerminalNode[] {
-	    	return this.getTokens(stellaParser.Surrogate_id_SYMB_10);
-	}
-	public Surrogate_id_SYMB_10(i: number): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_10, i);
-	}
-	public enterRule(listener: stellaParserListener): void {
-	    if(listener.enterMatch) {
-	 		listener.enterMatch(this);
-		}
-	}
-	public exitRule(listener: stellaParserListener): void {
-	    if(listener.exitMatch) {
-	 		listener.exitMatch(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
-		if (visitor.visitMatch) {
-			return visitor.visitMatch(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -5038,7 +5038,7 @@ export class BindingContext extends ParserRuleContext {
 }
 
 
-export class Match_caseContext extends ParserRuleContext {
+export class MatchCaseContext extends ParserRuleContext {
 	constructor(parser?: stellaParser, parent?: ParserRuleContext, invokingState?: number) {
 		super(parent, invokingState);
     	this.parser = parser;
@@ -5053,22 +5053,22 @@ export class Match_caseContext extends ParserRuleContext {
 		return this.getTypedRuleContext(ExprContext, 0) as ExprContext;
 	}
     public get ruleIndex(): number {
-    	return stellaParser.RULE_match_case;
+    	return stellaParser.RULE_matchCase;
 	}
 	public enterRule(listener: stellaParserListener): void {
-	    if(listener.enterMatch_case) {
-	 		listener.enterMatch_case(this);
+	    if(listener.enterMatchCase) {
+	 		listener.enterMatchCase(this);
 		}
 	}
 	public exitRule(listener: stellaParserListener): void {
-	    if(listener.exitMatch_case) {
-	 		listener.exitMatch_case(this);
+	    if(listener.exitMatchCase) {
+	 		listener.exitMatchCase(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: stellaParserVisitor<Result>): Result {
-		if (visitor.visitMatch_case) {
-			return visitor.visitMatch_case(this);
+		if (visitor.visitMatchCase) {
+			return visitor.visitMatchCase(this);
 		} else {
 			return visitor.visitChildren(this);
 		}

@@ -23,6 +23,7 @@ import { VarContext } from "./stellaParser";
 import { InlContext } from "./stellaParser";
 import { GreaterThanOrEqualContext } from "./stellaParser";
 import { InrContext } from "./stellaParser";
+import { MatchContext } from "./stellaParser";
 import { DivideContext } from "./stellaParser";
 import { LessThanContext } from "./stellaParser";
 import { LogicNotContext } from "./stellaParser";
@@ -42,7 +43,6 @@ import { TerminatingSemicolonContext } from "./stellaParser";
 import { NotEqualContext } from "./stellaParser";
 import { ConstUnitContext } from "./stellaParser";
 import { PredContext } from "./stellaParser";
-import { MatchContext } from "./stellaParser";
 import { TypeAscContext } from "./stellaParser";
 import { NatRecContext } from "./stellaParser";
 import { SequenceContext } from "./stellaParser";
@@ -62,7 +62,7 @@ import { TupleContext } from "./stellaParser";
 import { ConsListContext } from "./stellaParser";
 import { PatternBindingContext } from "./stellaParser";
 import { BindingContext } from "./stellaParser";
-import { Match_caseContext } from "./stellaParser";
+import { MatchCaseContext } from "./stellaParser";
 import { PatternVariantContext } from "./stellaParser";
 import { PatternInlContext } from "./stellaParser";
 import { PatternInrContext } from "./stellaParser";
@@ -330,6 +330,18 @@ export default class stellaParserListener extends ParseTreeListener {
 	 */
 	exitInr?: (ctx: InrContext) => void;
 	/**
+	 * Enter a parse tree produced by the `Match`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	enterMatch?: (ctx: MatchContext) => void;
+	/**
+	 * Exit a parse tree produced by the `Match`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	exitMatch?: (ctx: MatchContext) => void;
+	/**
 	 * Enter a parse tree produced by the `Divide`
 	 * labeled alternative in `stellaParser.expr`.
 	 * @param ctx the parse tree
@@ -558,18 +570,6 @@ export default class stellaParserListener extends ParseTreeListener {
 	 */
 	exitPred?: (ctx: PredContext) => void;
 	/**
-	 * Enter a parse tree produced by the `match`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 */
-	enterMatch?: (ctx: MatchContext) => void;
-	/**
-	 * Exit a parse tree produced by the `match`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 */
-	exitMatch?: (ctx: MatchContext) => void;
-	/**
 	 * Enter a parse tree produced by the `TypeAsc`
 	 * labeled alternative in `stellaParser.expr`.
 	 * @param ctx the parse tree
@@ -794,15 +794,15 @@ export default class stellaParserListener extends ParseTreeListener {
 	 */
 	exitBinding?: (ctx: BindingContext) => void;
 	/**
-	 * Enter a parse tree produced by `stellaParser.match_case`.
+	 * Enter a parse tree produced by `stellaParser.matchCase`.
 	 * @param ctx the parse tree
 	 */
-	enterMatch_case?: (ctx: Match_caseContext) => void;
+	enterMatchCase?: (ctx: MatchCaseContext) => void;
 	/**
-	 * Exit a parse tree produced by `stellaParser.match_case`.
+	 * Exit a parse tree produced by `stellaParser.matchCase`.
 	 * @param ctx the parse tree
 	 */
-	exitMatch_case?: (ctx: Match_caseContext) => void;
+	exitMatchCase?: (ctx: MatchCaseContext) => void;
 	/**
 	 * Enter a parse tree produced by the `PatternVariant`
 	 * labeled alternative in `stellaParser.pattern`.

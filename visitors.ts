@@ -57,7 +57,7 @@ import {
   LetRecContext,
   SequenceContext,
   BindingContext,
-  Match_caseContext,
+  MatchCaseContext,
   PatternBindingContext,
   ParenthesisedExprContext,
   TerminatingSemicolonContext,
@@ -625,7 +625,7 @@ export class AstTransformer extends StellaVisitor<Node> {
     return {
       type: 'Match',
       // TODO: implement visiting match case
-      cases: ctx._cases.map(this.visitMatch_case),
+      cases: ctx._cases.map(this.visitMatchCase),
       expr: this.visitExpr(ctx.expr()),
     };
   };

@@ -163,7 +163,7 @@ paramDecl
 expr
 patternBinding
 binding
-match_case
+matchCase
 pattern
 labelledPattern
 stellatype

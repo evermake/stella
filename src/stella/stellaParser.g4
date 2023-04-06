@@ -72,8 +72,8 @@ expr:
     )? '}'                                            # Record
     | '<|' label = StellaIdent ('=' rhs = expr)? '|>' # Variant
     | 'match' expr '{' (
-        cases += match_case ('|' cases += match_case)*
-    )? '}'                                         # match
+        cases += matchCase ('|' cases += matchCase)*
+    )? '}'                                         # Match
     | '[' (exprs += expr (',' exprs += expr))? ']' # List
     // expr
     | left = expr '<' right = expr  # LessThan
@@ -94,7 +94,7 @@ patternBinding: pat=pattern '=' rhs=expr ;
 
 binding: name = StellaIdent '=' rhs = expr;
 
-match_case: pattern '=>' expr;
+matchCase: pattern '=>' expr;
 
 pattern:
     '<|' label = StellaIdent ('=' pattern)? '|>'                # PatternVariant
