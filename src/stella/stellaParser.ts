@@ -1697,11 +1697,11 @@ export default class stellaParser extends Parser {
 			this.enterOuterAlt(localctx, 1);
 			{
 			this.state = 401;
-			this.pattern();
+			localctx._pat = this.pattern();
 			this.state = 402;
 			this.match(stellaParser.Surrogate_id_SYMB_9);
 			this.state = 403;
-			this.expr(0);
+			localctx._expr_ = this.expr(0);
 			}
 		}
 		catch (re) {
@@ -5039,15 +5039,17 @@ export class BindingContext extends ParserRuleContext {
 
 
 export class MatchCaseContext extends ParserRuleContext {
+	public _pat!: PatternContext;
+	public _expr_!: ExprContext;
 	constructor(parser?: stellaParser, parent?: ParserRuleContext, invokingState?: number) {
 		super(parent, invokingState);
     	this.parser = parser;
 	}
-	public pattern(): PatternContext {
-		return this.getTypedRuleContext(PatternContext, 0) as PatternContext;
-	}
 	public Surrogate_id_SYMB_9(): TerminalNode {
 		return this.getToken(stellaParser.Surrogate_id_SYMB_9, 0);
+	}
+	public pattern(): PatternContext {
+		return this.getTypedRuleContext(PatternContext, 0) as PatternContext;
 	}
 	public expr(): ExprContext {
 		return this.getTypedRuleContext(ExprContext, 0) as ExprContext;

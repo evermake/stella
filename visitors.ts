@@ -120,6 +120,7 @@ import type {
   Unfold,
   Var,
   Variant,
+  MatchCase,
 } from './ast';
 
 export class AstPrinter extends StellaVisitor<void> {
@@ -627,6 +628,13 @@ export class AstTransformer extends StellaVisitor<Node> {
       // TODO: implement visiting match case
       cases: ctx._cases.map(this.visitMatchCase),
       expr: this.visitExpr(ctx.expr()),
+    };
+  };
+  visitMatchCase: (ctx: MatchCaseContext) => MatchCase = (ctx) => {
+    return {
+      type: 'MatchCase',
+      pattern: ctx._pat,
+      expr: this.visitExpr(ctx._expr_),
     };
   };
   visitList: (ctx: ListContext) => List = (ctx) => {

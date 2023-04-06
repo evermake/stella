@@ -149,15 +149,15 @@ export interface Variant {
   label: Identifier;
   expr: Expr;
 }
-export interface Case {
-  type: 'Cast';
+export interface MatchCase {
+  type: 'MatchCase';
   pattern: Pattern;
   expr: Expr;
 }
 export interface Match {
   type: 'Match';
   expr: Expr;
-  cases: Case[];
+  cases: MatchCase[];
 }
 export interface List {
   type: 'List';
@@ -236,6 +236,8 @@ export type Expr =
   | LetRec
   | Sequence;
 
+// ---- Patterns
+
 /** Not yet implemented */
 export type Pattern = unknown; // TODO
 export interface PatternBinding {
@@ -279,4 +281,12 @@ export interface Program {
   declarations: Decl[];
 }
 
-export type Node = Program | Decl | Expr | ParamDecl | Type | Binding;
+export type Node =
+  | Program
+  | Decl
+  | Expr
+  | ParamDecl
+  | Type
+  | Binding
+  | PatternBinding
+  | MatchCase;

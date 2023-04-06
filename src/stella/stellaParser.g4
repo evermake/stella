@@ -94,7 +94,7 @@ patternBinding: pat=pattern '=' rhs=expr ;
 
 binding: name = StellaIdent '=' rhs = expr;
 
-matchCase: pattern '=>' expr;
+matchCase: pat=pattern '=>' expr_=expr;
 
 pattern:
     '<|' label = StellaIdent ('=' pattern)? '|>'                # PatternVariant
