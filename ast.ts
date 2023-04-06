@@ -26,17 +26,17 @@ type Param = ParamType<NullaryFunctionExtension>;
 type SimpleType<T extends Exclude<string, T>> = {
   type: T;
 };
-export type NatType = SimpleType<'NatType'>;
-export type BoolType = SimpleType<'BoolType'>;
-export type UnitType = SimpleType<'UnitType'>;
-export interface FunctionType {
-  type: 'FunctionType';
+export type TypeNat = SimpleType<'TypeNat'>;
+export type TypeBool = SimpleType<'TypeBool'>;
+export type TypeUnit = SimpleType<'TypeUnit'>;
+export interface TypeFun {
+  type: 'TypeFun';
   // TODO: handle multi-param and nullary extensions being enabled, and make [Type] (tuple type with 1 element) the default
   parametersTypes: Type[];
   returnType: Type;
 }
 
-export type Type = NatType | BoolType | UnitType | FunctionType;
+export type Type = TypeNat | TypeBool | TypeUnit | TypeFun;
 // TODO: TypeRec, tuple, record, variant, typelist (?), type var
 
 // ---- Expressions

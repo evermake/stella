@@ -83,7 +83,7 @@ import type {
   Add,
   Application,
   Binding,
-  BoolType,
+  TypeBool,
   Cons,
   ConstBool,
   ConstInt,
@@ -119,7 +119,7 @@ import type {
   NatIsZero,
   NatPred,
   NatRec,
-  NatType,
+  TypeNat,
   Node,
   LogicalNot,
   NotEqual,
@@ -623,8 +623,8 @@ export class AstTransformer extends StellaVisitor<Node> {
     throw new Error('Unknown type: ' + ctx);
   };
 
-  visitTypeNat = (ctx: TypeNatContext) => ({ type: 'NatType' } as NatType);
-  visitTypeBool = (ctx: TypeBoolContext) => ({ type: 'BoolType' } as BoolType);
+  visitTypeNat = (ctx: TypeNatContext) => ({ type: 'TypeNat' } as TypeNat);
+  visitTypeBool = (ctx: TypeBoolContext) => ({ type: 'TypeBool' } as TypeBool);
 
   visitTypeAsc: (ctx: TypeAscContext) => TypeAscription = (ctx) => {
     return {
