@@ -643,6 +643,42 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof TypeBoolContext) {
       return this.visitTypeBool(ctx);
     }
+    if (ctx instanceof TypeFunContext) {
+      return this.visitTypeFun(ctx);
+    }
+    if (ctx instanceof TypeRecContext) {
+      return this.visitTypeRec(ctx);
+    }
+    if (ctx instanceof TypeSumContext) {
+      return this.visitTypeSum(ctx);
+    }
+    if (ctx instanceof TypeTupleContext) {
+      return this.visitTypeTuple(ctx);
+    }
+    if (ctx instanceof RecordFieldTypeContext) {
+      return this.visitRecordFieldType(ctx);
+    }
+    if (ctx instanceof TypeRecordContext) {
+      return this.visitTypeRecord(ctx);
+    }
+    if (ctx instanceof VariantFieldTypeContext) {
+      return this.visitVariantFieldType(ctx);
+    }
+    if (ctx instanceof TypeVariantContext) {
+      return this.visitTypeVariant(ctx);
+    }
+    if (ctx instanceof TypeListContext) {
+      return this.visitTypeList(ctx);
+    }
+    if (ctx instanceof TypeUnitContext) {
+      return this.visitTypeUnit(ctx);
+    }
+    if (ctx instanceof TypeVarContext) {
+      return this.visitTypeVar(ctx);
+    }
+    if (ctx instanceof TypeParensContext) {
+      return this.visitTypeParens(ctx);
+    }
     throw new Error('Unknown type: ' + ctx);
   };
 
