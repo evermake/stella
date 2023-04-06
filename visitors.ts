@@ -103,7 +103,7 @@ import type {
   NatRec,
   NatType,
   Node,
-  Not,
+  LogicalNot,
   NotEqual,
   ParamDecl,
   PatternBinding,
@@ -434,9 +434,9 @@ export class AstTransformer extends StellaVisitor<Node> {
       expr: this.visitExpr(ctx._list),
     };
   };
-  visitLogicNot: (ctx: LogicNotContext) => Not = (ctx) => {
+  visitLogicNot: (ctx: LogicNotContext) => LogicalNot = (ctx) => {
     return {
-      type: 'Not',
+      type: 'LogicalNot',
       expr: this.visitExpr(ctx._expr_),
     };
   };

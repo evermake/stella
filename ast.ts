@@ -54,7 +54,7 @@ export type Succ = UnaryFunction<'Succ'>;
 export type ListHead = UnaryFunction<'ListHead'>;
 export type ListTail = UnaryFunction<'ListTail'>;
 export type ListIsEmpty = UnaryFunction<'ListIsEmpty'>;
-export type Not = UnaryFunction<'Not'>;
+export type LogicalNot = UnaryFunction<'LogicalNot'>;
 export type NatPred = UnaryFunction<'NatPred'>;
 export type NatIsZero = UnaryFunction<'NatIsZero'>;
 export type Fix = UnaryFunction<'Fix'>;
@@ -204,7 +204,7 @@ export type Expr =
   | ListIsEmpty
   | ListTail
   | Succ
-  | Not
+  | LogicalNot
   | NatPred
   | NatIsZero
   | Fix
