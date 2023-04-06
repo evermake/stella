@@ -35,9 +35,61 @@ export interface TypeFun {
   parametersTypes: Type[];
   returnType: Type;
 }
+export interface TypeRec {
+  type: 'TypeRec';
+  var: Identifier;
+  recType: Type;
+}
+export interface TypeSum {
+  type: 'TypeSum';
+  left: Type;
+  right: Type;
+}
+export interface TypeTuple {
+  type: 'TypeTuple';
+  types: Type[];
+}
+export interface RecordFieldType {
+  type: 'RecordFieldType';
+  label: Identifier;
+  fieldType: Type;
+}
+export interface TypeRecord {
+  type: 'TypeRecord';
+  fieldTypes: RecordFieldType[];
+}
+export interface VariantFieldType {
+  type: 'VariantFieldType';
+  label: Identifier;
+  fieldType?: Type;
+}
+export interface TypeVariant {
+  type: 'TypeVariant';
+  fieldTypes: VariantFieldType[];
+}
+export interface TypeList {
+  type: 'TypeList';
+  types: Type[];
+}
+export interface TypeVar {
+  type: 'TypeVar';
+  name: Identifier;
+}
 
-export type Type = TypeNat | TypeBool | TypeUnit | TypeFun;
-// TODO: TypeRec, tuple, record, variant, typelist (?), type var
+export type Type =
+  | TypeNat
+  | TypeBool
+  | TypeUnit
+  | TypeFun
+  | TypeRec
+  | TypeSum
+  | TypeTuple
+  | TypeRecord
+  | TypeVariant
+  | TypeList
+  | TypeVar
+  | RecordFieldType
+  | VariantFieldType;
 
 // ---- Expressions
 

@@ -77,6 +77,18 @@ import {
   PatternVarContext,
   ParenthesisedPatternContext,
   LabelledPatternContext,
+  TypeFunContext,
+  TypeRecContext,
+  TypeSumContext,
+  TypeTupleContext,
+  TypeRecordContext,
+  TypeVariantContext,
+  TypeListContext,
+  TypeUnitContext,
+  TypeVarContext,
+  RecordFieldTypeContext,
+  VariantFieldTypeContext,
+  TypeParensContext,
 } from './src/stella/stellaParser';
 import type {
   Abstraction,
@@ -152,6 +164,17 @@ import type {
   PatternVar,
   PatternVariant,
   LabelledPattern,
+  TypeFun,
+  TypeList,
+  TypeRec,
+  TypeRecord,
+  TypeSum,
+  TypeTuple,
+  TypeUnit,
+  TypeVar,
+  TypeVariant,
+  RecordFieldType,
+  VariantFieldType,
 } from './ast';
 
 export class AstPrinter extends StellaVisitor<void> {
@@ -625,6 +648,84 @@ export class AstTransformer extends StellaVisitor<Node> {
 
   visitTypeNat = (ctx: TypeNatContext) => ({ type: 'TypeNat' } as TypeNat);
   visitTypeBool = (ctx: TypeBoolContext) => ({ type: 'TypeBool' } as TypeBool);
+
+  visitTypeFun: (ctx: TypeFunContext) => TypeFun = (ctx) => {
+    return {
+      type: 'TypeFun',
+      parametersTypes: ctx._paramTypes.map(this.visitType),
+      returnType: this.visitType(ctx._returnType),
+    };
+  };
+  visitTypeRec: (ctx: TypeRecContext) => TypeRec = (ctx) => {
+    return {
+      type: 'TypeRec',
+      var: ctx._var_.text,
+      recType: this.visitType(ctx._type_),
+    };
+  };
+  visitTypeSum: (ctx: TypeSumContext) => TypeSum = (ctx) => {
+    return {
+      type: 'TypeSum',
+      left: this.visitType(ctx._left),
+      right: this.visitType(ctx._right),
+    };
+  };
+  visitTypeTuple: (ctx: TypeTupleContext) => TypeTuple = (ctx) => {
+    return {
+      type: 'TypeTuple',
+      types: ctx._types.map(this.visitType),
+    };
+  };
+  visitRecordFieldType: (ctx: RecordFieldTypeContext) => RecordFieldType = (
+    ctx
+  ) => {
+    return {
+      type: 'RecordFieldType',
+      label: ctx._label.text,
+      fieldType: this.visitType(ctx._type_),
+    };
+  };
+  visitTypeRecord: (ctx: TypeRecordContext) => TypeRecord = (ctx) => {
+    return {
+      type: 'TypeRecord',
+      fieldTypes: ctx._fieldTypes.map(this.visitRecordFieldType),
+    };
+  };
+  visitVariantFieldType: (ctx: VariantFieldTypeContext) => VariantFieldType = (
+    ctx
+  ) => {
+    return {
+      type: 'VariantFieldType',
+      label: ctx._label.text,
+      fieldType: this.visitType(ctx._type_),
+    };
+  };
+  visitTypeVariant: (ctx: TypeVariantContext) => TypeVariant = (ctx) => {
+    return {
+      type: 'TypeVariant',
+      fieldTypes: ctx._fieldTypes.map(this.visitVariantFieldType),
+    };
+  };
+  visitTypeList: (ctx: TypeListContext) => TypeList = (ctx) => {
+    return {
+      type: 'TypeList',
+      types: ctx._types.map(this.visitType),
+    };
+  };
+  visitTypeUnit: (ctx: TypeUnitContext) => TypeUnit = (ctx) => {
+    return {
+      type: 'TypeUnit',
+    };
+  };
+  visitTypeVar: (ctx: TypeVarContext) => TypeVar = (ctx) => {
+    return {
+      type: 'TypeVar',
+      name: ctx._name.text,
+    };
+  };
+  visitTypeParens: (ctx: TypeParensContext) => Type = (ctx) => {
+    return this.visitType(ctx._type_);
+  };
 
   visitTypeAsc: (ctx: TypeAscContext) => TypeAscription = (ctx) => {
     return {

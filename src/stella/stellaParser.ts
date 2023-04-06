@@ -2296,7 +2296,7 @@ export default class stellaParser extends Parser {
 				this.state = 553;
 				this.match(stellaParser.Surrogate_id_SYMB_2);
 				this.state = 554;
-				this.stellatype(0);
+				(localctx as TypeParensContext)._type_ = this.stellatype(0);
 				this.state = 555;
 				this.match(stellaParser.Surrogate_id_SYMB_3);
 				}
@@ -5876,6 +5876,7 @@ export class TypeRecContext extends StellatypeContext {
 	}
 }
 export class TypeParensContext extends StellatypeContext {
+	public _type_!: StellatypeContext;
 	constructor(parser: stellaParser, ctx: StellatypeContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
@@ -5883,11 +5884,11 @@ export class TypeParensContext extends StellatypeContext {
 	public Surrogate_id_SYMB_2(): TerminalNode {
 		return this.getToken(stellaParser.Surrogate_id_SYMB_2, 0);
 	}
-	public stellatype(): StellatypeContext {
-		return this.getTypedRuleContext(StellatypeContext, 0) as StellatypeContext;
-	}
 	public Surrogate_id_SYMB_3(): TerminalNode {
 		return this.getToken(stellaParser.Surrogate_id_SYMB_3, 0);
+	}
+	public stellatype(): StellatypeContext {
+		return this.getTypedRuleContext(StellatypeContext, 0) as StellatypeContext;
 	}
 	public enterRule(listener: stellaParserListener): void {
 	    if(listener.enterTypeParens) {

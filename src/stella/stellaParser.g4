@@ -140,7 +140,7 @@ stellatype:
     | '[' (types += stellatype (',' types += stellatype)*)? ']' # TypeList
     | 'Unit'                                                    # TypeUnit
     | name = StellaIdent                                        # TypeVar
-    | '(' stellatype ')' # TypeParens;
+    | '(' type_=stellatype ')' # TypeParens;
 
 recordFieldType: label = StellaIdent ':' type_ = stellatype;
 variantFieldType: label = StellaIdent (':' type_ = stellatype)?;
