@@ -801,7 +801,7 @@ export class AstTransformer extends StellaVisitor<Node> {
   visitMatchCase: (ctx: MatchCaseContext) => MatchCase = (ctx) => {
     return {
       type: 'MatchCase',
-      pattern: this.visitPattern(ctx._pat),
+      pattern: this.visitPattern(ctx._pattern_),
       expr: this.visitExpr(ctx._expr_),
     };
   };
@@ -965,19 +965,19 @@ export class AstTransformer extends StellaVisitor<Node> {
     return {
       type: 'PatternVariant',
       label: ctx._label.text,
-      pattern: ctx._pat && this.visitPattern(ctx._pat),
+      pattern: ctx._pattern_ && this.visitPattern(ctx._pattern_),
     };
   };
   visitPatternInl: (ctx: PatternInlContext) => PatternInl = (ctx) => {
     return {
       type: 'PatternInl',
-      pattern: this.visitPattern(ctx._pat),
+      pattern: this.visitPattern(ctx._pattern_),
     };
   };
   visitPatternInr: (ctx: PatternInrContext) => PatternInr = (ctx) => {
     return {
       type: 'PatternInr',
-      pattern: this.visitPattern(ctx._pat),
+      pattern: this.visitPattern(ctx._pattern_),
     };
   };
   visitPatternTuple: (ctx: PatternTupleContext) => PatternTuple = (ctx) => {
@@ -992,7 +992,7 @@ export class AstTransformer extends StellaVisitor<Node> {
     return {
       type: 'LabelledPattern',
       label: ctx._label.text,
-      pattern: this.visitPattern(ctx._pat),
+      pattern: this.visitPattern(ctx._pattern_),
     };
   };
   visitPatternRecord: (ctx: PatternRecordContext) => PatternRecord = (ctx) => {
@@ -1038,7 +1038,7 @@ export class AstTransformer extends StellaVisitor<Node> {
   visitPatternSucc: (ctx: PatternSuccContext) => PatternSucc = (ctx) => {
     return {
       type: 'PatternSucc',
-      value: this.visitPattern(ctx._n),
+      value: this.visitPattern(ctx._pattern_),
     };
   };
   visitPatternVar: (ctx: PatternVarContext) => PatternVar = (ctx) => {
@@ -1050,6 +1050,6 @@ export class AstTransformer extends StellaVisitor<Node> {
   visitParenthesisedPattern: (ctx: ParenthesisedPatternContext) => Pattern = (
     ctx
   ) => {
-    return this.visitPattern(ctx._pat);
+    return this.visitPattern(ctx._pattern_);
   };
 }
