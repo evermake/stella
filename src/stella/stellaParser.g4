@@ -97,7 +97,7 @@ binding: name = StellaIdent '=' rhs = expr;
 matchCase: pat=pattern '=>' expr_=expr;
 
 pattern:
-    '<|' label = StellaIdent ('=' pattern)? '|>'                # PatternVariant
+    '<|' label = StellaIdent ('=' pat=pattern)? '|>'            # PatternVariant
     | 'inl' '(' pat=pattern ')' # PatternInl
     | 'inr' '(' pat=pattern ')' # PatternInr
     | '{' (patterns += pattern (',' patterns += pattern)*)? '}' # PatternTuple
@@ -114,9 +114,9 @@ pattern:
     | n = INTEGER                                               # PatternInt
     | 'succ' '(' n = pattern ')'                                # PatternSucc
     | name = StellaIdent                                        # PatternVar
-    | '(' pattern ')'                                           # ParenthesisedPattern;
+    | '(' pat=pattern ')'                                       # ParenthesisedPattern;
 
-labelledPattern: label = StellaIdent '=' pattern;
+labelledPattern: label = StellaIdent '=' pat=pattern;
 
 stellatype:
     'Bool'  # TypeBool

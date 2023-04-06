@@ -238,13 +238,85 @@ export type Expr =
 
 // ---- Patterns
 
-/** Not yet implemented */
-export type Pattern = unknown; // TODO
 export interface PatternBinding {
   type: 'PatternBinding';
   pattern: Pattern;
   rhs: Expr;
 }
+
+export interface PatternVariant {
+  type: 'PatternVariant';
+  label: Identifier;
+  pattern?: Pattern;
+}
+export interface PatternInl {
+  type: 'PatternInl';
+  pattern: Pattern;
+}
+export interface PatternInr {
+  type: 'PatternInr';
+  pattern: Pattern;
+}
+export interface PatternTuple {
+  type: 'PatternTuple';
+  patterns: Pattern[];
+}
+export interface LabelledPattern {
+  type: 'LabelledPattern';
+  label: Identifier;
+  pattern: Pattern;
+}
+export interface PatternRecord {
+  type: 'PatternRecord';
+  patterns: LabelledPattern[];
+}
+export interface PatternList {
+  type: 'PatternList';
+  patterns: Pattern[];
+}
+export interface PatternCons {
+  type: 'PatternCons';
+  head: Pattern;
+  tail: Pattern;
+}
+export interface PatternFalse {
+  type: 'PatternFalse';
+}
+export interface PatternTrue {
+  type: 'PatternTrue';
+}
+export interface PatternUnit {
+  type: 'PatternUnit';
+}
+export interface PatternInt {
+  type: 'PatternInt';
+  value: number;
+}
+export interface PatternSucc {
+  type: 'PatternSucc';
+  value: Pattern;
+}
+export interface PatternVar {
+  type: 'PatternVar';
+  name: Identifier;
+}
+
+export type Pattern =
+  | PatternVariant
+  | PatternInl
+  | PatternInr
+  | PatternTuple
+  | LabelledPattern
+  | PatternRecord
+  | PatternList
+  | PatternCons
+  | PatternFalse
+  | PatternTrue
+  | PatternUnit
+  | PatternInt
+  | PatternSucc
+  | PatternVar;
+
 // ---- Declarations
 
 export interface ParamDecl {
@@ -289,4 +361,5 @@ export type Node =
   | Type
   | Binding
   | PatternBinding
-  | MatchCase;
+  | MatchCase
+  | Pattern;

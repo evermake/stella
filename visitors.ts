@@ -61,6 +61,22 @@ import {
   PatternBindingContext,
   ParenthesisedExprContext,
   TerminatingSemicolonContext,
+  PatternContext,
+  PatternVariantContext,
+  PatternInlContext,
+  PatternInrContext,
+  PatternTupleContext,
+  PatternRecordContext,
+  PatternListContext,
+  PatternConsContext,
+  PatternFalseContext,
+  PatternTrueContext,
+  PatternUnitContext,
+  PatternIntContext,
+  PatternSuccContext,
+  PatternVarContext,
+  ParenthesisedPatternContext,
+  LabelledPatternContext,
 } from './src/stella/stellaParser';
 import type {
   Abstraction,
@@ -121,6 +137,21 @@ import type {
   Var,
   Variant,
   MatchCase,
+  Pattern,
+  PatternCons,
+  PatternFalse,
+  PatternInl,
+  PatternInr,
+  PatternInt,
+  PatternList,
+  PatternRecord,
+  PatternSucc,
+  PatternTrue,
+  PatternTuple,
+  PatternUnit,
+  PatternVar,
+  PatternVariant,
+  LabelledPattern,
 } from './ast';
 
 export class AstPrinter extends StellaVisitor<void> {
@@ -633,7 +664,7 @@ export class AstTransformer extends StellaVisitor<Node> {
   visitMatchCase: (ctx: MatchCaseContext) => MatchCase = (ctx) => {
     return {
       type: 'MatchCase',
-      pattern: ctx._pat,
+      pattern: this.visitPattern(ctx._pat),
       expr: this.visitExpr(ctx._expr_),
     };
   };
@@ -716,7 +747,7 @@ export class AstTransformer extends StellaVisitor<Node> {
   ) => {
     return {
       type: 'PatternBinding',
-      pattern: ctx._pat,
+      pattern: this.visitPattern(ctx._pat),
       rhs: this.visitExpr(ctx._rhs),
     };
   };
@@ -742,5 +773,146 @@ export class AstTransformer extends StellaVisitor<Node> {
       name: ctx._name.text,
       expr: this.visitExpr(ctx._rhs),
     };
+  };
+
+  visitPattern: (ctx: PatternContext) => Pattern = (ctx) => {
+    if (ctx instanceof PatternVariantContext) {
+      return this.visitPatternVariant(ctx);
+    }
+    if (ctx instanceof PatternInlContext) {
+      return this.visitPatternInl(ctx);
+    }
+    if (ctx instanceof PatternInrContext) {
+      return this.visitPatternInr(ctx);
+    }
+    if (ctx instanceof PatternTupleContext) {
+      return this.visitPatternTuple(ctx);
+    }
+    if (ctx instanceof PatternRecordContext) {
+      return this.visitPatternRecord(ctx);
+    }
+    if (ctx instanceof PatternListContext) {
+      return this.visitPatternList(ctx);
+    }
+    if (ctx instanceof PatternConsContext) {
+      return this.visitPatternCons(ctx);
+    }
+    if (ctx instanceof PatternFalseContext) {
+      return this.visitPatternFalse(ctx);
+    }
+    if (ctx instanceof PatternTrueContext) {
+      return this.visitPatternTrue(ctx);
+    }
+    if (ctx instanceof PatternUnitContext) {
+      return this.visitPatternUnit(ctx);
+    }
+    if (ctx instanceof PatternIntContext) {
+      return this.visitPatternInt(ctx);
+    }
+    if (ctx instanceof PatternSuccContext) {
+      return this.visitPatternSucc(ctx);
+    }
+    if (ctx instanceof PatternVarContext) {
+      return this.visitPatternVar(ctx);
+    }
+    if (ctx instanceof ParenthesisedPatternContext) {
+      return this.visitParenthesisedPattern(ctx);
+    }
+
+    throw new Error('Unknown pattern type: ' + ctx.getText());
+  };
+
+  visitPatternVariant: (ctx: PatternVariantContext) => PatternVariant = (
+    ctx
+  ) => {
+    return {
+      type: 'PatternVariant',
+      label: ctx._label.text,
+      pattern: ctx._pat && this.visitPattern(ctx._pat),
+    };
+  };
+  visitPatternInl: (ctx: PatternInlContext) => PatternInl = (ctx) => {
+    return {
+      type: 'PatternInl',
+      pattern: this.visitPattern(ctx._pat),
+    };
+  };
+  visitPatternInr: (ctx: PatternInrContext) => PatternInr = (ctx) => {
+    return {
+      type: 'PatternInr',
+      pattern: this.visitPattern(ctx._pat),
+    };
+  };
+  visitPatternTuple: (ctx: PatternTupleContext) => PatternTuple = (ctx) => {
+    return {
+      type: 'PatternTuple',
+      patterns: ctx.pattern_list().map(this.visitPattern),
+    };
+  };
+  visitLabelledPattern: (ctx: LabelledPatternContext) => LabelledPattern = (
+    ctx
+  ) => {
+    return {
+      type: 'LabelledPattern',
+      label: ctx._label.text,
+      pattern: this.visitPattern(ctx._pat),
+    };
+  };
+  visitPatternRecord: (ctx: PatternRecordContext) => PatternRecord = (ctx) => {
+    return {
+      type: 'PatternRecord',
+      patterns: ctx.labelledPattern_list().map(this.visitLabelledPattern),
+    };
+  };
+  visitPatternList: (ctx: PatternListContext) => PatternList = (ctx) => {
+    return {
+      type: 'PatternList',
+      patterns: ctx.pattern_list().map(this.visitPattern),
+    };
+  };
+  visitPatternCons: (ctx: PatternConsContext) => PatternCons = (ctx) => {
+    return {
+      type: 'PatternCons',
+      head: this.visitPattern(ctx._head),
+      tail: this.visitPattern(ctx._tail),
+    };
+  };
+  visitPatternFalse: (ctx: PatternFalseContext) => PatternFalse = (ctx) => {
+    return {
+      type: 'PatternFalse',
+    };
+  };
+  visitPatternTrue: (ctx: PatternTrueContext) => PatternTrue = (ctx) => {
+    return {
+      type: 'PatternTrue',
+    };
+  };
+  visitPatternUnit: (ctx: PatternUnitContext) => PatternUnit = (ctx) => {
+    return {
+      type: 'PatternUnit',
+    };
+  };
+  visitPatternInt: (ctx: PatternIntContext) => PatternInt = (ctx) => {
+    return {
+      type: 'PatternInt',
+      value: Number(ctx._n.text),
+    };
+  };
+  visitPatternSucc: (ctx: PatternSuccContext) => PatternSucc = (ctx) => {
+    return {
+      type: 'PatternSucc',
+      value: this.visitPattern(ctx._n),
+    };
+  };
+  visitPatternVar: (ctx: PatternVarContext) => PatternVar = (ctx) => {
+    return {
+      type: 'PatternVar',
+      name: ctx._name.text,
+    };
+  };
+  visitParenthesisedPattern: (ctx: ParenthesisedPatternContext) => Pattern = (
+    ctx
+  ) => {
+    return this.visitPattern(ctx._pat);
   };
 }

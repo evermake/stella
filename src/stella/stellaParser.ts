@@ -1743,7 +1743,7 @@ export default class stellaParser extends Parser {
 					this.state = 407;
 					this.match(stellaParser.Surrogate_id_SYMB_6);
 					this.state = 408;
-					this.pattern();
+					(localctx as PatternVariantContext)._pat = this.pattern();
 					}
 				}
 
@@ -1972,7 +1972,7 @@ export default class stellaParser extends Parser {
 				this.state = 475;
 				this.match(stellaParser.Surrogate_id_SYMB_2);
 				this.state = 476;
-				this.pattern();
+				(localctx as ParenthesisedPatternContext)._pat = this.pattern();
 				this.state = 477;
 				this.match(stellaParser.Surrogate_id_SYMB_3);
 				}
@@ -2005,7 +2005,7 @@ export default class stellaParser extends Parser {
 			this.state = 482;
 			this.match(stellaParser.Surrogate_id_SYMB_6);
 			this.state = 483;
-			this.pattern();
+			localctx._pat = this.pattern();
 			}
 		}
 		catch (re) {
@@ -5268,6 +5268,7 @@ export class PatternRecordContext extends PatternContext {
 }
 export class PatternVariantContext extends PatternContext {
 	public _label!: Token;
+	public _pat!: PatternContext;
 	constructor(parser: stellaParser, ctx: PatternContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
@@ -5464,6 +5465,7 @@ export class PatternVarContext extends PatternContext {
 	}
 }
 export class ParenthesisedPatternContext extends PatternContext {
+	public _pat!: PatternContext;
 	constructor(parser: stellaParser, ctx: PatternContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
@@ -5471,11 +5473,11 @@ export class ParenthesisedPatternContext extends PatternContext {
 	public Surrogate_id_SYMB_2(): TerminalNode {
 		return this.getToken(stellaParser.Surrogate_id_SYMB_2, 0);
 	}
-	public pattern(): PatternContext {
-		return this.getTypedRuleContext(PatternContext, 0) as PatternContext;
-	}
 	public Surrogate_id_SYMB_3(): TerminalNode {
 		return this.getToken(stellaParser.Surrogate_id_SYMB_3, 0);
+	}
+	public pattern(): PatternContext {
+		return this.getTypedRuleContext(PatternContext, 0) as PatternContext;
 	}
 	public enterRule(listener: stellaParserListener): void {
 	    if(listener.enterParenthesisedPattern) {
@@ -5591,6 +5593,7 @@ export class PatternUnitContext extends PatternContext {
 
 export class LabelledPatternContext extends ParserRuleContext {
 	public _label!: Token;
+	public _pat!: PatternContext;
 	constructor(parser?: stellaParser, parent?: ParserRuleContext, invokingState?: number) {
 		super(parent, invokingState);
     	this.parser = parser;
@@ -5598,11 +5601,11 @@ export class LabelledPatternContext extends ParserRuleContext {
 	public Surrogate_id_SYMB_6(): TerminalNode {
 		return this.getToken(stellaParser.Surrogate_id_SYMB_6, 0);
 	}
-	public pattern(): PatternContext {
-		return this.getTypedRuleContext(PatternContext, 0) as PatternContext;
-	}
 	public StellaIdent(): TerminalNode {
 		return this.getToken(stellaParser.StellaIdent, 0);
+	}
+	public pattern(): PatternContext {
+		return this.getTypedRuleContext(PatternContext, 0) as PatternContext;
 	}
     public get ruleIndex(): number {
     	return stellaParser.RULE_labelledPattern;
