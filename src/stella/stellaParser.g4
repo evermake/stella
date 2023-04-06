@@ -55,13 +55,13 @@ expr:
     // expr
     | fun = expr '(' (args += expr (',' args += expr)*)? ')' # Application
     // expr
-    | lhs=expr '*' rhs=expr   # Multiply
-    | lhs=expr '/' rhs=expr   # Divide
-    | lhs=expr 'and' rhs=expr # LogicAnd
+    | left=expr '*' right=expr   # Multiply
+    | left=expr '/' right=expr   # Divide
+    | left=expr 'and' right=expr # LogicAnd
     // expr
-    | lhs=expr '+' rhs=expr                        # Add
-    | lhs=expr '-' rhs=expr                        # Subtract
-    | lhs=expr 'or' rhs=expr                       # LogicOr
+    | left=expr '+' right=expr                        # Add
+    | left=expr '-' right=expr                        # Subtract
+    | left=expr 'or' right=expr                       # LogicOr
     | expr_ = expr 'as' type_ = stellatype # TypeAsc
     | 'fn' '(' (
         paramDecls += paramDecl (',' paramDecls += paramDecl)*
@@ -86,9 +86,9 @@ expr:
     | 'if' condition = expr 'then' thenExpr = expr 'else' elseExpr = expr # If
     | 'let' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # Let
     | 'letrec' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # LetRec
-    | '(' expr ')'                                                        # ParenthesisedExpr
-    | expr ';' expr # Sequence
-    | expr ';' # TerminatingSemicolon;
+    | '(' expr_=expr ')'                                                        # ParenthesisedExpr
+    | left=expr ';' right=expr # Sequence
+    | expr_=expr ';' # TerminatingSemicolon;
 
 patternBinding: pat=pattern '=' rhs=expr ;
 

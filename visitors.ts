@@ -59,6 +59,8 @@ import {
   BindingContext,
   Match_caseContext,
   PatternBindingContext,
+  ParenthesisedExprContext,
+  TerminatingSemicolonContext,
 } from './src/stella/stellaParser';
 import type {
   Abstraction,
@@ -366,8 +368,14 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof LetRecContext) {
       return this.visitLetRec(ctx);
     }
+    if (ctx instanceof ParenthesisedExprContext) {
+      return this.visitParenthesisedExpr(ctx);
+    }
     if (ctx instanceof SequenceContext) {
       return this.visitSequence(ctx);
+    }
+    if (ctx instanceof TerminatingSemicolonContext) {
+      return this.visitTerminatingSemicolon(ctx);
     }
 
     throw new Error('Unknown expression type: ' + ctx.getText());
@@ -483,43 +491,43 @@ export class AstTransformer extends StellaVisitor<Node> {
   visitMultiply: (ctx: MultiplyContext) => Multiply = (ctx) => {
     return {
       type: 'Multiply',
-      left: this.visitExpr(ctx._lhs),
-      right: this.visitExpr(ctx._rhs),
+      left: this.visitExpr(ctx._left),
+      right: this.visitExpr(ctx._right),
     };
   };
   visitDivide: (ctx: DivideContext) => Divide = (ctx) => {
     return {
       type: 'Divide',
-      left: this.visitExpr(ctx._lhs),
-      right: this.visitExpr(ctx._rhs),
+      left: this.visitExpr(ctx._left),
+      right: this.visitExpr(ctx._right),
     };
   };
   visitLogicAnd: (ctx: LogicAndContext) => LogicalAnd = (ctx) => {
     return {
       type: 'LogicalAnd',
-      left: this.visitExpr(ctx._lhs),
-      right: this.visitExpr(ctx._rhs),
+      left: this.visitExpr(ctx._left),
+      right: this.visitExpr(ctx._right),
     };
   };
   visitAdd: (ctx: AddContext) => Add = (ctx) => {
     return {
       type: 'Add',
-      left: this.visitExpr(ctx._lhs),
-      right: this.visitExpr(ctx._rhs),
+      left: this.visitExpr(ctx._left),
+      right: this.visitExpr(ctx._right),
     };
   };
   visitSubtract: (ctx: SubtractContext) => Subtract = (ctx) => {
     return {
       type: 'Subtract',
-      left: this.visitExpr(ctx._lhs),
-      right: this.visitExpr(ctx._rhs),
+      left: this.visitExpr(ctx._left),
+      right: this.visitExpr(ctx._right),
     };
   };
   visitLogicOr: (ctx: LogicOrContext) => LogicalOr = (ctx) => {
     return {
       type: 'LogicalOr',
-      left: this.visitExpr(ctx._lhs),
-      right: this.visitExpr(ctx._rhs),
+      left: this.visitExpr(ctx._left),
+      right: this.visitExpr(ctx._right),
     };
   };
   visitAbstraction: (ctx: AbstractionContext) => Abstraction = (ctx) => {
@@ -710,6 +718,14 @@ export class AstTransformer extends StellaVisitor<Node> {
       // TODO: this does not actually flatten all the "Sequence"s into one list. It should do so.
       exprs: ctx.expr_list().map(this.visitExpr),
     };
+  };
+  visitParenthesisedExpr: (ctx: ParenthesisedExprContext) => Expr = (ctx) => {
+    return this.visitExpr(ctx._expr_);
+  };
+  visitTerminatingSemicolon: (ctx: TerminatingSemicolonContext) => Expr = (
+    ctx
+  ) => {
+    return this.visitExpr(ctx._expr_);
   };
 
   visitBinding: (ctx: BindingContext) => Binding = (ctx) => {

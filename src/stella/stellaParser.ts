@@ -1292,7 +1292,7 @@ export default class stellaParser extends Parser {
 				this.state = 319;
 				this.match(stellaParser.Surrogate_id_SYMB_2);
 				this.state = 320;
-				this.expr(0);
+				(localctx as ParenthesisedExprContext)._expr_ = this.expr(0);
 				this.state = 321;
 				this.match(stellaParser.Surrogate_id_SYMB_3);
 				}
@@ -1315,7 +1315,7 @@ export default class stellaParser extends Parser {
 					case 1:
 						{
 						localctx = new MultiplyContext(this, new ExprContext(this, _parentctx, _parentState));
-						(localctx as MultiplyContext)._lhs = _prevctx;
+						(localctx as MultiplyContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 325;
 						if (!(this.precpred(this._ctx, 25))) {
@@ -1324,13 +1324,13 @@ export default class stellaParser extends Parser {
 						this.state = 326;
 						this.match(stellaParser.Surrogate_id_SYMB_23);
 						this.state = 327;
-						(localctx as MultiplyContext)._rhs = this.expr(26);
+						(localctx as MultiplyContext)._right = this.expr(26);
 						}
 						break;
 					case 2:
 						{
 						localctx = new DivideContext(this, new ExprContext(this, _parentctx, _parentState));
-						(localctx as DivideContext)._lhs = _prevctx;
+						(localctx as DivideContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 328;
 						if (!(this.precpred(this._ctx, 24))) {
@@ -1339,13 +1339,13 @@ export default class stellaParser extends Parser {
 						this.state = 329;
 						this.match(stellaParser.Surrogate_id_SYMB_24);
 						this.state = 330;
-						(localctx as DivideContext)._rhs = this.expr(25);
+						(localctx as DivideContext)._right = this.expr(25);
 						}
 						break;
 					case 3:
 						{
 						localctx = new LogicAndContext(this, new ExprContext(this, _parentctx, _parentState));
-						(localctx as LogicAndContext)._lhs = _prevctx;
+						(localctx as LogicAndContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 331;
 						if (!(this.precpred(this._ctx, 23))) {
@@ -1354,13 +1354,13 @@ export default class stellaParser extends Parser {
 						this.state = 332;
 						this.match(stellaParser.Surrogate_id_SYMB_35);
 						this.state = 333;
-						(localctx as LogicAndContext)._rhs = this.expr(24);
+						(localctx as LogicAndContext)._right = this.expr(24);
 						}
 						break;
 					case 4:
 						{
 						localctx = new AddContext(this, new ExprContext(this, _parentctx, _parentState));
-						(localctx as AddContext)._lhs = _prevctx;
+						(localctx as AddContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 334;
 						if (!(this.precpred(this._ctx, 22))) {
@@ -1369,13 +1369,13 @@ export default class stellaParser extends Parser {
 						this.state = 335;
 						this.match(stellaParser.Surrogate_id_SYMB_21);
 						this.state = 336;
-						(localctx as AddContext)._rhs = this.expr(23);
+						(localctx as AddContext)._right = this.expr(23);
 						}
 						break;
 					case 5:
 						{
 						localctx = new SubtractContext(this, new ExprContext(this, _parentctx, _parentState));
-						(localctx as SubtractContext)._lhs = _prevctx;
+						(localctx as SubtractContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 337;
 						if (!(this.precpred(this._ctx, 21))) {
@@ -1384,13 +1384,13 @@ export default class stellaParser extends Parser {
 						this.state = 338;
 						this.match(stellaParser.Surrogate_id_SYMB_22);
 						this.state = 339;
-						(localctx as SubtractContext)._rhs = this.expr(22);
+						(localctx as SubtractContext)._right = this.expr(22);
 						}
 						break;
 					case 6:
 						{
 						localctx = new LogicOrContext(this, new ExprContext(this, _parentctx, _parentState));
-						(localctx as LogicOrContext)._lhs = _prevctx;
+						(localctx as LogicOrContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 340;
 						if (!(this.precpred(this._ctx, 20))) {
@@ -1399,7 +1399,7 @@ export default class stellaParser extends Parser {
 						this.state = 341;
 						this.match(stellaParser.Surrogate_id_SYMB_55);
 						this.state = 342;
-						(localctx as LogicOrContext)._rhs = this.expr(21);
+						(localctx as LogicOrContext)._right = this.expr(21);
 						}
 						break;
 					case 7:
@@ -1495,6 +1495,7 @@ export default class stellaParser extends Parser {
 					case 13:
 						{
 						localctx = new SequenceContext(this, new ExprContext(this, _parentctx, _parentState));
+						(localctx as SequenceContext)._left = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 361;
 						if (!(this.precpred(this._ctx, 2))) {
@@ -1503,7 +1504,7 @@ export default class stellaParser extends Parser {
 						this.state = 362;
 						this.match(stellaParser.Surrogate_id_SYMB_1);
 						this.state = 363;
-						this.expr(3);
+						(localctx as SequenceContext)._right = this.expr(3);
 						}
 						break;
 					case 14:
@@ -1597,6 +1598,7 @@ export default class stellaParser extends Parser {
 					case 18:
 						{
 						localctx = new TerminatingSemicolonContext(this, new ExprContext(this, _parentctx, _parentState));
+						(localctx as TerminatingSemicolonContext)._expr_ = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 386;
 						if (!(this.precpred(this._ctx, 1))) {
@@ -3264,8 +3266,8 @@ export class FoldContext extends ExprContext {
 	}
 }
 export class AddContext extends ExprContext {
-	public _lhs!: ExprContext;
-	public _rhs!: ExprContext;
+	public _left!: ExprContext;
+	public _right!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
@@ -3545,8 +3547,8 @@ export class InrContext extends ExprContext {
 	}
 }
 export class DivideContext extends ExprContext {
-	public _lhs!: ExprContext;
-	public _rhs!: ExprContext;
+	public _left!: ExprContext;
+	public _right!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
@@ -3687,6 +3689,7 @@ export class DotRecordContext extends ExprContext {
 	}
 }
 export class ParenthesisedExprContext extends ExprContext {
+	public _expr_!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
@@ -3694,11 +3697,11 @@ export class ParenthesisedExprContext extends ExprContext {
 	public Surrogate_id_SYMB_2(): TerminalNode {
 		return this.getToken(stellaParser.Surrogate_id_SYMB_2, 0);
 	}
-	public expr(): ExprContext {
-		return this.getTypedRuleContext(ExprContext, 0) as ExprContext;
-	}
 	public Surrogate_id_SYMB_3(): TerminalNode {
 		return this.getToken(stellaParser.Surrogate_id_SYMB_3, 0);
+	}
+	public expr(): ExprContext {
+		return this.getTypedRuleContext(ExprContext, 0) as ExprContext;
 	}
 	public enterRule(listener: stellaParserListener): void {
 	    if(listener.enterParenthesisedExpr) {
@@ -3827,8 +3830,8 @@ export class TailContext extends ExprContext {
 	}
 }
 export class MultiplyContext extends ExprContext {
-	public _lhs!: ExprContext;
-	public _rhs!: ExprContext;
+	public _left!: ExprContext;
+	public _right!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
@@ -3947,8 +3950,8 @@ export class ListContext extends ExprContext {
 	}
 }
 export class LogicAndContext extends ExprContext {
-	public _lhs!: ExprContext;
-	public _rhs!: ExprContext;
+	public _left!: ExprContext;
+	public _right!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
@@ -4030,8 +4033,8 @@ export class LetRecContext extends ExprContext {
 	}
 }
 export class LogicOrContext extends ExprContext {
-	public _lhs!: ExprContext;
-	public _rhs!: ExprContext;
+	public _left!: ExprContext;
+	public _right!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
@@ -4102,15 +4105,16 @@ export class HeadContext extends ExprContext {
 	}
 }
 export class TerminatingSemicolonContext extends ExprContext {
+	public _expr_!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
 	}
-	public expr(): ExprContext {
-		return this.getTypedRuleContext(ExprContext, 0) as ExprContext;
-	}
 	public Surrogate_id_SYMB_1(): TerminalNode {
 		return this.getToken(stellaParser.Surrogate_id_SYMB_1, 0);
+	}
+	public expr(): ExprContext {
+		return this.getTypedRuleContext(ExprContext, 0) as ExprContext;
 	}
 	public enterRule(listener: stellaParserListener): void {
 	    if(listener.enterTerminatingSemicolon) {
@@ -4364,18 +4368,20 @@ export class NatRecContext extends ExprContext {
 	}
 }
 export class SequenceContext extends ExprContext {
+	public _left!: ExprContext;
+	public _right!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
+	}
+	public Surrogate_id_SYMB_1(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_1, 0);
 	}
 	public expr_list(): ExprContext[] {
 		return this.getTypedRuleContexts(ExprContext) as ExprContext[];
 	}
 	public expr(i: number): ExprContext {
 		return this.getTypedRuleContext(ExprContext, i) as ExprContext;
-	}
-	public Surrogate_id_SYMB_1(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_1, 0);
 	}
 	public enterRule(listener: stellaParserListener): void {
 	    if(listener.enterSequence) {
@@ -4693,8 +4699,8 @@ export class FixContext extends ExprContext {
 	}
 }
 export class SubtractContext extends ExprContext {
-	public _lhs!: ExprContext;
-	public _rhs!: ExprContext;
+	public _left!: ExprContext;
+	public _right!: ExprContext;
 	constructor(parser: stellaParser, ctx: ExprContext) {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
