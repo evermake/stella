@@ -130,11 +130,11 @@ stellatype:
             ',' fieldTypes += recordFieldType
         )*
      '}' # TypeRecord
-    | '{' (
+    | '<|' (
         fieldTypes += variantFieldType (
             ',' fieldTypes += variantFieldType
         )*
-    )? '}'                                                      # TypeVariant
+    )? '|>'                                                     # TypeVariant
     | '[' (types += stellatype (',' types += stellatype)*)? ']' # TypeList
     | 'Unit'                                                    # TypeUnit
     | name = StellaIdent                                        # TypeVar

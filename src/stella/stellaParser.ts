@@ -2068,7 +2068,7 @@ export default class stellaParser extends Parser {
 				this.state = 497;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 16424) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & 2055) !== 0) || _la===66 || _la===69) {
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 20520) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & 2055) !== 0) || _la===66 || _la===69) {
 					{
 					this.state = 489;
 					(localctx as TypeFunContext)._stellatype = this.stellatype(0);
@@ -2126,7 +2126,7 @@ export default class stellaParser extends Parser {
 				this.state = 515;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 16424) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & 2055) !== 0) || _la===66 || _la===69) {
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 20520) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & 2055) !== 0) || _la===66 || _la===69) {
 					{
 					this.state = 507;
 					(localctx as TypeTupleContext)._stellatype = this.stellatype(0);
@@ -2192,7 +2192,7 @@ export default class stellaParser extends Parser {
 				this._ctx = localctx;
 				_prevctx = localctx;
 				this.state = 529;
-				this.match(stellaParser.Surrogate_id_SYMB_4);
+				this.match(stellaParser.Surrogate_id_SYMB_11);
 				this.state = 538;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
@@ -2222,7 +2222,7 @@ export default class stellaParser extends Parser {
 				}
 
 				this.state = 540;
-				this.match(stellaParser.Surrogate_id_SYMB_5);
+				this.match(stellaParser.Surrogate_id_SYMB_12);
 				}
 				break;
 			case 8:
@@ -2235,7 +2235,7 @@ export default class stellaParser extends Parser {
 				this.state = 550;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 16424) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & 2055) !== 0) || _la===66 || _la===69) {
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & 20520) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & 2055) !== 0) || _la===66 || _la===69) {
 					{
 					this.state = 542;
 					(localctx as TypeListContext)._stellatype = this.stellatype(0);
@@ -2645,9 +2645,9 @@ export default class stellaParser extends Parser {
 	560,5,6,0,0,518,519,5,5,0,0,519,524,3,32,16,0,520,521,5,1,0,0,521,523,3,
 	32,16,0,522,520,1,0,0,0,523,526,1,0,0,0,524,522,1,0,0,0,524,525,1,0,0,0,
 	525,527,1,0,0,0,526,524,1,0,0,0,527,528,5,6,0,0,528,560,1,0,0,0,529,538,
-	5,5,0,0,530,535,3,34,17,0,531,532,5,1,0,0,532,534,3,34,17,0,533,531,1,0,
-	0,0,534,537,1,0,0,0,535,533,1,0,0,0,535,536,1,0,0,0,536,539,1,0,0,0,537,
-	535,1,0,0,0,538,530,1,0,0,0,538,539,1,0,0,0,539,540,1,0,0,0,540,560,5,6,
+	5,12,0,0,530,535,3,34,17,0,531,532,5,1,0,0,532,534,3,34,17,0,533,531,1,
+	0,0,0,534,537,1,0,0,0,535,533,1,0,0,0,535,536,1,0,0,0,536,539,1,0,0,0,537,
+	535,1,0,0,0,538,530,1,0,0,0,538,539,1,0,0,0,539,540,1,0,0,0,540,560,5,13,
 	0,0,541,550,5,14,0,0,542,547,3,30,15,0,543,544,5,1,0,0,544,546,3,30,15,
 	0,545,543,1,0,0,0,546,549,1,0,0,0,547,545,1,0,0,0,547,548,1,0,0,0,548,551,
 	1,0,0,0,549,547,1,0,0,0,550,542,1,0,0,0,550,551,1,0,0,0,551,552,1,0,0,0,
@@ -5717,11 +5717,11 @@ export class TypeVariantContext extends StellatypeContext {
 		super(parser, ctx.parentCtx, ctx.invokingState);
 		super.copyFrom(ctx);
 	}
-	public Surrogate_id_SYMB_4(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_4, 0);
+	public Surrogate_id_SYMB_11(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_11, 0);
 	}
-	public Surrogate_id_SYMB_5(): TerminalNode {
-		return this.getToken(stellaParser.Surrogate_id_SYMB_5, 0);
+	public Surrogate_id_SYMB_12(): TerminalNode {
+		return this.getToken(stellaParser.Surrogate_id_SYMB_12, 0);
 	}
 	public variantFieldType_list(): VariantFieldTypeContext[] {
 		return this.getTypedRuleContexts(VariantFieldTypeContext) as VariantFieldTypeContext[];
