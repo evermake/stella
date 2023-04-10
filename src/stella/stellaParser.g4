@@ -85,8 +85,8 @@ expr:
     | 'let' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # Let
     | 'letrec' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # LetRec
     | '(' expr_ = expr ')'                                                        # ParenthesisedExpr
-    | expr1 = expr ';' expr2 = expr # Sequence
-    | expr_ = expr ';' # TerminatingSemicolon;
+    | expr1 = expr ';' (expr2 = expr)? # Sequence
+    ;
 
 patternBinding: pat=pattern '=' rhs=expr ;
 

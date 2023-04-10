@@ -60,7 +60,6 @@ import {
   MatchCaseContext,
   PatternBindingContext,
   ParenthesisedExprContext,
-  TerminatingSemicolonContext,
   PatternContext,
   PatternVariantContext,
   PatternInlContext,
@@ -429,9 +428,6 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof SequenceContext) {
       return this.visitSequence(ctx);
     }
-    if (ctx instanceof TerminatingSemicolonContext) {
-      return this.visitTerminatingSemicolon(ctx);
-    }
 
     throw new Error('Unknown expression type: ' + ctx.getText());
   };
@@ -793,7 +789,6 @@ export class AstTransformer extends StellaVisitor<Node> {
   visitMatch: (ctx: MatchContext) => Match = (ctx) => {
     return {
       type: 'Match',
-      // TODO: implement visiting match case
       cases: ctx._cases.map(this.visitMatchCase),
       expr: this.visitExpr(ctx.expr()),
     };
@@ -891,16 +886,11 @@ export class AstTransformer extends StellaVisitor<Node> {
   visitSequence: (ctx: SequenceContext) => Sequence = (ctx) => {
     return {
       type: 'Sequence',
-      // TODO: this does not actually flatten all the "Sequence"s into one list. It should do so.
-      exprs: ctx.expr_list().map(this.visitExpr),
+      expr1: this.visitExpr(ctx._expr1),
+      expr2: ctx._expr2 != null ? this.visitExpr(ctx._expr2) : undefined,
     };
   };
   visitParenthesisedExpr: (ctx: ParenthesisedExprContext) => Expr = (ctx) => {
-    return this.visitExpr(ctx._expr_);
-  };
-  visitTerminatingSemicolon: (ctx: TerminatingSemicolonContext) => Expr = (
-    ctx
-  ) => {
     return this.visitExpr(ctx._expr_);
   };
 

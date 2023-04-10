@@ -73,5 +73,5 @@ fn attempt(get_one? : Bool) -> <| value : Nat, failure : Unit |> {
 
 // Sum type
 fn main(n : Nat) -> Nat + Bool {
-  return inl(n);
+  return inr(n); inl(n);
 }

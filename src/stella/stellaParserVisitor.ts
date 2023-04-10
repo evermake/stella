@@ -39,7 +39,6 @@ import { LogicAndContext } from "./stellaParser";
 import { LetRecContext } from "./stellaParser";
 import { LogicOrContext } from "./stellaParser";
 import { HeadContext } from "./stellaParser";
-import { TerminatingSemicolonContext } from "./stellaParser";
 import { NotEqualContext } from "./stellaParser";
 import { ConstUnitContext } from "./stellaParser";
 import { PredContext } from "./stellaParser";
@@ -349,13 +348,6 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 * @return the visitor result
 	 */
 	visitHead?: (ctx: HeadContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `TerminatingSemicolon`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTerminatingSemicolon?: (ctx: TerminatingSemicolonContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `NotEqual`
 	 * labeled alternative in `stellaParser.expr`.

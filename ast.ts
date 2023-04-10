@@ -5,6 +5,8 @@ export type Extension = `#${string}`;
 
 export type Decl = DeclFun | DeclTypeAlias;
 
+// TODO: document all nodes with JSDoc
+
 // TODO: integrate language extensions in the types
 // Examples:
 /*
@@ -239,7 +241,8 @@ export interface LetRec {
 }
 export interface Sequence {
   type: 'Sequence';
-  exprs: Expr[];
+  expr1: Expr;
+  expr2?: Expr;
 }
 
 export type Expr =
