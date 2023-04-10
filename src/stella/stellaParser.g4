@@ -55,25 +55,23 @@ expr:
     // expr
     | fun = expr '(' (args += expr (',' args += expr)*)? ')' # Application
     // expr
-    | expr '*' expr   # Multiply
-    | expr '/' expr   # Divide
-    | expr 'and' expr # LogicAnd
+    | left=expr '*' right=expr   # Multiply
+    | left=expr '/' right=expr   # Divide
+    | left=expr 'and' right=expr # LogicAnd
     // expr
-    | expr '+' expr                        # Add
-    | expr '-' expr                        # Subtract
-    | expr 'or' expr                       # LogicOr
+    | left=expr '+' right=expr                        # Add
+    | left=expr '-' right=expr                        # Subtract
+    | left=expr 'or' right=expr                       # LogicOr
     | expr_ = expr 'as' type_ = stellatype # TypeAsc
     | 'fn' '(' (
         paramDecls += paramDecl (',' paramDecls += paramDecl)*
     )? ')' '{' 'return' returnExpr = expr '}'       # Abstraction
     | '{' (exprs += expr (',' exprs += expr)*)? '}' # Tuple
-    | '{' (
-        bindings += binding (',' bindings += binding)*
-    )? '}'                                            # Record
+    | '{' bindings += binding (',' bindings += binding)* '}' # Record
     | '<|' label = StellaIdent ('=' rhs = expr)? '|>' # Variant
     | 'match' expr '{' (
-        cases += match_case ('|' cases += match_case)*
-    )? '}'                                         # match
+        cases += matchCase ('|' cases += matchCase)*
+    )? '}'                                         # Match
     | '[' (exprs += expr (',' exprs += expr))? ']' # List
     // expr
     | left = expr '<' right = expr  # LessThan
@@ -85,21 +83,21 @@ expr:
     // expr
     | 'if' condition = expr 'then' thenExpr = expr 'else' elseExpr = expr # If
     | 'let' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # Let
-    | 'letrec' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # Let
-    | '(' expr ')'                                                        # ParenthesisedExpr
-    | expr ';' expr # Sequence
-    | expr ';' # TerminatingSemicolon;
+    | 'letrec' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # LetRec
+    | '(' expr_ = expr ')'                                                        # ParenthesisedExpr
+    | expr1 = expr ';' expr2 = expr # Sequence
+    | expr_ = expr ';' # TerminatingSemicolon;
 
 patternBinding: pat=pattern '=' rhs=expr ;
 
 binding: name = StellaIdent '=' rhs = expr;
 
-match_case: pattern '=>' expr;
+matchCase: pattern_ = pattern '=>' expr_ = expr;
 
 pattern:
-    '<|' label = StellaIdent ('=' pattern)? '|>'                # PatternVariant
-    | 'inl' '(' pat=pattern ')' # PatternInl
-    | 'inr' '(' pat=pattern ')' # PatternInr
+    '<|' label = StellaIdent ('=' pattern_ = pattern)? '|>'     # PatternVariant
+    | 'inl' '(' pattern_ = pattern ')' # PatternInl
+    | 'inr' '(' pattern_ = pattern ')' # PatternInr
     | '{' (patterns += pattern (',' patterns += pattern)*)? '}' # PatternTuple
     | '{' (
         patterns += labelledPattern (
@@ -112,11 +110,11 @@ pattern:
     | 'true'                                                    # PatternTrue
     | 'unit'                                                    # PatternUnit
     | n = INTEGER                                               # PatternInt
-    | 'succ' '(' n = pattern ')'                                # PatternSucc
+    | 'succ' '(' pattern_ = pattern ')'                         # PatternSucc
     | name = StellaIdent                                        # PatternVar
-    | '(' pattern ')'                                           # ParenthesisedPattern;
+    | '(' pattern_ = pattern ')'                                # ParenthesisedPattern;
 
-labelledPattern: label = StellaIdent '=' pattern;
+labelledPattern: label = StellaIdent '=' pattern_ = pattern;
 
 stellatype:
     'Bool'  # TypeBool
@@ -126,21 +124,21 @@ stellatype:
     )? ')' '->' returnType = stellatype                        # TypeFun
     | 'µ' var = StellaIdent '.' type_ = stellatype             # TypeRec
     | left = stellatype '+' right = stellatype                 # TypeSum
-    | '{' (types += stellatype (',' types += stellatype))? '}' # TypeTuple
-    | '{' (
+    | '{' (types += stellatype (',' types += stellatype)*)? '}' # TypeTuple
+    | '{'
         fieldTypes += recordFieldType (
             ',' fieldTypes += recordFieldType
         )*
-    )? '}' # TypeRecord
-    | '{' (
+     '}' # TypeRecord
+    | '<|' (
         fieldTypes += variantFieldType (
             ',' fieldTypes += variantFieldType
         )*
-    )? '}'                                                      # TypeVariant
+    )? '|>'                                                     # TypeVariant
     | '[' (types += stellatype (',' types += stellatype)*)? ']' # TypeList
     | 'Unit'                                                    # TypeUnit
     | name = StellaIdent                                        # TypeVar
-    | '(' stellatype ')' # TypeParens;
+    | '(' type_ = stellatype ')' # TypeParens;
 
 recordFieldType: label = StellaIdent ':' type_ = stellatype;
 variantFieldType: label = StellaIdent (':' type_ = stellatype)?;
