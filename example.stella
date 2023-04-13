@@ -71,6 +71,40 @@ fn attempt(get_one? : Bool) -> <| value : Nat, failure : Unit |> {
       else <| failure = unit |>
 }
 
+// References
+fn another_one(n : Nat) -> Nat {
+  return
+    let x = new(0) in
+    x := *x + 1;
+    x := *x * *x;
+    *x
+}
+fn inc_ref(ref : &Nat) -> Unit {
+  return
+    ref := succ(*ref)
+}
+
+// Exceptions
+exception type = Nat
+// exception variant test = Nat
+
+fn fail(param : Nat) -> Nat throws Nat {
+  return throw(succ(0))
+}
+fn attempt_catch(param : Nat) -> Nat {
+  return try {
+    fail(param)
+  } catch {
+    succ(0) => 0
+  }
+}
+fn attempt_with(param : Nat) -> Nat {
+  return try { fail(param) } with { 0 }; panic!
+}
+
+// Subtyping
+// TODO
+
 // Sum type
 fn main(n : Nat) -> Nat + Bool {
   return inr(n); inl(n);
