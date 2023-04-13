@@ -11,52 +11,63 @@ import { LanguageCoreContext } from "./stellaParser";
 import { AnExtensionContext } from "./stellaParser";
 import { DeclFunContext } from "./stellaParser";
 import { DeclTypeAliasContext } from "./stellaParser";
+import { DeclExceptionTypeContext } from "./stellaParser";
+import { DeclExceptionVariantContext } from "./stellaParser";
 import { InlineAnnotationContext } from "./stellaParser";
 import { ParamDeclContext } from "./stellaParser";
-import { IsEmptyContext } from "./stellaParser";
 import { FoldContext } from "./stellaParser";
 import { AddContext } from "./stellaParser";
 import { IsZeroContext } from "./stellaParser";
-import { LessThanOrEqualContext } from "./stellaParser";
-import { SuccContext } from "./stellaParser";
 import { VarContext } from "./stellaParser";
-import { InlContext } from "./stellaParser";
-import { GreaterThanOrEqualContext } from "./stellaParser";
-import { InrContext } from "./stellaParser";
-import { MatchContext } from "./stellaParser";
 import { DivideContext } from "./stellaParser";
 import { LessThanContext } from "./stellaParser";
-import { LogicNotContext } from "./stellaParser";
 import { DotRecordContext } from "./stellaParser";
-import { ParenthesisedExprContext } from "./stellaParser";
 import { GreaterThanContext } from "./stellaParser";
 import { EqualContext } from "./stellaParser";
-import { TailContext } from "./stellaParser";
+import { ThrowContext } from "./stellaParser";
 import { MultiplyContext } from "./stellaParser";
-import { RecordContext } from "./stellaParser";
+import { ConstMemoryContext } from "./stellaParser";
 import { ListContext } from "./stellaParser";
-import { LogicAndContext } from "./stellaParser";
-import { LetRecContext } from "./stellaParser";
-import { LogicOrContext } from "./stellaParser";
+import { TryCatchContext } from "./stellaParser";
 import { HeadContext } from "./stellaParser";
 import { NotEqualContext } from "./stellaParser";
 import { ConstUnitContext } from "./stellaParser";
-import { PredContext } from "./stellaParser";
-import { TypeAscContext } from "./stellaParser";
-import { NatRecContext } from "./stellaParser";
 import { SequenceContext } from "./stellaParser";
 import { ConstFalseContext } from "./stellaParser";
 import { AbstractionContext } from "./stellaParser";
 import { ConstIntContext } from "./stellaParser";
-import { UnfoldContext } from "./stellaParser";
 import { VariantContext } from "./stellaParser";
 import { ConstTrueContext } from "./stellaParser";
-import { DotTupleContext } from "./stellaParser";
-import { FixContext } from "./stellaParser";
 import { SubtractContext } from "./stellaParser";
-import { LetContext } from "./stellaParser";
+import { TypeCastContext } from "./stellaParser";
 import { IfContext } from "./stellaParser";
 import { ApplicationContext } from "./stellaParser";
+import { DerefContext } from "./stellaParser";
+import { IsEmptyContext } from "./stellaParser";
+import { PanicContext } from "./stellaParser";
+import { LessThanOrEqualContext } from "./stellaParser";
+import { SuccContext } from "./stellaParser";
+import { InlContext } from "./stellaParser";
+import { GreaterThanOrEqualContext } from "./stellaParser";
+import { InrContext } from "./stellaParser";
+import { MatchContext } from "./stellaParser";
+import { LogicNotContext } from "./stellaParser";
+import { ParenthesisedExprContext } from "./stellaParser";
+import { TailContext } from "./stellaParser";
+import { RecordContext } from "./stellaParser";
+import { LogicAndContext } from "./stellaParser";
+import { LetRecContext } from "./stellaParser";
+import { LogicOrContext } from "./stellaParser";
+import { TryWithContext } from "./stellaParser";
+import { PredContext } from "./stellaParser";
+import { TypeAscContext } from "./stellaParser";
+import { NatRecContext } from "./stellaParser";
+import { UnfoldContext } from "./stellaParser";
+import { RefContext } from "./stellaParser";
+import { DotTupleContext } from "./stellaParser";
+import { FixContext } from "./stellaParser";
+import { LetContext } from "./stellaParser";
+import { AssignContext } from "./stellaParser";
 import { TupleContext } from "./stellaParser";
 import { ConsListContext } from "./stellaParser";
 import { PatternBindingContext } from "./stellaParser";
@@ -78,17 +89,20 @@ import { PatternVarContext } from "./stellaParser";
 import { ParenthesisedPatternContext } from "./stellaParser";
 import { LabelledPatternContext } from "./stellaParser";
 import { TypeTupleContext } from "./stellaParser";
+import { TypeTopContext } from "./stellaParser";
+import { TypeBoolContext } from "./stellaParser";
+import { TypeRefContext } from "./stellaParser";
+import { TypeRecContext } from "./stellaParser";
+import { TypeSumContext } from "./stellaParser";
 import { TypeVarContext } from "./stellaParser";
 import { TypeVariantContext } from "./stellaParser";
 import { TypeUnitContext } from "./stellaParser";
-import { TypeBoolContext } from "./stellaParser";
 import { TypeNatContext } from "./stellaParser";
-import { TypeRecContext } from "./stellaParser";
+import { TypeBottomContext } from "./stellaParser";
 import { TypeParensContext } from "./stellaParser";
 import { TypeFunContext } from "./stellaParser";
 import { TypeRecordContext } from "./stellaParser";
 import { TypeListContext } from "./stellaParser";
-import { TypeSumContext } from "./stellaParser";
 import { RecordFieldTypeContext } from "./stellaParser";
 import { VariantFieldTypeContext } from "./stellaParser";
 
@@ -154,6 +168,20 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitDeclTypeAlias?: (ctx: DeclTypeAliasContext) => Result;
 	/**
+	 * Visit a parse tree produced by the `DeclExceptionType`
+	 * labeled alternative in `stellaParser.decl`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitDeclExceptionType?: (ctx: DeclExceptionTypeContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `DeclExceptionVariant`
+	 * labeled alternative in `stellaParser.decl`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitDeclExceptionVariant?: (ctx: DeclExceptionVariantContext) => Result;
+	/**
 	 * Visit a parse tree produced by the `InlineAnnotation`
 	 * labeled alternative in `stellaParser.annotation`.
 	 * @param ctx the parse tree
@@ -166,13 +194,6 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 * @return the visitor result
 	 */
 	visitParamDecl?: (ctx: ParamDeclContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `IsEmpty`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitIsEmpty?: (ctx: IsEmptyContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `Fold`
 	 * labeled alternative in `stellaParser.expr`.
@@ -195,54 +216,12 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitIsZero?: (ctx: IsZeroContext) => Result;
 	/**
-	 * Visit a parse tree produced by the `LessThanOrEqual`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitLessThanOrEqual?: (ctx: LessThanOrEqualContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `Succ`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitSucc?: (ctx: SuccContext) => Result;
-	/**
 	 * Visit a parse tree produced by the `Var`
 	 * labeled alternative in `stellaParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitVar?: (ctx: VarContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `Inl`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitInl?: (ctx: InlContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `GreaterThanOrEqual`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitGreaterThanOrEqual?: (ctx: GreaterThanOrEqualContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `Inr`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitInr?: (ctx: InrContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `Match`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitMatch?: (ctx: MatchContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `Divide`
 	 * labeled alternative in `stellaParser.expr`.
@@ -258,26 +237,12 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitLessThan?: (ctx: LessThanContext) => Result;
 	/**
-	 * Visit a parse tree produced by the `LogicNot`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitLogicNot?: (ctx: LogicNotContext) => Result;
-	/**
 	 * Visit a parse tree produced by the `DotRecord`
 	 * labeled alternative in `stellaParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitDotRecord?: (ctx: DotRecordContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `ParenthesisedExpr`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitParenthesisedExpr?: (ctx: ParenthesisedExprContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `GreaterThan`
 	 * labeled alternative in `stellaParser.expr`.
@@ -293,12 +258,12 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitEqual?: (ctx: EqualContext) => Result;
 	/**
-	 * Visit a parse tree produced by the `Tail`
+	 * Visit a parse tree produced by the `Throw`
 	 * labeled alternative in `stellaParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitTail?: (ctx: TailContext) => Result;
+	visitThrow?: (ctx: ThrowContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `Multiply`
 	 * labeled alternative in `stellaParser.expr`.
@@ -307,12 +272,12 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitMultiply?: (ctx: MultiplyContext) => Result;
 	/**
-	 * Visit a parse tree produced by the `Record`
+	 * Visit a parse tree produced by the `ConstMemory`
 	 * labeled alternative in `stellaParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitRecord?: (ctx: RecordContext) => Result;
+	visitConstMemory?: (ctx: ConstMemoryContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `List`
 	 * labeled alternative in `stellaParser.expr`.
@@ -321,26 +286,12 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitList?: (ctx: ListContext) => Result;
 	/**
-	 * Visit a parse tree produced by the `LogicAnd`
+	 * Visit a parse tree produced by the `TryCatch`
 	 * labeled alternative in `stellaParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitLogicAnd?: (ctx: LogicAndContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `LetRec`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitLetRec?: (ctx: LetRecContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `LogicOr`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitLogicOr?: (ctx: LogicOrContext) => Result;
+	visitTryCatch?: (ctx: TryCatchContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `Head`
 	 * labeled alternative in `stellaParser.expr`.
@@ -362,27 +313,6 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 * @return the visitor result
 	 */
 	visitConstUnit?: (ctx: ConstUnitContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `Pred`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitPred?: (ctx: PredContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `TypeAsc`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTypeAsc?: (ctx: TypeAscContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `NatRec`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitNatRec?: (ctx: NatRecContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `Sequence`
 	 * labeled alternative in `stellaParser.expr`.
@@ -412,13 +342,6 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitConstInt?: (ctx: ConstIntContext) => Result;
 	/**
-	 * Visit a parse tree produced by the `Unfold`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitUnfold?: (ctx: UnfoldContext) => Result;
-	/**
 	 * Visit a parse tree produced by the `Variant`
 	 * labeled alternative in `stellaParser.expr`.
 	 * @param ctx the parse tree
@@ -432,6 +355,188 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 * @return the visitor result
 	 */
 	visitConstTrue?: (ctx: ConstTrueContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Subtract`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitSubtract?: (ctx: SubtractContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `TypeCast`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTypeCast?: (ctx: TypeCastContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `If`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitIf?: (ctx: IfContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Application`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitApplication?: (ctx: ApplicationContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Deref`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitDeref?: (ctx: DerefContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `IsEmpty`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitIsEmpty?: (ctx: IsEmptyContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Panic`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitPanic?: (ctx: PanicContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `LessThanOrEqual`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLessThanOrEqual?: (ctx: LessThanOrEqualContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Succ`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitSucc?: (ctx: SuccContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Inl`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitInl?: (ctx: InlContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `GreaterThanOrEqual`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitGreaterThanOrEqual?: (ctx: GreaterThanOrEqualContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Inr`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitInr?: (ctx: InrContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Match`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMatch?: (ctx: MatchContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `LogicNot`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLogicNot?: (ctx: LogicNotContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `ParenthesisedExpr`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitParenthesisedExpr?: (ctx: ParenthesisedExprContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Tail`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTail?: (ctx: TailContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Record`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitRecord?: (ctx: RecordContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `LogicAnd`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLogicAnd?: (ctx: LogicAndContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `LetRec`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLetRec?: (ctx: LetRecContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `LogicOr`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLogicOr?: (ctx: LogicOrContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `TryWith`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTryWith?: (ctx: TryWithContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Pred`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitPred?: (ctx: PredContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `TypeAsc`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTypeAsc?: (ctx: TypeAscContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `NatRec`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitNatRec?: (ctx: NatRecContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Unfold`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitUnfold?: (ctx: UnfoldContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `Ref`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitRef?: (ctx: RefContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `DotTuple`
 	 * labeled alternative in `stellaParser.expr`.
@@ -447,13 +552,6 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitFix?: (ctx: FixContext) => Result;
 	/**
-	 * Visit a parse tree produced by the `Subtract`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitSubtract?: (ctx: SubtractContext) => Result;
-	/**
 	 * Visit a parse tree produced by the `Let`
 	 * labeled alternative in `stellaParser.expr`.
 	 * @param ctx the parse tree
@@ -461,19 +559,12 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitLet?: (ctx: LetContext) => Result;
 	/**
-	 * Visit a parse tree produced by the `If`
+	 * Visit a parse tree produced by the `Assign`
 	 * labeled alternative in `stellaParser.expr`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitIf?: (ctx: IfContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `Application`
-	 * labeled alternative in `stellaParser.expr`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitApplication?: (ctx: ApplicationContext) => Result;
+	visitAssign?: (ctx: AssignContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `Tuple`
 	 * labeled alternative in `stellaParser.expr`.
@@ -618,6 +709,41 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitTypeTuple?: (ctx: TypeTupleContext) => Result;
 	/**
+	 * Visit a parse tree produced by the `TypeTop`
+	 * labeled alternative in `stellaParser.stellatype`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTypeTop?: (ctx: TypeTopContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `TypeBool`
+	 * labeled alternative in `stellaParser.stellatype`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTypeBool?: (ctx: TypeBoolContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `TypeRef`
+	 * labeled alternative in `stellaParser.stellatype`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTypeRef?: (ctx: TypeRefContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `TypeRec`
+	 * labeled alternative in `stellaParser.stellatype`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTypeRec?: (ctx: TypeRecContext) => Result;
+	/**
+	 * Visit a parse tree produced by the `TypeSum`
+	 * labeled alternative in `stellaParser.stellatype`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTypeSum?: (ctx: TypeSumContext) => Result;
+	/**
 	 * Visit a parse tree produced by the `TypeVar`
 	 * labeled alternative in `stellaParser.stellatype`.
 	 * @param ctx the parse tree
@@ -639,13 +765,6 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitTypeUnit?: (ctx: TypeUnitContext) => Result;
 	/**
-	 * Visit a parse tree produced by the `TypeBool`
-	 * labeled alternative in `stellaParser.stellatype`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTypeBool?: (ctx: TypeBoolContext) => Result;
-	/**
 	 * Visit a parse tree produced by the `TypeNat`
 	 * labeled alternative in `stellaParser.stellatype`.
 	 * @param ctx the parse tree
@@ -653,12 +772,12 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 */
 	visitTypeNat?: (ctx: TypeNatContext) => Result;
 	/**
-	 * Visit a parse tree produced by the `TypeRec`
+	 * Visit a parse tree produced by the `TypeBottom`
 	 * labeled alternative in `stellaParser.stellatype`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitTypeRec?: (ctx: TypeRecContext) => Result;
+	visitTypeBottom?: (ctx: TypeBottomContext) => Result;
 	/**
 	 * Visit a parse tree produced by the `TypeParens`
 	 * labeled alternative in `stellaParser.stellatype`.
@@ -687,13 +806,6 @@ export default class stellaParserVisitor<Result> extends ParseTreeVisitor<Result
 	 * @return the visitor result
 	 */
 	visitTypeList?: (ctx: TypeListContext) => Result;
-	/**
-	 * Visit a parse tree produced by the `TypeSum`
-	 * labeled alternative in `stellaParser.stellatype`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTypeSum?: (ctx: TypeSumContext) => Result;
 	/**
 	 * Visit a parse tree produced by `stellaParser.recordFieldType`.
 	 * @param ctx the parse tree

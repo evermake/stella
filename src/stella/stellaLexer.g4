@@ -71,6 +71,18 @@ Surrogate_id_SYMB_62 : 'unfold' ;
 Surrogate_id_SYMB_63 : 'unit' ;
 Surrogate_id_SYMB_64 : 'with' ;
 Surrogate_id_SYMB_65 : 'µ' ;
+EXCEPTION : 'exception' ;
+VARIANT : 'variant' ;
+CAST : 'cast' ;
+ASSIGN : ':=' ;
+REF_TYPE : '&' ;
+REFERENCE : 'new' ;
+PANIC : 'panic!' ;
+THROW : 'throw' ;
+TRY : 'try' ;
+CATCH : 'catch' ;
+TOP_TYPE : 'Top' ;
+BOTTOM_TYPE : 'Bot' ;
 COMMENT_antlr_builtin
 : (
 '//' ~[\r\n]* (('\r'? '\n')|EOF)
@@ -82,6 +94,7 @@ MULTICOMMENT_antlr_builtin
 
 StellaIdent : ('_'|LETTER) ([!\-:?_]|(DIGIT|LETTER))*;
 ExtensionName : '#' ([\-_]|(DIGIT|LETTER))+;
+MemoryAddress: '<0x' (DIGIT|[a-f])+ '>';
 
 
 

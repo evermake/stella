@@ -23,7 +23,9 @@ decl: (annotations += annotation)* 'fn' name = StellaIdent '(' (
     )? ')' ('->' returnType = stellatype)? (
         'throws' throwTypes+= stellatype (',' throwTypes+=stellatype)*
     )? '{' (localDecls += decl)* 'return' returnExpr = expr '}' # DeclFun
-    | 'type' name = StellaIdent '=' atype = stellatype          # DeclTypeAlias;
+    | 'type' name = StellaIdent '=' atype = stellatype          # DeclTypeAlias
+    | 'exception' 'type' '=' exceptionType=stellatype           # DeclExceptionType
+    | 'exception' 'variant' name=StellaIdent ':' variantType=stellatype #DeclExceptionVariant;
 
 annotation: 'inline' # InlineAnnotation;
 paramDecl: name = StellaIdent ':' paramType = stellatype;
@@ -36,8 +38,13 @@ expr:
     | 'false'                            # ConstFalse
     | 'unit'                             # ConstUnit
     | n = INTEGER                        # ConstInt
+    | mem = MemoryAddress                # ConstMemory
     | name = StellaIdent                 # Var
     // expr
+    | 'panic!'                    # Panic
+    | 'throw' '(' expr_=expr ')'  # Throw
+    | 'try' '{' tryExpr=expr '}' 'catch' '{' pat=pattern '=>' fallbackExpr=expr '}'  # TryCatch
+    | 'try' '{' tryExpr=expr '}' 'with' '{' fallbackExpr=expr '}'  # TryWith
     | 'inl' '(' expr_=expr ')'                     # Inl
     | 'inr' '(' expr_=expr ')'                     # Inr
     | 'cons' '(' head = expr ',' tail = expr ')'                     # ConsList
@@ -58,11 +65,14 @@ expr:
     | left=expr '*' right=expr   # Multiply
     | left=expr '/' right=expr   # Divide
     | left=expr 'and' right=expr # LogicAnd
+    | 'new' expr_=expr # Ref
+    | '*' expr_=expr   # Deref
     // expr
     | left=expr '+' right=expr                        # Add
     | left=expr '-' right=expr                        # Subtract
     | left=expr 'or' right=expr                       # LogicOr
     | expr_ = expr 'as' type_ = stellatype # TypeAsc
+    | expr_ = expr 'cast' 'as' type_ = stellatype # TypeCast
     | 'fn' '(' (
         paramDecls += paramDecl (',' paramDecls += paramDecl)*
     )? ')' '{' 'return' returnExpr = expr '}'       # Abstraction
@@ -81,6 +91,7 @@ expr:
     | left = expr '==' right = expr # Equal
     | left = expr '!=' right = expr # NotEqual
     // expr
+    | lhs = expr ':=' rhs = expr # Assign
     | 'if' condition = expr 'then' thenExpr = expr 'else' elseExpr = expr # If
     | 'let' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # Let
     | 'letrec' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # LetRec
@@ -137,6 +148,9 @@ stellatype:
     )? '|>'                                                     # TypeVariant
     | '[' (types += stellatype (',' types += stellatype)*)? ']' # TypeList
     | 'Unit'                                                    # TypeUnit
+    | 'Top'                                                     # TypeTop
+    | '&' type_=stellatype                                      # TypeRef
+    | 'Bot'                                                     # TypeBottom
     | name = StellaIdent                                        # TypeVar
     | '(' type_ = stellatype ')' # TypeParens;
 
