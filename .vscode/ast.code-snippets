@@ -11,5 +11,15 @@
     "prefix": "ast",
     "body": ["export interface $1 {", "  type: '$1';", "  $0", "}"],
     "description": "Adds an AST node"
+  },
+  "Instanceof check": {
+    "scope": "javascript,typescript",
+    "prefix": "ifinst",
+    "body": [
+      "if (ctx instanceof $1Context) {",
+      "  return this.visit$1(ctx);",
+      "}$0"
+    ],
+    "description": "Adds dynamic type check for expression types"
   }
 }

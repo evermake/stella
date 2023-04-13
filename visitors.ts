@@ -88,6 +88,20 @@ import {
   RecordFieldTypeContext,
   VariantFieldTypeContext,
   TypeParensContext,
+  AssignContext,
+  TypeCastContext,
+  PanicContext,
+  ThrowContext,
+  TryCatchContext,
+  TryWithContext,
+  DerefContext,
+  RefContext,
+  ConstMemoryContext,
+  DeclExceptionTypeContext,
+  DeclExceptionVariantContext,
+  TypeBottomContext,
+  TypeTopContext,
+  TypeRefContext,
 } from './src/stella/stellaParser';
 import type {
   Abstraction,
@@ -174,6 +188,20 @@ import type {
   TypeVariant,
   RecordFieldType,
   VariantFieldType,
+  TypeTop,
+  TypeBottom,
+  DeclExceptionType,
+  DeclExceptionVariant,
+  ConstMemory,
+  Assignment,
+  TypeCast,
+  Reference,
+  Dereference,
+  Panic,
+  Throw,
+  TryCatch,
+  TryWith,
+  TypeRef,
 } from './ast';
 
 export class AstPrinter extends StellaVisitor<void> {
@@ -265,6 +293,12 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof DeclTypeAliasContext) {
       return this.visitDeclTypeAlias(ctx);
     }
+    if (ctx instanceof DeclExceptionTypeContext) {
+      return this.visitDeclExceptionType(ctx);
+    }
+    if (ctx instanceof DeclExceptionVariantContext) {
+      return this.visitDeclExceptionVariant(ctx);
+    }
     throw Error('Unknown declaration type: ' + ctx);
   };
 
@@ -289,6 +323,23 @@ export class AstTransformer extends StellaVisitor<Node> {
     };
   };
 
+  visitDeclExceptionType: (ctx: DeclExceptionTypeContext) => DeclExceptionType =
+    (ctx) => {
+      return {
+        type: 'DeclExceptionType',
+        exceptionType: this.visitType(ctx._exceptionType),
+      };
+    };
+  visitDeclExceptionVariant: (
+    ctx: DeclExceptionVariantContext
+  ) => DeclExceptionVariant = (ctx) => {
+    return {
+      type: 'DeclExceptionVariant',
+      name: ctx._name.text,
+      variantType: this.visitType(ctx._variantType),
+    };
+  };
+
   visitExpr: (ctx: ExprContext) => Expr = (ctx) => {
     if (ctx instanceof DotRecordContext) {
       return this.visitDotRecord(ctx);
@@ -307,6 +358,9 @@ export class AstTransformer extends StellaVisitor<Node> {
     }
     if (ctx instanceof ConstIntContext) {
       return this.visitConstInt(ctx);
+    }
+    if (ctx instanceof ConstMemoryContext) {
+      return this.visitConstMemory(ctx);
     }
     if (ctx instanceof VarContext) {
       return this.visitVar(ctx);
@@ -427,6 +481,30 @@ export class AstTransformer extends StellaVisitor<Node> {
     }
     if (ctx instanceof SequenceContext) {
       return this.visitSequence(ctx);
+    }
+    if (ctx instanceof AssignContext) {
+      return this.visitAssign(ctx);
+    }
+    if (ctx instanceof TypeCastContext) {
+      return this.visitTypeCast(ctx);
+    }
+    if (ctx instanceof RefContext) {
+      return this.visitRef(ctx);
+    }
+    if (ctx instanceof DerefContext) {
+      return this.visitDeref(ctx);
+    }
+    if (ctx instanceof PanicContext) {
+      return this.visitPanic(ctx);
+    }
+    if (ctx instanceof ThrowContext) {
+      return this.visitThrow(ctx);
+    }
+    if (ctx instanceof TryCatchContext) {
+      return this.visitTryCatch(ctx);
+    }
+    if (ctx instanceof TryWithContext) {
+      return this.visitTryWith(ctx);
     }
 
     throw new Error('Unknown expression type: ' + ctx.getText());
@@ -624,6 +702,66 @@ export class AstTransformer extends StellaVisitor<Node> {
     };
   };
 
+  visitConstMemory: (ctx: ConstMemoryContext) => ConstMemory = (ctx) => {
+    return {
+      type: 'ConstMemory',
+      value: ctx._mem.text,
+    };
+  };
+
+  visitAssign: (ctx: AssignContext) => Assignment = (ctx) => {
+    return {
+      type: 'Assignment',
+      lhs: this.visitExpr(ctx._lhs),
+      rhs: this.visitExpr(ctx._rhs),
+    };
+  };
+  visitTypeCast: (ctx: TypeCastContext) => TypeCast = (ctx) => {
+    return {
+      type: 'TypeCast',
+      castType: this.visitType(ctx._type_),
+      expr: this.visitExpr(ctx._expr_),
+    };
+  };
+  visitRef: (ctx: RefContext) => Reference = (ctx) => {
+    return {
+      type: 'Reference',
+      expr: this.visitExpr(ctx._expr_),
+    };
+  };
+  visitDeref: (ctx: DerefContext) => Dereference = (ctx) => {
+    return {
+      type: 'Dereference',
+      expr: this.visitExpr(ctx._expr_),
+    };
+  };
+  visitPanic: (ctx: PanicContext) => Panic = (ctx) => {
+    return {
+      type: 'Panic',
+    };
+  };
+  visitThrow: (ctx: ThrowContext) => Throw = (ctx) => {
+    return {
+      type: 'Throw',
+      expr: this.visitExpr(ctx._expr_),
+    };
+  };
+  visitTryCatch: (ctx: TryCatchContext) => TryCatch = (ctx) => {
+    return {
+      type: 'TryCatch',
+      tryExpr: this.visitExpr(ctx._tryExpr),
+      pattern: this.visitPattern(ctx._pat),
+      fallbackExpr: this.visitExpr(ctx._fallbackExpr),
+    };
+  };
+  visitTryWith: (ctx: TryWithContext) => TryWith = (ctx) => {
+    return {
+      type: 'TryWith',
+      tryExpr: this.visitExpr(ctx._tryExpr),
+      fallbackExpr: this.visitExpr(ctx._fallbackExpr),
+    };
+  };
+
   visitParamDecl: (ctx: ParamDeclContext) => ParamDecl = (ctx) => {
     return {
       type: 'ParamDecl',
@@ -638,6 +776,15 @@ export class AstTransformer extends StellaVisitor<Node> {
     }
     if (ctx instanceof TypeBoolContext) {
       return this.visitTypeBool(ctx);
+    }
+    if (ctx instanceof TypeUnitContext) {
+      return this.visitTypeUnit(ctx);
+    }
+    if (ctx instanceof TypeTopContext) {
+      return this.visitTypeTop(ctx);
+    }
+    if (ctx instanceof TypeBottomContext) {
+      return this.visitTypeBottom(ctx);
     }
     if (ctx instanceof TypeFunContext) {
       return this.visitTypeFun(ctx);
@@ -666,20 +813,30 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof TypeListContext) {
       return this.visitTypeList(ctx);
     }
-    if (ctx instanceof TypeUnitContext) {
-      return this.visitTypeUnit(ctx);
-    }
     if (ctx instanceof TypeVarContext) {
       return this.visitTypeVar(ctx);
     }
     if (ctx instanceof TypeParensContext) {
       return this.visitTypeParens(ctx);
     }
+    if (ctx instanceof TypeRefContext) {
+      return this.visitTypeRef(ctx);
+    }
     throw new Error('Unknown type: ' + ctx);
   };
 
   visitTypeNat = (ctx: TypeNatContext) => ({ type: 'TypeNat' } as TypeNat);
   visitTypeBool = (ctx: TypeBoolContext) => ({ type: 'TypeBool' } as TypeBool);
+  visitTypeTop: (ctx: TypeTopContext) => TypeTop = (ctx) => {
+    return {
+      type: 'TypeTop',
+    };
+  };
+  visitTypeBottom: (ctx: TypeBottomContext) => TypeBottom = (ctx) => {
+    return {
+      type: 'TypeBottom',
+    };
+  };
 
   visitTypeFun: (ctx: TypeFunContext) => TypeFun = (ctx) => {
     return {
@@ -757,6 +914,12 @@ export class AstTransformer extends StellaVisitor<Node> {
   };
   visitTypeParens: (ctx: TypeParensContext) => Type = (ctx) => {
     return this.visitType(ctx._type_);
+  };
+  visitTypeRef: (ctx: TypeRefContext) => TypeRef = (ctx) => {
+    return {
+      type: 'TypeRef',
+      referredType: this.visitType(ctx._type_),
+    };
   };
 
   visitTypeAsc: (ctx: TypeAscContext) => TypeAscription = (ctx) => {

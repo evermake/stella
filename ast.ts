@@ -1,9 +1,13 @@
+// ---- Basic tokens
+
 /** A Stella identifier satisfying the RegEx `[_a-zA-Z][\w!\-:?]*` */
 export type Identifier = string;
 
 export type Extension = `#${string}`;
 
-export type Decl = DeclFun | DeclTypeAlias;
+/** It is currently not possible in TypeScript to represent "hexadecimal string" as a type */
+type Hex = string;
+export type MemoryAddress = `<0x${Hex}>`;
 
 // TODO: document all nodes with JSDoc
 
@@ -31,6 +35,8 @@ type SimpleType<T extends Exclude<string, T>> = {
 export type TypeNat = SimpleType<'TypeNat'>;
 export type TypeBool = SimpleType<'TypeBool'>;
 export type TypeUnit = SimpleType<'TypeUnit'>;
+export type TypeTop = SimpleType<'TypeTop'>;
+export type TypeBottom = SimpleType<'TypeBottom'>;
 export interface TypeFun {
   type: 'TypeFun';
   // TODO: handle multi-param and nullary extensions being enabled, and make [Type] (tuple type with 1 element) the default
@@ -77,11 +83,17 @@ export interface TypeVar {
   type: 'TypeVar';
   name: Identifier;
 }
+export interface TypeRef {
+  type: 'TypeRef';
+  referredType: Type;
+}
 
 export type Type =
   | TypeNat
   | TypeBool
   | TypeUnit
+  | TypeTop
+  | TypeBottom
   | TypeFun
   | TypeRec
   | TypeSum
@@ -90,6 +102,7 @@ export type Type =
   | TypeVariant
   | TypeList
   | TypeVar
+  | TypeRef
   | RecordFieldType
   | VariantFieldType;
 
@@ -122,6 +135,10 @@ export interface ConstBool {
 }
 export interface ConstUnit {
   type: 'Unit';
+}
+export interface ConstMemory {
+  type: 'ConstMemory';
+  value: string;
 }
 export interface DotRecord {
   type: 'DotRecord';
@@ -223,6 +240,39 @@ export type GreaterThan = BinaryOp<'GreaterThan'>;
 export type GreaterThanOrEqual = BinaryOp<'GreaterThanOrEqual'>;
 export type Equal = BinaryOp<'Equal'>;
 export type NotEqual = BinaryOp<'NotEqual'>;
+export interface Assignment {
+  type: 'Assignment';
+  lhs: Expr;
+  rhs: Expr;
+}
+export interface TypeCast {
+  type: 'TypeCast';
+  expr: Expr;
+  castType: Type;
+}
+export interface Reference {
+  type: 'Reference';
+  expr: Expr;
+}
+export interface Dereference {
+  type: 'Dereference';
+  expr: Expr;
+}
+export interface Panic {
+  type: 'Panic';
+}
+export type Throw = UnaryFunction<'Throw'>;
+export interface TryCatch {
+  type: 'TryCatch';
+  tryExpr: Expr;
+  pattern: Pattern;
+  fallbackExpr: Expr;
+}
+export interface TryWith {
+  type: 'TryWith';
+  tryExpr: Expr;
+  fallbackExpr: Expr;
+}
 export interface If {
   type: 'If';
   condition: Expr;
@@ -251,6 +301,7 @@ export type Expr =
   | ConstBool
   | ConstUnit
   | ConstInt
+  | ConstMemory
   | Var
   | Inl
   | Inr
@@ -286,6 +337,14 @@ export type Expr =
   | GreaterThanOrEqual
   | Equal
   | NotEqual
+  | Assignment
+  | TypeCast
+  | Reference
+  | Dereference
+  | Panic
+  | Throw
+  | TryCatch
+  | TryWith
   | If
   | Let
   | LetRec
@@ -401,6 +460,25 @@ export interface DeclTypeAlias {
   alias: Identifier;
   aliasedType: Type;
 }
+
+export interface DeclExceptionType {
+  type: 'DeclExceptionType';
+  exceptionType: Type;
+}
+
+export interface DeclExceptionVariant {
+  type: 'DeclExceptionVariant';
+  name: Identifier;
+  variantType: Type;
+}
+
+export type Decl =
+  | DeclFun
+  | DeclTypeAlias
+  | DeclExceptionType
+  | DeclExceptionVariant;
+
+// ----- Program
 
 export interface Program {
   type: 'Program';
