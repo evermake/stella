@@ -105,6 +105,17 @@ fn attempt_with(param : Nat) -> Nat {
 // Subtyping
 // TODO
 
+// Generics
+generic fn identity[X](x : X) -> X {
+  return x
+}
+
+generic fn const[X](x : X) -> forall Y. fn(Y) -> X {
+  return generic [Y] fn(y : Y) {
+    return identity[X](x)
+  }
+}
+
 // Sum type
 fn main(n : Nat) -> Nat + Bool {
   return inr(n); inl(n);
