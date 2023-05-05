@@ -87,6 +87,11 @@ export interface TypeRef {
   type: 'TypeRef';
   referredType: Type;
 }
+export interface TypeForAll {
+  type: 'TypeForAll';
+  typeVars: Identifier[];
+  body: Type;
+}
 
 export type Type =
   | TypeNat
@@ -103,6 +108,7 @@ export type Type =
   | TypeList
   | TypeVar
   | TypeRef
+  | TypeForAll
   | RecordFieldType
   | VariantFieldType;
 
@@ -178,6 +184,12 @@ export interface Application {
   // TODO: handle type without unary/multi-param extensions enabled
   arguments: Expr[];
 }
+export interface TypeApplication {
+  type: 'TypeApplication';
+  function: Expr;
+  typeArguments: Type[];
+}
+
 export interface TypeAscription {
   type: 'TypeAscription';
   expr: Expr;
@@ -200,6 +212,11 @@ export interface Abstraction {
   // TODO: handle type without unary/multi-param extensions enabled
   parameters: ParamDecl[];
   returnValue: Expr;
+}
+export interface TypeAbstraction {
+  type: 'TypeAbstraction';
+  typeParams: Identifier[];
+  expr: Expr;
 }
 
 export interface Tuple {
@@ -318,6 +335,7 @@ export type Expr =
   | Fold
   | Unfold
   | Application
+  | TypeApplication
   | Multiply
   | Divide
   | LogicalAnd
@@ -326,6 +344,7 @@ export type Expr =
   | LogicalOr
   | TypeAscription
   | Abstraction
+  | TypeAbstraction
   | Tuple
   | Record
   | Variant
@@ -455,6 +474,11 @@ export interface DeclFun {
   returnValue: Expr;
 }
 
+export interface DeclFunGeneric extends Omit<DeclFun, 'type'> {
+  type: 'DeclFunGeneric';
+  typeParams: Identifier[];
+}
+
 export interface DeclTypeAlias {
   type: 'DeclTypeAlias';
   alias: Identifier;
@@ -474,6 +498,7 @@ export interface DeclExceptionVariant {
 
 export type Decl =
   | DeclFun
+  | DeclFunGeneric
   | DeclTypeAlias
   | DeclExceptionType
   | DeclExceptionVariant;

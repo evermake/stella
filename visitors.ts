@@ -102,6 +102,10 @@ import {
   TypeBottomContext,
   TypeTopContext,
   TypeRefContext,
+  TypeForAllContext,
+  TypeApplicationContext,
+  TypeAbstractionContext,
+  DeclFunGenericContext,
 } from './src/stella/stellaParser';
 import type {
   Abstraction,
@@ -202,6 +206,10 @@ import type {
   TryCatch,
   TryWith,
   TypeRef,
+  TypeForAll,
+  TypeApplication,
+  TypeAbstraction,
+  DeclFunGeneric,
 } from './ast';
 
 export class AstPrinter extends StellaVisitor<void> {
@@ -290,6 +298,9 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof DeclFunContext) {
       return this.visitDeclFun(ctx);
     }
+    if (ctx instanceof DeclFunGenericContext) {
+      return this.visitDeclFunGeneric(ctx);
+    }
     if (ctx instanceof DeclTypeAliasContext) {
       return this.visitDeclTypeAlias(ctx);
     }
@@ -311,6 +322,21 @@ export class AstTransformer extends StellaVisitor<Node> {
       parameters: ctx.paramDecl_list().map(this.visitParamDecl),
       returnType: ctx._returnType && this.visitType(ctx._returnType),
       throwTypes: ctx._throwTypes.map(this.visitType),
+      returnValue: this.visitExpr(ctx._returnExpr),
+    };
+  };
+  visitDeclFunGeneric: (ctx: DeclFunGenericContext) => DeclFunGeneric = (
+    ctx
+  ) => {
+    return {
+      type: 'DeclFunGeneric',
+      name: ctx._name.text,
+      annotations: ctx._annotations.map((a) => a.getText()),
+      typeParams: ctx._generics.map((t) => t.text),
+      parameters: ctx.paramDecl_list().map(this.visitParamDecl),
+      returnType: ctx._returnType && this.visitType(ctx._returnType),
+      throwTypes: ctx._throwTypes.map(this.visitType),
+      nestedDeclarations: ctx.decl_list().map(this.visitDecl),
       returnValue: this.visitExpr(ctx._returnExpr),
     };
   };
@@ -410,6 +436,9 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof ApplicationContext) {
       return this.visitApplication(ctx);
     }
+    if (ctx instanceof TypeApplicationContext) {
+      return this.visitTypeApplication(ctx);
+    }
     if (ctx instanceof MultiplyContext) {
       return this.visitMultiply(ctx);
     }
@@ -430,6 +459,9 @@ export class AstTransformer extends StellaVisitor<Node> {
     }
     if (ctx instanceof AbstractionContext) {
       return this.visitAbstraction(ctx);
+    }
+    if (ctx instanceof TypeAbstractionContext) {
+      return this.visitTypeAbstraction(ctx);
     }
     if (ctx instanceof TypeAscContext) {
       return this.visitTypeAsc(ctx);
@@ -666,6 +698,15 @@ export class AstTransformer extends StellaVisitor<Node> {
       returnValue: this.visitExpr(ctx._returnExpr),
     };
   };
+  visitTypeAbstraction: (ctx: TypeAbstractionContext) => TypeAbstraction = (
+    ctx
+  ) => {
+    return {
+      type: 'TypeAbstraction',
+      typeParams: ctx._generics.map((t) => t.text),
+      expr: this.visitExpr(ctx._expr_),
+    };
+  };
 
   visitApplication: (ctx: ApplicationContext) => Application = (ctx) => {
     // Question: what is ctx._expr?
@@ -673,6 +714,15 @@ export class AstTransformer extends StellaVisitor<Node> {
       type: 'Application',
       function: this.visitExpr(ctx._fun),
       arguments: ctx._args.map(this.visitExpr),
+    };
+  };
+  visitTypeApplication: (ctx: TypeApplicationContext) => TypeApplication = (
+    ctx
+  ) => {
+    return {
+      type: 'TypeApplication',
+      function: this.visitExpr(ctx._fun),
+      typeArguments: ctx._types.map(this.visitType),
     };
   };
 
@@ -822,6 +872,9 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof TypeRefContext) {
       return this.visitTypeRef(ctx);
     }
+    if (ctx instanceof TypeForAllContext) {
+      return this.visitTypeForAll(ctx);
+    }
     throw new Error('Unknown type: ' + ctx);
   };
 
@@ -919,6 +972,13 @@ export class AstTransformer extends StellaVisitor<Node> {
     return {
       type: 'TypeRef',
       referredType: this.visitType(ctx._type_),
+    };
+  };
+  visitTypeForAll: (ctx: TypeForAllContext) => TypeForAll = (ctx) => {
+    return {
+      type: 'TypeForAll',
+      typeVars: ctx._types.map((t) => t.text),
+      body: this.visitType(ctx._type_),
     };
   };
 
