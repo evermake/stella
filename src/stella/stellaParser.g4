@@ -23,6 +23,11 @@ decl: (annotations += annotation)* 'fn' name = StellaIdent '(' (
     )? ')' ('->' returnType = stellatype)? (
         'throws' throwTypes+= stellatype (',' throwTypes+=stellatype)*
     )? '{' (localDecls += decl)* 'return' returnExpr = expr '}' # DeclFun
+    | (annotations += annotation)* 'generic' 'fn' name = StellaIdent '[' (generics += StellaIdent)* ']' '(' (
+        paramDecls += paramDecl (',' paramDecls += paramDecl)*
+    )? ')' ('->' returnType = stellatype)? (
+        'throws' throwTypes+= stellatype (',' throwTypes+=stellatype)*
+    )? '{' (localDecls += decl)* 'return' returnExpr = expr '}' # DeclFunGeneric
     | 'type' name = StellaIdent '=' atype = stellatype          # DeclTypeAlias
     | 'exception' 'type' '=' exceptionType=stellatype           # DeclExceptionType
     | 'exception' 'variant' name=StellaIdent ':' variantType=stellatype #DeclExceptionVariant;
@@ -61,6 +66,7 @@ expr:
     | 'unfold' '[' type_ = stellatype ']' expr_ = expr               # Unfold
     // expr
     | fun = expr '(' (args += expr (',' args += expr)*)? ')' # Application
+    | fun = expr '[' (types += stellatype) ']'                     # TypeApplication
     // expr
     | left=expr '*' right=expr   # Multiply
     | left=expr '/' right=expr   # Divide
@@ -95,6 +101,7 @@ expr:
     | 'if' condition = expr 'then' thenExpr = expr 'else' elseExpr = expr # If
     | 'let' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # Let
     | 'letrec' patternBindings+=patternBinding (',' patternBindings+=patternBinding)* 'in' body = expr           # LetRec
+    | 'generic' '[' (generics += StellaIdent)* ']' expr_ = expr                           # TypeAbstraction
     | '(' expr_ = expr ')'                                                        # ParenthesisedExpr
     | expr1 = expr ';' (expr2 = expr)? # Sequence
     ;
@@ -133,6 +140,7 @@ stellatype:
     | 'fn' '(' (
         paramTypes += stellatype (',' paramTypes += stellatype)*
     )? ')' '->' returnType = stellatype                        # TypeFun
+    | 'forall' (types += StellaIdent)* '.' type_ = stellatype          # TypeForAll
     | 'µ' var = StellaIdent '.' type_ = stellatype             # TypeRec
     | left = stellatype '+' right = stellatype                 # TypeSum
     | '{' (types += stellatype (',' types += stellatype)*)? '}' # TypeTuple

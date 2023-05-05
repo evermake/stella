@@ -10,6 +10,7 @@ import { ProgramContext } from "./stellaParser";
 import { LanguageCoreContext } from "./stellaParser";
 import { AnExtensionContext } from "./stellaParser";
 import { DeclFunContext } from "./stellaParser";
+import { DeclFunGenericContext } from "./stellaParser";
 import { DeclTypeAliasContext } from "./stellaParser";
 import { DeclExceptionTypeContext } from "./stellaParser";
 import { DeclExceptionVariantContext } from "./stellaParser";
@@ -19,6 +20,7 @@ import { FoldContext } from "./stellaParser";
 import { AddContext } from "./stellaParser";
 import { IsZeroContext } from "./stellaParser";
 import { VarContext } from "./stellaParser";
+import { TypeAbstractionContext } from "./stellaParser";
 import { DivideContext } from "./stellaParser";
 import { LessThanContext } from "./stellaParser";
 import { DotRecordContext } from "./stellaParser";
@@ -56,6 +58,7 @@ import { ParenthesisedExprContext } from "./stellaParser";
 import { TailContext } from "./stellaParser";
 import { RecordContext } from "./stellaParser";
 import { LogicAndContext } from "./stellaParser";
+import { TypeApplicationContext } from "./stellaParser";
 import { LetRecContext } from "./stellaParser";
 import { LogicOrContext } from "./stellaParser";
 import { TryWithContext } from "./stellaParser";
@@ -101,6 +104,7 @@ import { TypeNatContext } from "./stellaParser";
 import { TypeBottomContext } from "./stellaParser";
 import { TypeParensContext } from "./stellaParser";
 import { TypeFunContext } from "./stellaParser";
+import { TypeForAllContext } from "./stellaParser";
 import { TypeRecordContext } from "./stellaParser";
 import { TypeListContext } from "./stellaParser";
 import { RecordFieldTypeContext } from "./stellaParser";
@@ -188,6 +192,18 @@ export default class stellaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitDeclFun?: (ctx: DeclFunContext) => void;
+	/**
+	 * Enter a parse tree produced by the `DeclFunGeneric`
+	 * labeled alternative in `stellaParser.decl`.
+	 * @param ctx the parse tree
+	 */
+	enterDeclFunGeneric?: (ctx: DeclFunGenericContext) => void;
+	/**
+	 * Exit a parse tree produced by the `DeclFunGeneric`
+	 * labeled alternative in `stellaParser.decl`.
+	 * @param ctx the parse tree
+	 */
+	exitDeclFunGeneric?: (ctx: DeclFunGenericContext) => void;
 	/**
 	 * Enter a parse tree produced by the `DeclTypeAlias`
 	 * labeled alternative in `stellaParser.decl`.
@@ -294,6 +310,18 @@ export default class stellaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitVar?: (ctx: VarContext) => void;
+	/**
+	 * Enter a parse tree produced by the `TypeAbstraction`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeAbstraction?: (ctx: TypeAbstractionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `TypeAbstraction`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeAbstraction?: (ctx: TypeAbstractionContext) => void;
 	/**
 	 * Enter a parse tree produced by the `Divide`
 	 * labeled alternative in `stellaParser.expr`.
@@ -738,6 +766,18 @@ export default class stellaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitLogicAnd?: (ctx: LogicAndContext) => void;
+	/**
+	 * Enter a parse tree produced by the `TypeApplication`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeApplication?: (ctx: TypeApplicationContext) => void;
+	/**
+	 * Exit a parse tree produced by the `TypeApplication`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeApplication?: (ctx: TypeApplicationContext) => void;
 	/**
 	 * Enter a parse tree produced by the `LetRec`
 	 * labeled alternative in `stellaParser.expr`.
@@ -1270,6 +1310,18 @@ export default class stellaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTypeFun?: (ctx: TypeFunContext) => void;
+	/**
+	 * Enter a parse tree produced by the `TypeForAll`
+	 * labeled alternative in `stellaParser.stellatype`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeForAll?: (ctx: TypeForAllContext) => void;
+	/**
+	 * Exit a parse tree produced by the `TypeForAll`
+	 * labeled alternative in `stellaParser.stellatype`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeForAll?: (ctx: TypeForAllContext) => void;
 	/**
 	 * Enter a parse tree produced by the `TypeRecord`
 	 * labeled alternative in `stellaParser.stellatype`.

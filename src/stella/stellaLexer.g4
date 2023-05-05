@@ -83,6 +83,8 @@ TRY : 'try' ;
 CATCH : 'catch' ;
 TOP_TYPE : 'Top' ;
 BOTTOM_TYPE : 'Bot' ;
+GENERIC : 'generic' ;
+FORALL : 'forall' ;
 COMMENT_antlr_builtin
 : (
 '//' ~[\r\n]* (('\r'? '\n')|EOF)
