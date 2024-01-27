@@ -2,6 +2,7 @@ import { CommonTokenStream, CharStream, FileStream } from 'antlr4';
 import StellaLexer from './stella/stellaLexer';
 import StellaParser from './stella/stellaParser';
 import { AstTransformer } from './visitors';
+import { typecheckProgram } from './typechecker';
 
 let inputStream: CharStream;
 
@@ -33,4 +34,5 @@ const program = parser.program();
 
 const t = new AstTransformer();
 const ast = t.visitProgram(program);
-console.log(JSON.stringify(ast, (k, v) => v ?? null, 4));
+// console.log(JSON.stringify(ast, (k, v) => v ?? null, 4));
+typecheckProgram(ast);
