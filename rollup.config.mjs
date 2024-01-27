@@ -3,7 +3,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 /** @type {import('rollup').RollupOptions} */
 export default {
-  input: './index.ts',
+  input: './src/index.ts',
   output: {
     file: './build/index.js',
     format: 'cjs',

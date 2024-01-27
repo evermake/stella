@@ -1,4 +1,4 @@
-import StellaVisitor from './src/stella/stellaParserVisitor';
+import StellaVisitor from './stella/stellaParserVisitor';
 import {
   ApplicationContext,
   ConstFalseContext,
@@ -106,7 +106,7 @@ import {
   TypeApplicationContext,
   TypeAbstractionContext,
   DeclFunGenericContext,
-} from './src/stella/stellaParser';
+} from './stella/stellaParser';
 import type {
   Abstraction,
   Add,

@@ -1,6 +1,6 @@
 import { CommonTokenStream, CharStream, FileStream } from 'antlr4';
-import StellaLexer from './src/stella/stellaLexer';
-import StellaParser from './src/stella/stellaParser';
+import StellaLexer from './stella/stellaLexer';
+import StellaParser from './stella/stellaParser';
 import { AstTransformer } from './visitors';
 
 let inputStream: CharStream;
