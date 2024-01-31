@@ -1,25 +1,32 @@
 {
   "name": "stella-implementation-in-typescript",
+  "type": "module",
   "version": "0.1.0",
+  "private": true,
+  "main": "./build/index.cjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node ./build/index.cjs",
+    "generate": "tsx ./scripts/generate-parser.ts",
+    "build": "rollup -c rollup.config.js",
+    "watch": "rollup -c rollup.config.js --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
   "dependencies": {
     "antlr4": "^4.12.0"
   },
-  "main": "./build/index.js",
-  "scripts": {
-    "start": "node ./build/index.js",
-    "antlr4": "node ./generateParser.js",
-    "build": "rollup -c rollup.config.mjs",
-    "watch": "rollup -c rollup.config.mjs --watch"
-  },
-  "engines": {
-    "node": ">=14"
-  },
   "devDependencies": {
+    "@antfu/eslint-config": "^2.6.3",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^11.0.0",
     "@types/node": "^18.15.10",
+    "eslint": "^8.56.0",
     "rollup": "^3.20.2",
     "tslib": "^2.5.0",
+    "tsx": "^4.7.0",
     "typescript": "^5.0.2"
   }
 }
