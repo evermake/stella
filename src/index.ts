@@ -1,6 +1,6 @@
+import fs from 'node:fs'
 import process from 'node:process'
-import type { CharStream } from 'antlr4'
-import { CommonTokenStream, FileStream } from 'antlr4'
+import { CharStream, CommonTokenStream, FileStream } from 'antlr4'
 import StellaLexer from './stella/stellaLexer'
 import StellaParser from './stella/stellaParser'
 import { AstTransformer } from './visitors'
@@ -14,7 +14,10 @@ enum ErrorCode {
 
 function main() {
   let inputStream: CharStream
-  if (process.argv.length === 3) {
+  if (process.argv.length === 2) {
+    // Program ran w/o arguments -> read from stdin.
+    inputStream = new CharStream(fs.readFileSync(0).toString())
+  } else if (process.argv.length === 3) {
     inputStream = new FileStream(process.argv[2])
   } else {
     console.error('Usage: node index.js path/to/file.stella')
@@ -29,8 +32,6 @@ function main() {
 
   const t = new AstTransformer()
   const ast = t.visitProgram(program)
-
-  // console.log(JSON.stringify(ast, (k, v) => v ?? null, 2))
 
   try {
     typecheckProgram(ast)
