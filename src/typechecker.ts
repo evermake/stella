@@ -146,12 +146,10 @@ function deriveType(expr: Expr, scope: Scope, expectedType?: Type): Type {
       }
       const argExpr = expr.arguments[0]
       const fnExpr = expr.function
-      // Todo: check that function expression is of type T -> infer D
-      //       and arguments[0]
 
       const fnType = deriveType(fnExpr, scope)
       if (fnType.type !== 'TypeFun') {
-        throw new UnexpectedTypeForExpressionError(`Left side of application must be a function, but got ${t(fnType)}.`)
+        throw new NotAFunctionError(`Left side of application must be a function, but got ${t(fnType)}.`)
       }
 
       if (fnType.parametersTypes.length !== 1) {
