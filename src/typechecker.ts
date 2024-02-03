@@ -286,17 +286,7 @@ function areTypesEqual(t1: Type, t2: Type): boolean {
       }
       return true
     }
-    case 'TypeRec':
-    case 'TypeSum':
-    case 'TypeTuple':
-    case 'TypeRecord':
-    case 'TypeVariant':
-    case 'TypeList':
-    case 'TypeVar':
-    case 'TypeRef':
-    case 'TypeForAll':
-    case 'RecordFieldType':
-    case 'VariantFieldType':
+    default:
       throw new Error(`Cannot compare type "${t1.type}".`)
   }
 }
