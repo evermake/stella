@@ -114,14 +114,14 @@ function deriveType(expr: Expr, scope: Scope, expectedType?: Type): Type {
 
       // Type of initialType is T
       // stepReturnType must be of type (T) -> T
-      const expectedType = {
+      const expectedStepReturnType = {
         type: 'TypeFun' as const,
         parametersTypes: [initialType],
         returnType: initialType,
       }
 
-      if (!areTypesEqual(stepReturnType, expectedType)) {
-        throw new UnexpectedTypeForExpressionError(`Expected step function of NatRec to return type ${t(expectedType)}, but got ${t(stepReturnType)}.`)
+      if (!areTypesEqual(stepReturnType, expectedStepReturnType)) {
+        throw new UnexpectedTypeForExpressionError(`Expected step function of NatRec to return type ${t(expectedStepReturnType)}, but got ${t(stepReturnType)}.`)
       }
 
       return initialType
