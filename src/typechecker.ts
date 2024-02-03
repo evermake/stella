@@ -1,6 +1,6 @@
 import type { DeclFun, Expr, Program, Type } from './ast'
 import { MissingExplicitReturnTypeError, MissingMainError, NotAFunctionError, UndefinedVariableError, UnexpectedLambdaError, UnexpectedTypeForExpressionError, UnexpectedTypeForParameterError } from './errors'
-import { areTypesEqual, t } from './utils'
+import { T, areTypesEqual, t } from './utils'
 
 export function typecheckProgram(ast: Program) {
   const globalScope = new Scope()
@@ -36,7 +36,6 @@ export function typecheckProgram(ast: Program) {
 function typecheckDeclFun(decl: DeclFun, parentScope: Scope) {
   // @todo: decl.annations, decl.nestedDeclarations, decl.throwTypes
 
-  // Create a new local scope.
   const localScope = new Scope(parentScope)
 
   if (decl.parameters.length !== 1) {
@@ -48,23 +47,21 @@ function typecheckDeclFun(decl: DeclFun, parentScope: Scope) {
     ? decl.returnValue.expr1
     : decl.returnValue
 
-  // Add parameter to a local scope.
   localScope.identifiers.set(param.name, param.paramType)
 
-  // Check return type is correct.
   if (decl.returnType) {
-    expect(decl.returnType).toBe(deriveType(returnVal, localScope))
+    expect(deriveType(returnVal, localScope)).toBe(decl.returnType)
   }
 }
 
 function deriveType(expr: Expr, scope: Scope): Type {
   switch (expr.type) {
     case 'ConstBool': {
-      return { type: 'TypeBool' }
+      return T.Bool
     }
     case 'ConstInt': {
       if (expr.value === 0) {
-        return { type: 'TypeNat' }
+        return T.Nat
       }
       throw new Error('Non-zero integers are not supported.')
     }
@@ -76,34 +73,28 @@ function deriveType(expr: Expr, scope: Scope): Type {
       return varType
     }
     case 'Succ': {
-      expect(deriveType(expr.expr, scope)).toBe({ type: 'TypeNat' })
-      return { type: 'TypeNat' }
+      expect(deriveType(expr.expr, scope)).toBe(T.Nat)
+      return T.Nat
     }
     case 'NatIsZero': {
-      expect(deriveType(expr.expr, scope)).toBe({ type: 'TypeNat' })
-      return { type: 'TypeBool' }
+      expect(deriveType(expr.expr, scope)).toBe(T.Nat)
+      return T.Bool
     }
     case 'NatRec': {
       const nType = deriveType(expr.n, scope)
-      expect(nType).toBe({ type: 'TypeNat' })
+      expect(nType).toBe(T.Nat)
 
       const initialType = deriveType(expr.initial, scope)
       const stepType = deriveType(expr.step, scope)
-      expect(stepType).toBe({
-        type: 'TypeFun',
-        parametersTypes: [{ type: 'TypeNat' }],
-        returnType: {
-          type: 'TypeFun',
-          parametersTypes: [initialType],
-          returnType: initialType,
-        },
-      })
+      expect(stepType).toBe(T.fn`${T.Nat} -> ${
+          T.fn`${initialType} -> ${initialType}`
+        }`)
 
       return initialType
     }
     case 'If': {
       const conditionType = deriveType(expr.condition, scope)
-      expect(conditionType).toBe({ type: 'TypeBool' })
+      expect(conditionType).toBe(T.Bool)
 
       const thenType = deriveType(expr.thenExpr, scope)
       const elseType = deriveType(expr.elseExpr, scope)
@@ -141,11 +132,7 @@ function deriveType(expr: Expr, scope: Scope): Type {
       const nestedScope = new Scope(scope)
       nestedScope.set(paramDecl.name, paramDecl.paramType)
 
-      return {
-        type: 'TypeFun',
-        parametersTypes: [paramDecl.paramType],
-        returnType: deriveType(expr.returnValue, nestedScope),
-      }
+      return T.fn`${paramDecl.paramType} -> ${deriveType(expr.returnValue, nestedScope)}`
     }
     case 'Sequence': {
       if (expr.expr2) {
@@ -204,7 +191,7 @@ function expect(actualType: Type) {
       } else if (actualType.type === 'TypeFun' && expectedType.type !== 'TypeFun') {
         throw new UnexpectedLambdaError(`Expected ${t(expectedType)}, but got ${t(actualType)}.`)
       } else if (actualType.type === 'TypeFun' && expectedType.type === 'TypeFun') {
-        throw new UnexpectedTypeForParameterError(`Expected ${t(expectedType)}, but got ${t(actualType)}.`)
+        throw new UnexpectedTypeForParameterError(`Expected ${t(expectedType.parametersTypes[0])}, but got ${t(actualType.parametersTypes[0])}.`)
       } else {
         throw new UnexpectedTypeForExpressionError(expectedType, actualType)
       }

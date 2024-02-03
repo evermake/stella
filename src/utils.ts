@@ -1,4 +1,4 @@
-import type { Type, TypeFun } from './ast'
+import type { Type, TypeBool, TypeFun, TypeNat } from './ast'
 
 /**
  * Stringifies a type.
@@ -17,6 +17,37 @@ export function t(type: Type): string {
       return type.type
   }
 }
+
+/**
+ * Utility-class for creating types.
+ */
+export class _T {
+  get Bool(): TypeBool {
+    return { type: 'TypeBool' }
+  }
+
+  get Nat(): TypeNat {
+    return { type: 'TypeNat' }
+  }
+
+  /**
+   * Tag function to create a function type.
+   */
+  fn(_: TemplateStringsArray, ...types: Type[]): TypeFun {
+    const parametersTypes = types.slice(0, types.length - 1)
+    const returnType = types[types.length - 1]
+    return {
+      type: 'TypeFun',
+      parametersTypes,
+      returnType,
+    }
+  }
+}
+
+/**
+ * Utility-object for creating types.
+ */
+export const T = new _T()
 
 export function areTypesEqual(t1: Type, t2: Type): boolean {
   if (t1.type !== t2.type) {
