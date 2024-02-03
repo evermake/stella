@@ -5,7 +5,9 @@ import {
   MissingMainError,
   NotAFunctionError,
   UndefinedVariableError,
+  UnexpectedLambdaError,
   UnexpectedTypeForExpressionError,
+  UnexpectedTypeForParameterError,
 } from './errors'
 import { T, areTypesEqual, t } from './utils'
 
@@ -60,106 +62,124 @@ function typecheckDeclFun(decl: DeclFun, parentScope: Scope) {
   localScope.identifiers.set(param.name, param.paramType)
 
   if (decl.returnType) {
-    expect(deriveType(returnVal, localScope)).toBe(decl.returnType)
+    deriveType(returnVal, localScope, decl.returnType)
   }
 }
 
-function deriveType(expr: Expr, scope: Scope): Type {
-  switch (expr.type) {
-    case 'ConstBool': {
-      return T.Bool
-    }
-    case 'ConstInt': {
-      if (scope.ctx.hasExtension('#natural-literals')) {
-        if (expr.value < 0) {
-          throw new IllegalNegativeLiteral(`Negative integers are not supported (got ${expr.value}).`)
+function deriveType(expr: Expr, scope: Scope, wantedType?: Type): Type {
+  const derivedType = (() => {
+    switch (expr.type) {
+      case 'ConstBool': {
+        return T.Bool
+      }
+      case 'ConstInt': {
+        if (scope.ctx.hasExtension('#natural-literals')) {
+          if (expr.value < 0) {
+            throw new IllegalNegativeLiteral(`Negative integers are not supported (got ${expr.value}).`)
+          }
+        } else {
+          if (expr.value !== 0) {
+            throw new Error('Non-zero integers are not supported.')
+          }
         }
         return T.Nat
-      } else {
-        if (expr.value === 0) {
-          return T.Nat
+      }
+      case 'Var': {
+        const varType = scope.get(expr.name)
+        if (!varType) {
+          throw new UndefinedVariableError(`Variable "${expr.name}" is not defined.`)
         }
-        throw new Error('Non-zero integers are not supported.')
+        return varType
       }
-    }
-    case 'Var': {
-      const varType = scope.get(expr.name)
-      if (!varType) {
-        throw new UndefinedVariableError(`Variable "${expr.name}" is not defined.`)
+      case 'Succ': {
+        deriveType(expr.expr, scope, T.Nat)
+        return T.Nat
       }
-      return varType
-    }
-    case 'Succ': {
-      expect(deriveType(expr.expr, scope)).toBe(T.Nat)
-      return T.Nat
-    }
-    case 'NatIsZero': {
-      expect(deriveType(expr.expr, scope)).toBe(T.Nat)
-      return T.Bool
-    }
-    case 'NatRec': {
-      const nType = deriveType(expr.n, scope)
-      expect(nType).toBe(T.Nat)
+      case 'NatIsZero': {
+        deriveType(expr.expr, scope, T.Nat)
+        return T.Bool
+      }
+      case 'NatRec': {
+        deriveType(expr.n, scope, T.Nat)
 
-      const initialType = deriveType(expr.initial, scope)
-      const stepType = deriveType(expr.step, scope)
-      expect(stepType).toBe(T.fn`${T.Nat} -> ${
+        const initialType = deriveType(expr.initial, scope)
+        deriveType(expr.step, scope, T.fn`${T.Nat} -> ${
           T.fn`${initialType} -> ${initialType}`
         }`)
 
-      return initialType
-    }
-    case 'If': {
-      const conditionType = deriveType(expr.condition, scope)
-      expect(conditionType).toBe(T.Bool)
-
-      const thenType = deriveType(expr.thenExpr, scope)
-      const elseType = deriveType(expr.elseExpr, scope)
-      expect(elseType).toBe(thenType)
-
-      return thenType
-    }
-    case 'Application': {
-      if (expr.arguments.length !== 1) {
-        throw new Error(`Functions must accept exactly one parameter.`)
+        return initialType
       }
-      const argExpr = expr.arguments[0]
-      const fnExpr = expr.function
+      case 'If': {
+        deriveType(expr.condition, scope, T.Bool)
 
-      const fnType = deriveType(fnExpr, scope)
-      if (fnType.type !== 'TypeFun') {
-        throw new NotAFunctionError(`Left side of application must be a function, but got ${t(fnType)}.`)
+        const thenType = deriveType(expr.thenExpr, scope)
+        deriveType(expr.elseExpr, scope, thenType)
+
+        return thenType
       }
+      case 'Application': {
+        if (expr.arguments.length !== 1) {
+          throw new Error(`Functions must accept exactly one parameter.`)
+        }
+        const argExpr = expr.arguments[0]
+        const fnExpr = expr.function
 
-      if (fnType.parametersTypes.length !== 1) {
-        throw new Error(`Functions must accept exactly one parameter.`)
+        const fnType = deriveType(fnExpr, scope)
+        if (fnType.type !== 'TypeFun') {
+          throw new NotAFunctionError(`Left side of application must be a function, but got ${t(fnType)}.`)
+        }
+
+        if (fnType.parametersTypes.length !== 1) {
+          throw new Error(`Functions must accept exactly one parameter.`)
+        }
+
+        deriveType(argExpr, scope, fnType.parametersTypes[0])
+
+        return fnType.returnType
       }
+      case 'Abstraction': {
+        if (expr.parameters.length !== 1) {
+          throw new Error(`Anonymous function must have exactly one parameter, but definition has ${expr.parameters.length}.`)
+        }
 
-      const argType = deriveType(argExpr, scope)
-      expect(argType).toBe(fnType.parametersTypes[0])
+        const paramDecl = expr.parameters[0]
 
-      return fnType.returnType
+        let wantedReturnType
+        if (wantedType) {
+          if (wantedType.type !== 'TypeFun') {
+            throw new UnexpectedLambdaError(`Expected ${t(wantedType)}, but got lambda.`)
+          }
+          if (wantedType.parametersTypes.length !== 1) {
+            throw new Error(`Functions must accept exactly one parameter.`)
+          }
+          const wantedParamType = wantedType.parametersTypes[0]
+          if (!areTypesEqual(wantedParamType, paramDecl.paramType)) {
+            throw new UnexpectedTypeForParameterError(`Unexpected type for parameter "${paramDecl.name}": expected ${t(wantedParamType)}, but got ${t(paramDecl.paramType)}.`)
+          }
+          wantedReturnType = wantedType.returnType
+        }
+
+        const nestedScope = new Scope(scope, scope.ctx)
+        nestedScope.set(paramDecl.name, paramDecl.paramType)
+
+        return T.fn`${paramDecl.paramType} -> ${deriveType(expr.returnValue, nestedScope, wantedReturnType)}`
+      }
+      case 'Sequence': {
+        if (expr.expr2) {
+          throw new Error('Sequences are not supported.')
+        }
+        return deriveType(expr.expr1, scope, wantedType)
+      }
+      default:
+        throw new Error(`Cannot derive type for expression "${expr.type}".`)
     }
-    case 'Abstraction': {
-      if (expr.parameters.length !== 1) {
-        throw new Error(`Anonymous function must have exactly one parameter, but definition has ${expr.parameters.length}.`)
-      }
+  })()
 
-      const paramDecl = expr.parameters[0]
-      const nestedScope = new Scope(scope, scope.ctx)
-      nestedScope.set(paramDecl.name, paramDecl.paramType)
-
-      return T.fn`${paramDecl.paramType} -> ${deriveType(expr.returnValue, nestedScope)}`
-    }
-    case 'Sequence': {
-      if (expr.expr2) {
-        throw new Error('Sequences are not supported.')
-      }
-      return deriveType(expr.expr1, scope)
-    }
-    default:
-      throw new Error(`Cannot derive type for expression "${expr.type}".`)
+  if (wantedType) {
+    expect(derivedType).toBe(wantedType)
   }
+
+  return derivedType
 }
 
 type Extension = '#natural-literals'
