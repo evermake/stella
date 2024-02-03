@@ -133,7 +133,7 @@ function deriveType(expr: Expr, scope: Scope, expectedType?: Type): Type {
       }
 
       const thenType = deriveType(expr.thenExpr, scope)
-      const elseType = deriveType(expr.elseExpr, scope)
+      const elseType = deriveType(expr.elseExpr, scope, thenType)
       if (!areTypesEqual(thenType, elseType)) {
         throw new UnexpectedTypeForExpressionError(`Both branches of if/then/else must be of the same type, instead then has ${t(thenType)} and else has ${t(elseType)}.`)
       }
