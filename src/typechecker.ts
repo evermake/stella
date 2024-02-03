@@ -1,17 +1,19 @@
 import type { DeclFun, Expr, Program, Type } from './ast'
 import {
+  IllegalNegativeLiteral,
   MissingExplicitReturnTypeError,
   MissingMainError,
   NotAFunctionError,
   UndefinedVariableError,
-  UnexpectedLambdaError,
   UnexpectedTypeForExpressionError,
-  UnexpectedTypeForParameterError,
 } from './errors'
 import { T, areTypesEqual, t } from './utils'
 
 export function typecheckProgram(ast: Program) {
-  const globalScope = new Scope()
+  const ctx = new Context()
+  const globalScope = new Scope(null, ctx)
+
+  ast.extensions.forEach(ext => ctx.addExtension(ext as Extension))
 
   // Add all global functions to the scope, so we can correctly typecheck their
   // bodies later, when their calls will be invoked.
@@ -44,7 +46,7 @@ export function typecheckProgram(ast: Program) {
 function typecheckDeclFun(decl: DeclFun, parentScope: Scope) {
   // @todo: decl.annations, decl.nestedDeclarations, decl.throwTypes
 
-  const localScope = new Scope(parentScope)
+  const localScope = new Scope(parentScope, parentScope.ctx)
 
   if (decl.parameters.length !== 1) {
     throw new Error(`Function declarations must have exactly one parameter, but "${decl.name}" has ${decl.parameters.length}.`)
@@ -68,10 +70,17 @@ function deriveType(expr: Expr, scope: Scope): Type {
       return T.Bool
     }
     case 'ConstInt': {
-      if (expr.value === 0) {
+      if (scope.ctx.hasExtension('#natural-literals')) {
+        if (expr.value < 0) {
+          throw new IllegalNegativeLiteral(`Negative integers are not supported (got ${expr.value}).`)
+        }
         return T.Nat
+      } else {
+        if (expr.value === 0) {
+          return T.Nat
+        }
+        throw new Error('Non-zero integers are not supported.')
       }
-      throw new Error('Non-zero integers are not supported.')
     }
     case 'Var': {
       const varType = scope.get(expr.name)
@@ -137,7 +146,7 @@ function deriveType(expr: Expr, scope: Scope): Type {
       }
 
       const paramDecl = expr.parameters[0]
-      const nestedScope = new Scope(scope)
+      const nestedScope = new Scope(scope, scope.ctx)
       nestedScope.set(paramDecl.name, paramDecl.paramType)
 
       return T.fn`${paramDecl.paramType} -> ${deriveType(expr.returnValue, nestedScope)}`
@@ -153,14 +162,27 @@ function deriveType(expr: Expr, scope: Scope): Type {
   }
 }
 
-class Scope {
-  parent: Scope | null
-  identifiers: Map<string, Type>
+type Extension = '#natural-literals'
 
-  constructor(parent: Scope | null = null) {
-    this.parent = parent
-    this.identifiers = new Map()
+class Context {
+  enabledExtensions: Set<Extension> = new Set()
+
+  addExtension(extension: Extension) {
+    this.enabledExtensions.add(extension)
   }
+
+  hasExtension(extension: Extension) {
+    return this.enabledExtensions.has(extension)
+  }
+}
+
+class Scope {
+  identifiers: Map<string, Type> = new Map()
+
+  constructor(
+    public parent: Scope | null = null,
+    public ctx: Context,
+  ) {}
 
   get(name: string, traverseParents = true): Type | undefined {
     if (this.identifiers.has(name)) {

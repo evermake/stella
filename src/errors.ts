@@ -65,3 +65,7 @@ export class MissingMainError extends BaseTypeError {
 export class MissingExplicitReturnTypeError extends BaseTypeError {
   tag: string = 'ERROR_MISSING_EXPLICIT_RETURN_TYPE'
 }
+
+export class IllegalNegativeLiteral extends BaseTypeError {
+  tag: string = 'ERROR_ILLEGAL_NEGATIVE_LITERAL'
+}
