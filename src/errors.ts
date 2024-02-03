@@ -1,3 +1,6 @@
+import type { Type } from './ast'
+import { t } from './utils'
+
 export class BaseTypeError extends Error {
   tag: string = 'UNKNOWN'
 
@@ -18,6 +21,14 @@ export class UnexpectedTypeForParameterError extends BaseTypeError {
  */
 export class UnexpectedTypeForExpressionError extends BaseTypeError {
   tag: string = 'ERROR_UNEXPECTED_TYPE_FOR_EXPRESSION'
+
+  constructor(
+    public expectedType: Type,
+    public actualType: Type,
+  ) {
+    const message = `Expected expression to be of type ${t(expectedType)}, but got ${t(actualType)}.`
+    super(message)
+  }
 }
 
 /**
