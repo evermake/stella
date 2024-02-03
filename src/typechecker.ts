@@ -1,5 +1,13 @@
 import type { DeclFun, Expr, Program, Type } from './ast'
-import { MissingExplicitReturnTypeError, MissingMainError, NotAFunctionError, UndefinedVariableError, UnexpectedLambdaError, UnexpectedTypeForExpressionError, UnexpectedTypeForParameterError } from './errors'
+import {
+  MissingExplicitReturnTypeError,
+  MissingMainError,
+  NotAFunctionError,
+  UndefinedVariableError,
+  UnexpectedLambdaError,
+  UnexpectedTypeForExpressionError,
+  UnexpectedTypeForParameterError,
+} from './errors'
 import { T, areTypesEqual, t } from './utils'
 
 export function typecheckProgram(ast: Program) {
@@ -186,13 +194,7 @@ function checkForValidMainInGlobalScope(scope: Scope) {
 function expect(actualType: Type) {
   return {
     toBe: (expectedType: Type) => {
-      if (areTypesEqual(actualType, expectedType)) {
-        // Ok.
-      } else if (actualType.type === 'TypeFun' && expectedType.type !== 'TypeFun') {
-        throw new UnexpectedLambdaError(`Expected ${t(expectedType)}, but got ${t(actualType)}.`)
-      } else if (actualType.type === 'TypeFun' && expectedType.type === 'TypeFun') {
-        throw new UnexpectedTypeForParameterError(`Expected ${t(expectedType.parametersTypes[0])}, but got ${t(actualType.parametersTypes[0])}.`)
-      } else {
+      if (!areTypesEqual(actualType, expectedType)) {
         throw new UnexpectedTypeForExpressionError(expectedType, actualType)
       }
     },
