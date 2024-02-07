@@ -1,14 +1,5 @@
 import type { DeclFun, Expr, Program, Type } from './ast'
-import {
-  IllegalNegativeLiteral,
-  MissingExplicitReturnTypeError,
-  MissingMainError,
-  NotAFunctionError,
-  UndefinedVariableError,
-  UnexpectedLambdaError,
-  UnexpectedTypeForExpressionError,
-  UnexpectedTypeForParameterError,
-} from './errors'
+import { TypecheckingFailedError } from './errors'
 import type { Extension } from './types'
 import { T, areTypesEqual, t } from './utils'
 
@@ -23,7 +14,7 @@ export function typecheckProgram(ast: Program) {
   for (const decl of ast.declarations) {
     if (decl.type === 'DeclFun') {
       if (!decl.returnType) {
-        throw new MissingExplicitReturnTypeError(`Function "${decl.name}" is missing an explicit return type.`)
+        throw new TypecheckingFailedError('ERROR_MISSING_EXPLICIT_RETURN_TYPE', `Function "${decl.name}" is missing an explicit return type.`)
       }
       globalScope.set(decl.name, {
         type: 'TypeFun',
@@ -76,7 +67,7 @@ function deriveType(expr: Expr, scope: Scope, wantedType?: Type): Type {
       case 'ConstInt': {
         if (scope.ctx.hasExtension('#natural-literals')) {
           if (expr.value < 0) {
-            throw new IllegalNegativeLiteral(`Negative integers are not supported (got ${expr.value}).`)
+            throw new TypecheckingFailedError('ERROR_ILLEGAL_NEGATIVE_LITERAL', `Negative integers are not supported (got ${expr.value}).`)
           }
         } else {
           if (expr.value !== 0) {
@@ -88,7 +79,7 @@ function deriveType(expr: Expr, scope: Scope, wantedType?: Type): Type {
       case 'Var': {
         const varType = scope.get(expr.name)
         if (!varType) {
-          throw new UndefinedVariableError(`Variable "${expr.name}" is not defined.`)
+          throw new TypecheckingFailedError('ERROR_UNDEFINED_VARIABLE', `Variable "${expr.name}" is not defined.`)
         }
         return varType
       }
@@ -127,7 +118,7 @@ function deriveType(expr: Expr, scope: Scope, wantedType?: Type): Type {
 
         const fnType = deriveType(fnExpr, scope)
         if (fnType.type !== 'TypeFun') {
-          throw new NotAFunctionError(`Left side of application must be a function, but got ${t(fnType)}.`)
+          throw new TypecheckingFailedError('ERROR_NOT_A_FUNCTION', `Left side of application must be a function, but got ${t(fnType)}.`)
         }
 
         if (fnType.parametersTypes.length !== 1) {
@@ -148,14 +139,14 @@ function deriveType(expr: Expr, scope: Scope, wantedType?: Type): Type {
         let wantedReturnType
         if (wantedType) {
           if (wantedType.type !== 'TypeFun') {
-            throw new UnexpectedLambdaError(`Expected ${t(wantedType)}, but got lambda.`)
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_LAMBDA', `Expected ${t(wantedType)}, but got lambda.`)
           }
           if (wantedType.parametersTypes.length !== 1) {
             throw new Error(`Functions must accept exactly one parameter.`)
           }
           const wantedParamType = wantedType.parametersTypes[0]
           if (!areTypesEqual(wantedParamType, paramDecl.paramType)) {
-            throw new UnexpectedTypeForParameterError(`Unexpected type for parameter "${paramDecl.name}": expected ${t(wantedParamType)}, but got ${t(paramDecl.paramType)}.`)
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_PARAMETER', `Unexpected type for parameter "${paramDecl.name}": expected ${t(wantedParamType)}, but got ${t(paramDecl.paramType)}.`)
           }
           wantedReturnType = wantedType.returnType
         }
@@ -225,10 +216,10 @@ class Scope {
 function checkForValidMainInGlobalScope(scope: Scope) {
   const main = scope.identifiers.get('main')
   if (!main) {
-    throw new MissingMainError('"main" function is not found in the scope.')
+    throw new TypecheckingFailedError('ERROR_MISSING_MAIN', '"main" function is not found in the scope.')
   }
   if (main.type !== 'TypeFun') {
-    throw new NotAFunctionError(`"main" must be a function, not ${t(main)}.`)
+    throw new TypecheckingFailedError('ERROR_NOT_A_FUNCTION', `"main" must be a function, not ${t(main)}.`)
   }
 }
 
@@ -236,7 +227,7 @@ function expect(actualType: Type) {
   return {
     toBe: (expectedType: Type) => {
       if (!areTypesEqual(actualType, expectedType)) {
-        throw new UnexpectedTypeForExpressionError(expectedType, actualType)
+        throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_EXPRESSION', `Expected expression to be of type ${t(expectedType)}, but got ${t(actualType)}.`)
       }
     },
   }

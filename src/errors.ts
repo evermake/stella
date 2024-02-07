@@ -1,71 +1,61 @@
-import type { Type } from './ast'
-import { t } from './utils'
+export type TypeErrorTag =
+  // Unexpected type specified for a parameter of an anonymous function.
+  | 'ERROR_UNEXPECTED_TYPE_FOR_PARAMETER'
 
-export class BaseTypeError extends Error {
-  tag: string = 'UNKNOWN'
+  // Type of an expression does not match an expected type (known from larger context).
+  | 'ERROR_UNEXPECTED_TYPE_FOR_EXPRESSION'
 
-  get detail(): string {
-    return `Type error ${this.tag}: ${this.message}`
-  }
-}
+  // Unexpected anonymous function where an expression of a non-function type is expected.
+  | 'ERROR_UNEXPECTED_LAMBDA'
 
-/**
- * Unexpected type specified for a parameter of an anonymous function.
- */
-export class UnexpectedTypeForParameterError extends BaseTypeError {
-  tag: string = 'ERROR_UNEXPECTED_TYPE_FOR_PARAMETER'
-}
+  // Unexpected expression where a function is expected.
+  | 'ERROR_NOT_A_FUNCTION'
 
-/**
- * Type of an expression does not match an expected type (known from larger context).
- */
-export class UnexpectedTypeForExpressionError extends BaseTypeError {
-  tag: string = 'ERROR_UNEXPECTED_TYPE_FOR_EXPRESSION'
+  // Undefined variable in a an expression.
+  | 'ERROR_UNDEFINED_VARIABLE'
 
-  constructor(
-    public expectedType: Type,
-    public actualType: Type,
-  ) {
-    const message = `Expected expression to be of type ${t(expectedType)}, but got ${t(actualType)}.`
+  // A program is missing `main` function.
+  | 'ERROR_MISSING_MAIN'
+
+  // Missing an explicit return type in the declaration of a function.
+  | 'ERROR_MISSING_EXPLICIT_RETURN_TYPE'
+
+  | 'ERROR_ILLEGAL_NEGATIVE_LITERAL'
+
+  //  Record is missing one or more of the expected fields.
+  | 'ERROR_MISSING_RECORD_FIELDS'
+
+  // Record has one or more unexpected fields.
+  | 'ERROR_UNEXPECTED_RECORD_FIELDS'
+
+  // Unexpected record where an expression of a non-record type is expected.
+  | 'ERROR_UNEXPECTED_RECORD'
+
+  // Unexpected expression where a record is expected.
+  | 'ERROR_NOT_A_RECORD'
+
+  // Access to a field that is not present in the record.
+  | 'ERROR_UNEXPECTED_FIELD_ACCESS'
+
+  // Unexpected tuple/pair where an expression of a non-tuple type is expected.
+  | 'ERROR_UNEXPECTED_TUPLE'
+
+  // Unexpected expression where a tuple/pair is expected.
+  | 'ERROR_NOT_A_TUPLE'
+
+export class TypecheckingFailedError extends Error {
+  #tag: TypeErrorTag
+
+  constructor(tag: TypeErrorTag, message: string) {
     super(message)
+    this.#tag = tag
   }
-}
 
-/**
- * Unexpected anonymous function where an expression of a non-function type is expected.
- */
-export class UnexpectedLambdaError extends BaseTypeError {
-  tag: string = 'ERROR_UNEXPECTED_LAMBDA'
-}
+  get tag(): TypeErrorTag {
+    return this.#tag
+  }
 
-/**
- * Unexpected expression where a function is expected.
- */
-export class NotAFunctionError extends BaseTypeError {
-  tag: string = 'ERROR_NOT_A_FUNCTION'
-}
-
-/**
- * Undefined variable in a an expression.
- */
-export class UndefinedVariableError extends BaseTypeError {
-  tag: string = 'ERROR_UNDEFINED_VARIABLE'
-}
-
-/**
- * A program is missing `main` function.
- */
-export class MissingMainError extends BaseTypeError {
-  tag: string = 'ERROR_MISSING_MAIN'
-}
-
-/**
- * Missing an explicit return type in the declaration of a function.
- */
-export class MissingExplicitReturnTypeError extends BaseTypeError {
-  tag: string = 'ERROR_MISSING_EXPLICIT_RETURN_TYPE'
-}
-
-export class IllegalNegativeLiteral extends BaseTypeError {
-  tag: string = 'ERROR_ILLEGAL_NEGATIVE_LITERAL'
+  toString(): string {
+    return `Type error ${this.#tag}: ${this.message}`
+  }
 }
