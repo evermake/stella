@@ -9,6 +9,7 @@ import {
   UnexpectedTypeForExpressionError,
   UnexpectedTypeForParameterError,
 } from './errors'
+import type { Extension } from './types'
 import { T, areTypesEqual, t } from './utils'
 
 export function typecheckProgram(ast: Program) {
@@ -181,8 +182,6 @@ function deriveType(expr: Expr, scope: Scope, wantedType?: Type): Type {
 
   return derivedType
 }
-
-type Extension = '#natural-literals'
 
 class Context {
   enabledExtensions: Set<Extension> = new Set()
