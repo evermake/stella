@@ -12,7 +12,16 @@ export function t(type: Type): string {
     case 'TypeFun':
       return `fn(${type.parametersTypes.map(t).join(' -> ')}) -> ${t(type.returnType)}`
     case 'TypeVar':
-      return 'Var'
+      return `Var(${type.name})`
+    case 'TypeUnit':
+      return 'Unit'
+    case 'TypeTuple':
+      return `{${type.types.map(t).join(', ')}}`
+    case 'TypeRec':
+      // @todo: improve this
+      return `Rec(type=${type.recType}, var=${type.var})`
+    case 'TypeRecord':
+      return `{${type.fieldTypes.map(f => `${f.label} : ${t(f.fieldType)}`).join(', ')}}`
     default:
       return type.type
   }
