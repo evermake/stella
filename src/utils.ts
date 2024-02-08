@@ -1,4 +1,12 @@
-import type { Type, TypeBool, TypeFun, TypeNat } from './ast'
+import type {
+  Type,
+  TypeBool,
+  TypeFun,
+  TypeNat,
+  TypeRecord,
+  TypeTuple,
+  TypeUnit,
+} from './ast'
 
 /**
  * Stringifies a type.
@@ -39,15 +47,29 @@ export class _T {
     return { type: 'TypeNat' }
   }
 
-  /**
-   * Tag function to create a function type.
-   */
-  fn(_: TemplateStringsArray, ...types: Type[]): TypeFun {
-    const parametersTypes = types.slice(0, types.length - 1)
-    const returnType = types[types.length - 1]
+  get Unit(): TypeUnit {
+    return { type: 'TypeUnit' }
+  }
+
+  Tuple(types: Type[]): TypeTuple {
+    return { type: 'TypeTuple', types }
+  }
+
+  Record(types: { [label in string]: Type }): TypeRecord {
+    return {
+      type: 'TypeRecord',
+      fieldTypes: Object.entries(types).map(([label, type]) => ({
+        type: 'RecordFieldType',
+        label,
+        fieldType: type,
+      })),
+    }
+  }
+
+  fn(paramTypes: Type[], returnType: Type): TypeFun {
     return {
       type: 'TypeFun',
-      parametersTypes,
+      parametersTypes: paramTypes,
       returnType,
     }
   }
@@ -67,25 +89,28 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
     case 'TypeNat':
     case 'TypeBool':
     case 'TypeUnit':
-    case 'TypeTop':
-    case 'TypeBottom':
       return true
     case 'TypeFun': {
       const t2_ = t2 as TypeFun
+
+      if (!areTypesEqual(t1.returnType, t2_.returnType)) {
+        return false
+      }
+
       const params1 = t1.parametersTypes
       const params2 = t2_.parametersTypes
       if (params1.length !== params2.length) {
         return false
       }
-      if (!areTypesEqual(t1.returnType, t2_.returnType)) {
+
+      return params1.every((p, i) => areTypesEqual(p, params2[i]))
+    }
+    case 'TypeTuple': {
+      const t2_ = t2 as TypeTuple
+      if (t1.types.length !== t2_.types.length) {
         return false
       }
-      for (let i = 0; i < params1.length; i++) {
-        if (!areTypesEqual(params1[i], params2[i])) {
-          return false
-        }
-      }
-      return true
+      return t1.types.every((t, i) => areTypesEqual(t, t2_.types[i]))
     }
     default:
       throw new Error(`Cannot compare type "${t1.type}".`)

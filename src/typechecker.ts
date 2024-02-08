@@ -95,9 +95,7 @@ function deriveType(expr: Expr, ctx: Context, wantedType?: Type): Type {
         deriveType(expr.n, ctx, T.Nat)
 
         const initialType = deriveType(expr.initial, ctx)
-        deriveType(expr.step, ctx, T.fn`${T.Nat} -> ${
-          T.fn`${initialType} -> ${initialType}`
-        }`)
+        deriveType(expr.step, ctx, T.fn([T.Nat], T.fn([initialType], initialType)))
 
         return initialType
       }
@@ -154,7 +152,7 @@ function deriveType(expr: Expr, ctx: Context, wantedType?: Type): Type {
         const nestedCtx = ctx.newChild()
         nestedCtx.scope.set(paramDecl.name, paramDecl.paramType)
 
-        return T.fn`${paramDecl.paramType} -> ${deriveType(expr.returnValue, nestedCtx, wantedReturnType)}`
+        return T.fn([paramDecl.paramType], deriveType(expr.returnValue, nestedCtx, wantedReturnType))
       }
       case 'Sequence': {
         if (expr.expr2) {
