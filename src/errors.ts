@@ -46,16 +46,12 @@ export type TypeErrorTag =
 export class TypecheckingFailedError extends Error {
   #tag: TypeErrorTag
 
-  constructor(tag: TypeErrorTag, message: string) {
-    super(message)
+  constructor(tag: TypeErrorTag, detail: string) {
+    super(`Type error ${tag}: ${detail}`)
     this.#tag = tag
   }
 
   get tag(): TypeErrorTag {
     return this.#tag
-  }
-
-  toString(): string {
-    return `Type error ${this.#tag}: ${this.message}`
   }
 }
