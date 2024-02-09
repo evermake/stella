@@ -88,11 +88,11 @@ function inferType({
         return varType
       }
       case 'Succ': {
-        inferType({ expr, ctx, expectedType: T.Nat })
+        inferType({ expr: expr.expr, ctx, expectedType: T.Nat })
         return T.Nat
       }
       case 'NatIsZero': {
-        inferType({ expr, ctx, expectedType: T.Nat })
+        inferType({ expr: expr.expr, ctx, expectedType: T.Nat })
         return T.Bool
       }
       case 'NatRec': {
