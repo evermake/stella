@@ -5,7 +5,7 @@ import StellaLexer from './stella/stellaLexer'
 import StellaParser from './stella/stellaParser'
 import { AstTransformer } from './visitors'
 import { typecheckProgram } from './typechecker'
-import { BaseTypeError } from './errors'
+import { TypecheckingFailedError } from './errors'
 
 enum ErrorCode {
   InvalidCliUsage = 1,
@@ -36,8 +36,8 @@ function main() {
   try {
     typecheckProgram(ast)
   } catch (err) {
-    if (err instanceof BaseTypeError) {
-      console.error(err.detail)
+    if (err instanceof TypecheckingFailedError) {
+      console.error(err.message)
       process.exit(ErrorCode.TypecheckingError)
     } else {
       throw err
