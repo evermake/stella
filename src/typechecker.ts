@@ -1,5 +1,5 @@
 import type { DeclFun, Expr, Program, Type } from './ast'
-import { ExtensionRequiredError, TypecheckingFailedError } from './errors'
+import { TypecheckingFailedError } from './errors'
 import type { Extension } from './types'
 import { T, areTypesEqual, t } from './utils'
 import { Context } from './context'
@@ -7,34 +7,39 @@ import { Context } from './context'
 export function typecheckProgram(ast: Program) {
   const ctx = new Context()
 
+  // Add all extensions to the context.
   ast.extensions.forEach(ext => ctx.extensions.add(ext as Extension))
 
   // Add all global functions to the scope, so we can correctly typecheck their
-  // bodies later, when their calls will be invoked.
+  // bodies later, when they will invoke each other.
   for (const decl of ast.declarations) {
     if (decl.type === 'DeclFun') {
       if (!decl.returnType) {
         throw new TypecheckingFailedError('ERROR_MISSING_EXPLICIT_RETURN_TYPE', `Function "${decl.name}" is missing an explicit return type.`)
       }
-      ctx.scope.set(decl.name, {
-        type: 'TypeFun',
-        parametersTypes: decl.parameters.map(p => p.paramType),
-        returnType: decl.returnType,
-      })
+      ctx.scope.set(decl.name, T.fn(decl.parameters.map(p => p.paramType), decl.returnType))
     }
   }
 
+  // Typecheck all declarations.
   for (const decl of ast.declarations) {
     switch (decl.type) {
       case 'DeclFun':
         typecheckDeclFun(decl, ctx)
         break
       default:
-        throw new Error(`Typechecking for declaration of type "${decl.type}" is not supported.`)
+        throw new Error(`Unknown declaration type: "${decl.type}".`)
     }
   }
 
-  checkForValidMainInContext(ctx)
+  // Check for a valid main in the program.
+  const main = ctx.scope.get('main')
+  if (!main) {
+    throw new TypecheckingFailedError('ERROR_MISSING_MAIN', '"main" function is not found in the scope.')
+  }
+  if (main.type !== 'TypeFun') {
+    throw new TypecheckingFailedError('ERROR_NOT_A_FUNCTION', `"main" must be a function, not ${t(main)}.`)
+  }
 }
 
 function typecheckDeclFun(decl: DeclFun, ctx: Context) {
@@ -65,26 +70,15 @@ function inferType({
 }): Type {
   const inferredType = (() => {
     switch (expr.type) {
-      case 'ConstBool': {
+      case 'ConstBool':
         return T.Bool
-      }
-      case 'Unit': {
-        if (ctx.extensions.has('#unit-type')) {
-          return T.Unit
-        } else {
-          throw new ExtensionRequiredError('#unit-type', 'Unexpected unit expression.')
-        }
-      }
-      case 'ConstInt': {
-        if (ctx.extensions.has('#natural-literals')) {
-          if (expr.value < 0) {
-            throw new TypecheckingFailedError('ERROR_ILLEGAL_NEGATIVE_LITERAL', `Illegal negative literal: ${expr.value}.`)
-          }
-        } else if (expr.value !== 0) {
-          throw new ExtensionRequiredError('#natural-literals', 'Unexpected non-zero natural literal.')
+      case 'Unit':
+        return T.Unit
+      case 'ConstInt':
+        if (expr.value < 0) {
+          throw new TypecheckingFailedError('ERROR_ILLEGAL_NEGATIVE_LITERAL', `Illegal negative literal: ${expr.value}.`)
         }
         return T.Nat
-      }
       case 'Var': {
         const varType = ctx.scope.get(expr.name)
         if (!varType) {
@@ -92,14 +86,12 @@ function inferType({
         }
         return varType
       }
-      case 'Succ': {
+      case 'Succ':
         inferType({ expr: expr.expr, ctx, expectedType: T.Nat })
         return T.Nat
-      }
-      case 'NatIsZero': {
+      case 'NatIsZero':
         inferType({ expr: expr.expr, ctx, expectedType: T.Nat })
         return T.Bool
-      }
       case 'NatRec': {
         inferType({ expr: expr.n, ctx, expectedType: T.Nat })
 
@@ -168,16 +160,6 @@ function inferType({
   }
 
   return inferredType
-}
-
-function checkForValidMainInContext(ctx: Context) {
-  const main = ctx.scope.get('main')
-  if (!main) {
-    throw new TypecheckingFailedError('ERROR_MISSING_MAIN', '"main" function is not found in the scope.')
-  }
-  if (main.type !== 'TypeFun') {
-    throw new TypecheckingFailedError('ERROR_NOT_A_FUNCTION', `"main" must be a function, not ${t(main)}.`)
-  }
 }
 
 function expect(actualType: Type) {

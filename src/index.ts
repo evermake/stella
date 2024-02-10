@@ -33,6 +33,9 @@ function main() {
   const t = new AstTransformer()
   const ast = t.visitProgram(program)
 
+  // @todo: Traverse AST to check whether used expressions are allowed for the
+  //        enabled extensions.
+
   try {
     typecheckProgram(ast)
   } catch (err) {
