@@ -166,6 +166,38 @@ function inferType({
           throw new Error('Sequences are not supported.')
         }
         return inferType({ expr: expr.expr1, ctx, expectedType })
+      case 'Tuple': {
+        if (expectedType) {
+          if (expectedType.type !== 'TypeTuple') {
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_TUPLE', `Expected expression of type ${t(expectedType)}, but got Tuple.`)
+          }
+
+          const expectedLength = expectedType.types.length
+          const actualLength = expr.exprs.length
+          if (actualLength !== expectedLength) {
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_TUPLE_LENGTH', `Expected tuple to have length ${expectedLength}, but got ${actualLength}.`)
+          }
+        }
+
+        const inferredTypes = expr.exprs.map((expr, i) => (
+          inferType({ expr, ctx, expectedType: expectedType?.types[i] })
+        ))
+
+        return T.Tuple(inferredTypes)
+      }
+      case 'DotTuple': {
+        const tupleType = inferType({ expr: expr.expr, ctx })
+        if (tupleType.type !== 'TypeTuple') {
+          throw new TypecheckingFailedError('ERROR_NOT_A_TUPLE', `Tuple member access is only allowed for Tuples, not ${t(tupleType)}.`)
+        }
+
+        // In tuples indexes are 1-based.
+        if (expr.index < 1 || expr.index > tupleType.types.length) {
+          throw new TypecheckingFailedError('ERROR_TUPLE_INDEX_OUT_OF_BOUNDS', `Cannot access member with index ${expr.index} of type ${t(tupleType)}.`)
+        }
+
+        return tupleType.types[expr.index - 1]
+      }
       default:
         throw new Error(`Cannot derive type for expression "${expr.type}".`)
     }

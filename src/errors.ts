@@ -54,6 +54,9 @@ export type TypeErrorTag =
   // Unexpected expression where a tuple/pair is expected.
   | 'ERROR_NOT_A_TUPLE'
 
+  | 'ERROR_TUPLE_INDEX_OUT_OF_BOUNDS'
+  | 'ERROR_UNEXPECTED_TUPLE_LENGTH'
+
 export class TypecheckingFailedError extends Error {
   #tag: TypeErrorTag
 
