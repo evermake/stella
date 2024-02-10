@@ -1,3 +1,11 @@
+import type { Extension } from './types'
+
+export class ExtensionRequiredError extends Error {
+  constructor(requiredExtension: Extension, detail: string) {
+    super(`${detail}\nDid you forget to enable ${requiredExtension} extension?)`)
+  }
+}
+
 export type TypeErrorTag =
   // Unexpected type specified for a parameter of an anonymous function.
   | 'ERROR_UNEXPECTED_TYPE_FOR_PARAMETER'

@@ -1,5 +1,5 @@
 import type { DeclFun, Expr, Program, Type } from './ast'
-import { TypecheckingFailedError } from './errors'
+import { ExtensionRequiredError, TypecheckingFailedError } from './errors'
 import type { Extension } from './types'
 import { T, areTypesEqual, t } from './utils'
 import { Context } from './context'
@@ -68,15 +68,20 @@ function inferType({
       case 'ConstBool': {
         return T.Bool
       }
+      case 'Unit': {
+        if (ctx.extensions.has('#unit-type')) {
+          return T.Unit
+        } else {
+          throw new ExtensionRequiredError('#unit-type', 'Unexpected unit expression.')
+        }
+      }
       case 'ConstInt': {
         if (ctx.extensions.has('#natural-literals')) {
           if (expr.value < 0) {
-            throw new TypecheckingFailedError('ERROR_ILLEGAL_NEGATIVE_LITERAL', `Negative integers are not supported (got ${expr.value}).`)
+            throw new TypecheckingFailedError('ERROR_ILLEGAL_NEGATIVE_LITERAL', `Illegal negative literal: ${expr.value}.`)
           }
-        } else {
-          if (expr.value !== 0) {
-            throw new Error('Non-zero integers are not supported.')
-          }
+        } else if (expr.value !== 0) {
+          throw new ExtensionRequiredError('#natural-literals', 'Unexpected non-zero natural literal.')
         }
         return T.Nat
       }
