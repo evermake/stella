@@ -1,4 +1,4 @@
-import type { DeclFun, Expr, Program, Type } from './ast'
+import type { Decl, DeclFun, Expr, Program, Type } from './ast'
 import { TypecheckingFailedError } from './errors'
 import type { Extension } from './types'
 import { T, areTypesEqual, t } from './utils'
@@ -12,25 +12,14 @@ export function typecheckProgram(ast: Program) {
 
   // Add all global functions to the scope, so we can correctly typecheck their
   // bodies later, when they will invoke each other.
-  for (const decl of ast.declarations) {
+  ast.declarations.forEach((decl) => {
     if (decl.type === 'DeclFun') {
-      if (!decl.returnType) {
-        throw new TypecheckingFailedError('ERROR_MISSING_EXPLICIT_RETURN_TYPE', `Function "${decl.name}" is missing an explicit return type.`)
-      }
-      ctx.scope.set(decl.name, T.fn(decl.parameters.map(p => p.paramType), decl.returnType))
+      addFunctionDeclarationToContext(decl, ctx)
     }
-  }
+  })
 
   // Typecheck all declarations.
-  for (const decl of ast.declarations) {
-    switch (decl.type) {
-      case 'DeclFun':
-        typecheckDeclFun(decl, ctx)
-        break
-      default:
-        throw new Error(`Unknown declaration type: "${decl.type}".`)
-    }
-  }
+  ast.declarations.forEach(decl => typecheckDeclaration(decl, ctx))
 
   // Check for a valid main in the program.
   const main = ctx.scope.get('main')
@@ -45,18 +34,40 @@ export function typecheckProgram(ast: Program) {
   }
 }
 
-function typecheckDeclFun(decl: DeclFun, ctx: Context) {
-  // @todo: decl.annations, decl.nestedDeclarations, decl.throwTypes
+function typecheckDeclaration(decl: Decl, ctx: Context) {
+  switch (decl.type) {
+    case 'DeclFun': {
+      // @todo: decl.annations, decl.throwTypes
 
-  const localCtx = ctx.newChild()
+      const localCtx = ctx.newChild()
 
-  decl.parameters.forEach((param) => {
-    localCtx.scope.set(param.name, param.paramType)
-  })
+      decl.parameters.forEach((param) => {
+        localCtx.scope.set(param.name, param.paramType)
+      })
 
-  if (decl.returnType) {
-    inferType({ expr: decl.returnValue, ctx: localCtx, expectedType: decl.returnType })
+      decl.nestedDeclarations.forEach((decl) => {
+        typecheckDeclaration(decl, localCtx)
+        if (decl.type === 'DeclFun') {
+          addFunctionDeclarationToContext(decl, localCtx)
+        }
+      })
+
+      if (decl.returnType) {
+        inferType({ expr: decl.returnValue, ctx: localCtx, expectedType: decl.returnType })
+      }
+
+      break
+    }
+    default:
+      throw new Error(`Unsupported declaration type: "${decl.type}".`)
   }
+}
+
+function addFunctionDeclarationToContext(decl: DeclFun, ctx: Context) {
+  if (!decl.returnType) {
+    throw new TypecheckingFailedError('ERROR_MISSING_EXPLICIT_RETURN_TYPE', `Function "${decl.name}" is missing an explicit return type.`)
+  }
+  ctx.scope.set(decl.name, T.fn(decl.parameters.map(p => p.paramType), decl.returnType))
 }
 
 function inferType({
