@@ -40,6 +40,9 @@ export function typecheckProgram(ast: Program) {
   if (main.type !== 'TypeFun') {
     throw new TypecheckingFailedError('ERROR_NOT_A_FUNCTION', `"main" must be a function, not ${t(main)}.`)
   }
+  if (main.parametersTypes.length !== 1) {
+    throw new TypecheckingFailedError('ERROR_INCORRECT_ARITY_OF_MAIN', `"main" function must accept exactly one argument, not ${main.parametersTypes.length}.`)
+  }
 }
 
 function typecheckDeclFun(decl: DeclFun, ctx: Context) {
@@ -47,15 +50,12 @@ function typecheckDeclFun(decl: DeclFun, ctx: Context) {
 
   const localCtx = ctx.newChild()
 
-  const param = decl.parameters[0]
-  const returnVal = decl.returnValue.type === 'Sequence'
-    ? decl.returnValue.expr1
-    : decl.returnValue
-
-  localCtx.scope.set(param.name, param.paramType)
+  decl.parameters.forEach((param) => {
+    localCtx.scope.set(param.name, param.paramType)
+  })
 
   if (decl.returnType) {
-    inferType({ expr: returnVal, ctx: localCtx, expectedType: decl.returnType })
+    inferType({ expr: decl.returnValue, ctx: localCtx, expectedType: decl.returnType })
   }
 }
 
@@ -95,7 +95,7 @@ function inferType({
       case 'NatRec': {
         inferType({ expr: expr.n, ctx, expectedType: T.Nat })
 
-        const initialType = inferType({ expr: expr.initial, ctx })
+        const initialType = inferType({ expr: expr.initial, ctx, expectedType })
         const expectedStepType = T.fn([T.Nat], T.fn([initialType], initialType))
         inferType({ expr: expr.step, ctx, expectedType: expectedStepType })
 
@@ -115,41 +115,57 @@ function inferType({
           throw new TypecheckingFailedError('ERROR_NOT_A_FUNCTION', `Left side of application must be a function, but got ${t(fnType)}.`)
         }
 
-        inferType({ expr: expr.arguments[0], ctx, expectedType: fnType.parametersTypes[0] })
+        const expectedArgsCount = fnType.parametersTypes.length
+        const actualArgsCount = expr.arguments.length
+        if (expectedArgsCount !== actualArgsCount) {
+          throw new TypecheckingFailedError('ERROR_INCORRECT_NUMBER_OF_ARGUMENTS', `Function requires ${expectedArgsCount}, but got ${actualArgsCount}.`)
+        }
+
+        expr.arguments.forEach((arg, i) => {
+          inferType({ expr: arg, ctx, expectedType: fnType.parametersTypes[i] })
+        })
 
         return fnType.returnType
       }
       case 'Abstraction': {
-        const param = expr.parameters[0]
-
         let expectedReturnType
         if (expectedType) {
           if (expectedType.type !== 'TypeFun') {
             throw new TypecheckingFailedError('ERROR_UNEXPECTED_LAMBDA', `Expected ${t(expectedType)}, but got lambda.`)
           }
 
-          const wantedParamType = expectedType.parametersTypes[0]
-          if (!areTypesEqual(wantedParamType, param.paramType)) {
-            throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_PARAMETER', `Unexpected type for parameter "${param.name}": expected ${t(wantedParamType)}, but got ${t(param.paramType)}.`)
+          const expectedArity = expectedType.parametersTypes.length
+          const actualArity = expr.parameters.length
+          if (actualArity !== expectedArity) {
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_NUMBER_OF_PARAMETERS_IN_LAMBDA', `Expected lambda to have ${expectedArity} parameter(s), but got ${actualArity}.`)
+          }
+
+          for (let i = 0; i < expectedArity; i++) {
+            const expectedParamType = expectedType.parametersTypes[i]
+            const actualParam = expr.parameters[i]
+            if (!areTypesEqual(expectedParamType, actualParam.paramType)) {
+              throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_PARAMETER', `Expected lambda parameter "${actualParam.name}" to have type ${t(expectedParamType)}, but got ${t(actualParam.paramType)}`)
+            }
           }
 
           expectedReturnType = expectedType.returnType
         }
 
         const nestedCtx = ctx.newChild()
-        nestedCtx.scope.set(param.name, param.paramType)
+        expr.parameters.forEach((param) => {
+          nestedCtx.scope.set(param.name, param.paramType)
+        })
 
         return T.fn(
-          [param.paramType],
+          expr.parameters.map(param => param.paramType),
           inferType({ expr: expr.returnValue, ctx: nestedCtx, expectedType: expectedReturnType }),
         )
       }
-      case 'Sequence': {
+      case 'Sequence':
         if (expr.expr2) {
           throw new Error('Sequences are not supported.')
         }
         return inferType({ expr: expr.expr1, ctx, expectedType })
-      }
       default:
         throw new Error(`Cannot derive type for expression "${expr.type}".`)
     }
