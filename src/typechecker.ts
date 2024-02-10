@@ -255,6 +255,30 @@ function inferType({
 
         return inferType({ expr: expr.body, ctx: nestedCtx, expectedType })
       }
+      case 'Equal':
+      case 'NotEqual':
+      case 'GreaterThan':
+      case 'GreaterThanOrEqual':
+      case 'LessThan':
+      case 'LessThanOrEqual':
+        inferType({ expr: expr.left, ctx, expectedType: T.Nat })
+        inferType({ expr: expr.right, ctx, expectedType: T.Nat })
+        return T.Bool
+      case 'Add':
+      case 'Subtract':
+      case 'Multiply':
+      case 'Divide':
+        inferType({ expr: expr.left, ctx, expectedType: T.Nat })
+        inferType({ expr: expr.right, ctx, expectedType: T.Nat })
+        return T.Nat
+      case 'LogicalAnd':
+      case 'LogicalOr':
+        inferType({ expr: expr.left, ctx, expectedType: T.Bool })
+        inferType({ expr: expr.right, ctx, expectedType: T.Bool })
+        return T.Bool
+      case 'LogicalNot':
+        inferType({ expr: expr.expr, ctx, expectedType: T.Bool })
+        return T.Bool
       default:
         throw new Error(`Cannot derive type for expression "${expr.type}".`)
     }
