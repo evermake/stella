@@ -179,11 +179,9 @@ function inferType({
           }
         }
 
-        const inferredTypes = expr.exprs.map((expr, i) => (
+        return T.Tuple(expr.exprs.map((expr, i) => (
           inferType({ expr, ctx, expectedType: expectedType?.types[i] })
-        ))
-
-        return T.Tuple(inferredTypes)
+        )))
       }
       case 'DotTuple': {
         const tupleType = inferType({ expr: expr.expr, ctx })
@@ -197,6 +195,54 @@ function inferType({
         }
 
         return tupleType.types[expr.index - 1]
+      }
+      case 'Record': {
+        let expectedFieldTypes: Record<string, Type>
+        if (expectedType) {
+          if (expectedType.type !== 'TypeRecord') {
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_RECORD', `Expected expression of type ${t(expectedType)}, but got Record.`)
+          }
+
+          const expectedLabels = expectedType.fieldTypes.map(f => f.label)
+          const presentLables = expr.bindings.map(b => b.name)
+
+          const missingLabels = expectedLabels.filter(l => !presentLables.includes(l))
+          if (missingLabels.length > 0) {
+            throw new TypecheckingFailedError('ERROR_MISSING_RECORD_FIELDS', `Record doesn't have required field(s): ${missingLabels.join(', ')}.`)
+          }
+
+          const unexpectedLabels = presentLables.filter(l => !expectedLabels.includes(l))
+          if (unexpectedLabels.length > 0) {
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_RECORD_FIELDS', `Record has unexpected field(s): ${unexpectedLabels.join(', ')}.`)
+          }
+
+          expectedFieldTypes = Object.fromEntries(
+            expectedType.fieldTypes.map(field => (
+              [field.label, field.fieldType]
+            )),
+          )
+        }
+
+        return T.Record(
+          Object.fromEntries(
+            expr.bindings.map(binding => (
+              [binding.name, inferType({ expr: binding.expr, ctx, expectedType: expectedFieldTypes?.[binding.name] })]
+            )),
+          ),
+        )
+      }
+      case 'DotRecord': {
+        const recordType = inferType({ expr: expr.expr, ctx })
+        if (recordType.type !== 'TypeRecord') {
+          throw new TypecheckingFailedError('ERROR_NOT_A_RECORD', `Record field access in only allowed for Records, not ${t(recordType)}.`)
+        }
+
+        const accessedField = recordType.fieldTypes.find(field => field.label === expr.label)
+        if (!accessedField) {
+          throw new TypecheckingFailedError('ERROR_UNEXPECTED_FIELD_ACCESS', `Field with label "${expr.label}" is not present in the ${t(recordType)}.`)
+        }
+
+        return accessedField.fieldType
       }
       default:
         throw new Error(`Cannot derive type for expression "${expr.type}".`)

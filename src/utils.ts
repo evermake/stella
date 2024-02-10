@@ -112,6 +112,31 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
       }
       return t1.types.every((t, i) => areTypesEqual(t, t2_.types[i]))
     }
+    case 'TypeRecord': {
+      const t2_ = t2 as TypeRecord
+
+      const fields1: Record<string, Type> = Object.fromEntries(
+        t1.fieldTypes.map(f => [f.label, f.fieldType]),
+      )
+      const fields2: Record<string, Type> = Object.fromEntries(
+        t2_.fieldTypes.map(f => [f.label, f.fieldType]),
+      )
+
+      const labels = new Set([...(Object.keys(fields1)), ...(Object.keys(fields2))])
+
+      for (const label of labels.values()) {
+        const t1 = fields1[label]
+        const t2 = fields2[label]
+        if (!t1 || !t2) {
+          return false
+        }
+        if (!areTypesEqual(t1, t2)) {
+          return false
+        }
+      }
+
+      return true
+    }
     default:
       throw new Error(`Cannot compare type "${t1.type}".`)
   }
