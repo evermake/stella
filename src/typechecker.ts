@@ -244,6 +244,17 @@ function inferType({
 
         return accessedField.fieldType
       }
+      case 'Let': {
+        const nestedCtx = ctx.newChild()
+        expr.patternBindings.forEach((binding) => {
+          if (binding.pattern.type !== 'PatternVar') {
+            throw new Error(`Let with binding patterns of type ${binding.pattern.type} are not supported.`)
+          }
+          nestedCtx.scope.set(binding.pattern.name, inferType({ expr: binding.rhs, ctx }))
+        })
+
+        return inferType({ expr: expr.body, ctx: nestedCtx, expectedType })
+      }
       default:
         throw new Error(`Cannot derive type for expression "${expr.type}".`)
     }
