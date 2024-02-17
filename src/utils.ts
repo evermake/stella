@@ -33,7 +33,7 @@ export function t(type: Type): string {
     case 'TypeRecord':
       return `{${type.fieldTypes.map(f => `${f.label} : ${t(f.fieldType)}`).join(', ')}}`
     case 'TypeList':
-      return `[${type.types.map(typ => t(typ)).join(', ')}]`
+      return `[${type.elementType}]`
     case 'TypeSum': {
       const strLeft = type.left.type === 'TypeSum' ? `(${t(type.left)})` : t(type.left)
       const strRight = type.right.type === 'TypeSum' ? `(${t(type.right)})` : t(type.right)
@@ -81,6 +81,18 @@ export class _T {
       parametersTypes: paramTypes,
       returnType,
     }
+  }
+
+  Sum(a: Type, b: Type): TypeSum {
+    return {
+      type: 'TypeSum',
+      left: a,
+      right: b,
+    }
+  }
+
+  ListOf(elementType: Type): TypeList {
+    return { type: 'TypeList', elementType }
   }
 }
 
@@ -148,10 +160,7 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
     }
     case 'TypeList': {
       const t2_ = t2 as TypeList
-      if (t1.types.length !== 1 || t2_.types.length !== 1) {
-        throw new Error(`List types must have exactly one type parameter:\n${t(t1)}\n${t(t2_)}`)
-      }
-      return areTypesEqual(t1.types[0], t2_.types[0])
+      return areTypesEqual(t1.elementType, t2_.elementType)
     }
     case 'TypeSum': {
       const t2_ = t2 as TypeSum
