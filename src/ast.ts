@@ -77,7 +77,7 @@ export interface TypeVariant {
 }
 export interface TypeList {
   type: 'TypeList'
-  types: Type[]
+  elementType: Type
 }
 export interface TypeVar {
   type: 'TypeVar'

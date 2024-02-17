@@ -9,7 +9,7 @@ const _filename = url.fileURLToPath(import.meta.url)
 const scriptsDir = path.resolve(_filename, '..')
 
 const output = execSync(
-  'antlr4 -visitor -Dlanguage=TypeScript *.g4',
+  'antlr4 -v 4.12.0 -visitor -Dlanguage=TypeScript *.g4',
   { cwd: path.resolve(scriptsDir, '../src/stella/') },
 ).toString()
 

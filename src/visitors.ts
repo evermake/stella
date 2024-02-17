@@ -1,5 +1,8 @@
+/* eslint unused-imports/no-unused-vars: 0 */
+
 import StellaVisitor from './stella/stellaParserVisitor'
 import {
+
   AbstractionContext,
   AddContext,
   ApplicationContext,
@@ -66,6 +69,7 @@ import {
   SubtractContext,
   SuccContext,
   TailContext,
+  TerminatingSemicolonContext,
   ThrowContext,
   TryCatchContext,
   TryWithContext,
@@ -242,8 +246,6 @@ export class AstPrinter extends StellaVisitor<void> {
   }
 
   visitDecl = (ctx: DeclContext) => {
-    console.log('Decl')
-
     if (ctx instanceof DeclFunContext) {
       return ctx.accept(this)
     }
@@ -264,13 +266,15 @@ export class AstPrinter extends StellaVisitor<void> {
     this.depth--
   }
 
-  visitDeclTypeAlias = (_: DeclTypeAliasContext) => {
+  visitDeclTypeAlias = (ctx: DeclTypeAliasContext) => {
     this.depth++
 
     this.print('Type Alias')
 
-    // ctx._name
-    // ctx._atype
+    // eslint-disable-next-line no-unused-expressions
+    ctx._name
+    // eslint-disable-next-line no-unused-expressions
+    ctx._atype
 
     this.depth--
   }
@@ -312,7 +316,7 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof DeclExceptionVariantContext) {
       return this.visitDeclExceptionVariant(ctx)
     }
-    throw new Error(`Unknown declaration type: ${ctx}`)
+    throw new Error(`Unknown declaration type: ${ctx.getText()}`)
   }
 
   visitDeclFun: (ctx: DeclFunContext) => DeclFun = (ctx) => {
@@ -518,6 +522,9 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof SequenceContext) {
       return this.visitSequence(ctx)
     }
+    if (ctx instanceof TerminatingSemicolonContext) {
+      return this.visitTerminatingSemicolon(ctx)
+    }
     if (ctx instanceof AssignContext) {
       return this.visitAssign(ctx)
     }
@@ -562,7 +569,7 @@ export class AstTransformer extends StellaVisitor<Node> {
     }
   }
 
-  visitConstUnit: (ctx: ConstUnitContext) => ConstUnit = (_) => {
+  visitConstUnit: (ctx: ConstUnitContext) => ConstUnit = (ctx) => {
     return { type: 'Unit' }
   }
 
@@ -768,14 +775,14 @@ export class AstTransformer extends StellaVisitor<Node> {
     }
   }
 
-  visitConstTrue: (ctx: ConstTrueContext) => ConstBool = (_) => {
+  visitConstTrue: (ctx: ConstTrueContext) => ConstBool = (ctx) => {
     return {
       type: 'ConstBool',
       value: true,
     }
   }
 
-  visitConstFalse: (ctx: ConstFalseContext) => ConstBool = (_) => {
+  visitConstFalse: (ctx: ConstFalseContext) => ConstBool = (ctx) => {
     return {
       type: 'ConstBool',
       value: false,
@@ -819,7 +826,7 @@ export class AstTransformer extends StellaVisitor<Node> {
     }
   }
 
-  visitPanic: (ctx: PanicContext) => Panic = (_) => {
+  visitPanic: (ctx: PanicContext) => Panic = (ctx) => {
     return {
       type: 'Panic',
     }
@@ -912,18 +919,18 @@ export class AstTransformer extends StellaVisitor<Node> {
     if (ctx instanceof TypeForAllContext) {
       return this.visitTypeForAll(ctx)
     }
-    throw new Error(`Unknown type: ${ctx}`)
+    throw new Error(`Unknown type: ${ctx.getText()}`)
   }
 
-  visitTypeNat = (_: TypeNatContext) => ({ type: 'TypeNat' } as TypeNat)
-  visitTypeBool = (_: TypeBoolContext) => ({ type: 'TypeBool' } as TypeBool)
-  visitTypeTop: (ctx: TypeTopContext) => TypeTop = (_) => {
+  visitTypeNat = (ctx: TypeNatContext) => ({ type: 'TypeNat' } as TypeNat)
+  visitTypeBool = (ctx: TypeBoolContext) => ({ type: 'TypeBool' } as TypeBool)
+  visitTypeTop: (ctx: TypeTopContext) => TypeTop = (ctx) => {
     return {
       type: 'TypeTop',
     }
   }
 
-  visitTypeBottom: (ctx: TypeBottomContext) => TypeBottom = (_) => {
+  visitTypeBottom: (ctx: TypeBottomContext) => TypeBottom = (ctx) => {
     return {
       type: 'TypeBottom',
     }
@@ -997,11 +1004,11 @@ export class AstTransformer extends StellaVisitor<Node> {
   visitTypeList: (ctx: TypeListContext) => TypeList = (ctx) => {
     return {
       type: 'TypeList',
-      types: ctx._types.map(this.visitType),
+      elementType: this.visitType(ctx._type_),
     }
   }
 
-  visitTypeUnit: (ctx: TypeUnitContext) => TypeUnit = (_) => {
+  visitTypeUnit: (ctx: TypeUnitContext) => TypeUnit = (ctx) => {
     return {
       type: 'TypeUnit',
     }
@@ -1067,7 +1074,7 @@ export class AstTransformer extends StellaVisitor<Node> {
     return {
       type: 'Match',
       cases: ctx._cases.map(this.visitMatchCase),
-      expr: this.visitExpr(ctx.expr()),
+      expr: this.visitExpr(ctx._expr_),
     }
   }
 
@@ -1082,7 +1089,7 @@ export class AstTransformer extends StellaVisitor<Node> {
   visitList: (ctx: ListContext) => List = (ctx) => {
     return {
       type: 'List',
-      exprs: ctx.expr_list().map(this.visitExpr),
+      exprs: ctx._exprs.map(this.visitExpr),
     }
   }
 
@@ -1177,8 +1184,14 @@ export class AstTransformer extends StellaVisitor<Node> {
     return {
       type: 'Sequence',
       expr1: this.visitExpr(ctx._expr1),
-      expr2: ctx._expr2 != null ? this.visitExpr(ctx._expr2) : undefined,
+      expr2: this.visitExpr(ctx._expr2),
     }
+  }
+
+  visitTerminatingSemicolon: (ctx: TerminatingSemicolonContext) => Expr = (
+    ctx,
+  ) => {
+    return this.visitExpr(ctx._expr_)
   }
 
   visitParenthesisedExpr: (ctx: ParenthesisedExprContext) => Expr = (ctx) => {
@@ -1303,19 +1316,19 @@ export class AstTransformer extends StellaVisitor<Node> {
     }
   }
 
-  visitPatternFalse: (ctx: PatternFalseContext) => PatternFalse = (_) => {
+  visitPatternFalse: (ctx: PatternFalseContext) => PatternFalse = (ctx) => {
     return {
       type: 'PatternFalse',
     }
   }
 
-  visitPatternTrue: (ctx: PatternTrueContext) => PatternTrue = (_) => {
+  visitPatternTrue: (ctx: PatternTrueContext) => PatternTrue = (ctx) => {
     return {
       type: 'PatternTrue',
     }
   }
 
-  visitPatternUnit: (ctx: PatternUnitContext) => PatternUnit = (_) => {
+  visitPatternUnit: (ctx: PatternUnitContext) => PatternUnit = (ctx) => {
     return {
       type: 'PatternUnit',
     }

@@ -32,6 +32,7 @@ import { ConstMemoryContext } from "./stellaParser";
 import { ListContext } from "./stellaParser";
 import { TryCatchContext } from "./stellaParser";
 import { HeadContext } from "./stellaParser";
+import { TerminatingSemicolonContext } from "./stellaParser";
 import { NotEqualContext } from "./stellaParser";
 import { ConstUnitContext } from "./stellaParser";
 import { SequenceContext } from "./stellaParser";
@@ -454,6 +455,18 @@ export default class stellaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitHead?: (ctx: HeadContext) => void;
+	/**
+	 * Enter a parse tree produced by the `TerminatingSemicolon`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	enterTerminatingSemicolon?: (ctx: TerminatingSemicolonContext) => void;
+	/**
+	 * Exit a parse tree produced by the `TerminatingSemicolon`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	exitTerminatingSemicolon?: (ctx: TerminatingSemicolonContext) => void;
 	/**
 	 * Enter a parse tree produced by the `NotEqual`
 	 * labeled alternative in `stellaParser.expr`.
