@@ -57,6 +57,30 @@ export type TypeErrorTag =
   | 'ERROR_TUPLE_INDEX_OUT_OF_BOUNDS'
   | 'ERROR_UNEXPECTED_TUPLE_LENGTH'
 
+  // When it is impossible to typecheck an expression of a sum type because the other half of the type is unknown.
+  | 'ERROR_AMBIGUOUS_SUM_TYPE'
+
+  // When it is impossible to typecheck an expression of a list type because the type of its elements is unknown.
+  | 'ERROR_AMBIGUOUS_LIST_TYPE'
+
+  // When match-expression does not have any patterns.
+  | 'ERROR_ILLEGAL_EMPTY_MATCHING'
+
+  // When match-expression does not have all necessary patterns (inl and inr for sum types and at least the empty list pattern and cons-pattern for lists).
+  | 'ERROR_NONEXHAUSTIVE_MATCH_PATTERNS'
+
+  // When an expression of a non-list type appears as the argument to one of the builtin list functions (List::head, List::tail, or List::isempty).
+  | 'ERROR_NOT_A_LIST'
+
+  // When a list (List or ConsList) is encountered instead of an expression of expected non-list type.
+  | 'ERROR_UNEXPECTED_LIST'
+
+  // When an injection into a sum type (inl or inr) is encountered instead of an expression of expected non-sum type.
+  | 'ERROR_UNEXPECTED_INJECTION'
+
+  // When a pattern in a match-expression does not correspond to the type of matched expression.
+  | 'ERROR_UNEXPECTED_PATTERN_FOR_TYPE'
+
 export class TypecheckingFailedError extends Error {
   #tag: TypeErrorTag
 
