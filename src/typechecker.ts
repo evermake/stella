@@ -266,6 +266,79 @@ function inferType({
 
         return inferType({ expr: expr.body, ctx: nestedCtx, expectedType })
       }
+      case 'TypeAscription': {
+        const { expr: innerExpr, ascribedType } = expr
+
+        if (expectedType) {
+          expect(ascribedType).toBe(expectedType)
+        }
+
+        return inferType({ expr: innerExpr, ctx, expectedType: ascribedType })
+      }
+      case 'ListIsEmpty': {
+        const inferredType = inferType({ expr: expr.expr, ctx })
+        if (inferredType.type !== 'TypeList') {
+          throw new TypecheckingFailedError('ERROR_NOT_A_LIST', `List::isempty expects a list as an argument, but got ${t(inferredType)}.`)
+        }
+        return T.Bool
+      }
+      case 'Cons': {
+        let expectedItemsType
+        if (expectedType) {
+          if (expectedType.type !== 'TypeList') {
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_LIST', `Expected expression of type ${t(expectedType)}, but got Cons.`)
+          }
+          expectedItemsType = expectedType.elementType
+        }
+
+        const { head, tail } = expr
+        const itemsType = inferType({ expr: head, ctx, expectedType: expectedItemsType })
+        return inferType({ expr: tail, ctx, expectedType: T.ListOf(itemsType) })
+      }
+      case 'List': {
+        let itemsType
+        if (expectedType) {
+          if (expectedType.type !== 'TypeList') {
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_LIST', `Expected expression of type ${t(expectedType)}, but got List.`)
+          }
+          itemsType = expectedType.elementType
+        }
+        for (const item of expr.exprs) {
+          itemsType = inferType({ expr: item, ctx, expectedType: itemsType })
+        }
+
+        if (!itemsType) {
+          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_LIST_TYPE', `Cannot infer type for an empty list, provide the expected type explicitly.`)
+        }
+
+        return T.ListOf(itemsType)
+      }
+      case 'ListHead': {
+        const { expr: innerExpr } = expr
+        const innerExprType = inferType({
+          expr: innerExpr,
+          ctx,
+          expectedType: expectedType ? T.ListOf(expectedType) : undefined,
+        })
+        if (innerExprType.type !== 'TypeList') {
+          throw new TypecheckingFailedError('ERROR_NOT_A_LIST', `List::head expects a list as an argument, but got ${t(innerExprType)}.`)
+        }
+        return innerExprType.elementType
+      }
+      case 'ListTail': {
+        const { expr: innerExpr } = expr
+        const innerExprType = inferType({
+          expr: innerExpr,
+          ctx,
+          expectedType: (expectedType && expectedType.type === 'TypeList')
+            ? expectedType
+            : undefined,
+        })
+        if (innerExprType.type !== 'TypeList') {
+          throw new TypecheckingFailedError('ERROR_NOT_A_LIST', `List::tail expects a list as an argument, but got ${t(innerExprType)}.`)
+        }
+        return innerExprType
+      }
       case 'Equal':
       case 'NotEqual':
       case 'GreaterThan':
@@ -291,7 +364,7 @@ function inferType({
         inferType({ expr: expr.expr, ctx, expectedType: T.Bool })
         return T.Bool
       default:
-        throw new Error(`Cannot derive type for expression "${expr.type}".`)
+        throw new Error(`Cannot infer type for expression "${expr.type}".`)
     }
   })()
 
