@@ -339,6 +339,44 @@ function inferType({
         }
         return innerExprType
       }
+
+      case 'Inl': {
+        const inlExpr = expr.expr
+
+        if (expectedType) {
+          if (expectedType.type !== 'TypeSum') {
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_INJECTION', `Expected ${t(expectedType)}, but got left injection.`)
+          }
+          return T.Sum(
+            inferType({ expr: inlExpr, ctx, expectedType: expectedType.left }),
+            expectedType.right,
+          )
+        } else {
+          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_SUM_TYPE', `Cannot infer type for left injection, provide the expected type explicitly.`)
+        }
+      }
+      case 'Inr': {
+        const inrExpr = expr.expr
+
+        if (expectedType) {
+          if (expectedType.type !== 'TypeSum') {
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_INJECTION', `Expected ${t(expectedType)}, but got right injection.`)
+          }
+          return T.Sum(
+            expectedType.left,
+            inferType({ expr: inrExpr, ctx, expectedType: expectedType.left }),
+          )
+        } else {
+          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_SUM_TYPE', `Cannot infer type for right injection, provide the expected type explicitly.`)
+        }
+      }
+      case 'Match': {
+        const { expr: matchExpr, cases } = expr
+
+        const matchExprType = inferType({ expr: matchExpr, ctx })
+
+        throw new Error('Match is not supported.')
+      }
       case 'Equal':
       case 'NotEqual':
       case 'GreaterThan':

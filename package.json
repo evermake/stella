@@ -8,25 +8,20 @@
     "node": ">=18"
   },
   "scripts": {
-    "start": "node ./build/index.cjs",
-    "generate": "tsx ./scripts/generate-parser.ts",
-    "build": "rollup -c rollup.config.js",
-    "watch": "rollup -c rollup.config.js --watch",
+    "build": "esbuild ./src/index.ts --format=cjs --bundle --platform=node --packages=external --outfile=build/index.cjs",
+    "start": "node build/index.cjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "antlr4": "^4.12.0"
+    "antlr4": "^4.13.1",
+    "commander": "^12.0.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.6.3",
-    "@rollup/plugin-node-resolve": "^15.0.1",
-    "@rollup/plugin-typescript": "^11.0.0",
-    "@types/node": "^18.15.10",
+    "@antfu/eslint-config": "^2.6.4",
+    "@types/node": "^18.19.17",
+    "esbuild": "^0.20.0",
     "eslint": "^8.56.0",
-    "rollup": "^3.20.2",
-    "tslib": "^2.5.0",
-    "tsx": "^4.7.0",
-    "typescript": "^5.0.2"
+    "typescript": "^5.3.3"
   }
 }
