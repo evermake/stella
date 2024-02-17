@@ -3,3 +3,6 @@ node_modules/
 *.jar
 .antlr
 .DS_Store
+
+report.json
+test.sh
