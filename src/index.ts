@@ -7,7 +7,6 @@ import StellaParser from './stella/stellaParser'
 import { AstTransformer } from './visitors'
 import { typecheckProgram } from './typechecker'
 import { TypecheckingFailedError } from './errors'
-import { PrettyPrinter } from './pretty-printer'
 
 enum ErrorCode {
   TypecheckingError = 2,
@@ -37,13 +36,12 @@ function main() {
     ),
   )
   const stellaProgram = parser.program()
+  const ast = new AstTransformer().visitProgram(stellaProgram)
 
   if (printOnly) {
-    console.log(new PrettyPrinter().visitProgram(stellaProgram))
+    console.log(JSON.stringify(ast, (_, v) => v ?? null, 2))
     return
   }
-
-  const ast = new AstTransformer().visitProgram(stellaProgram)
 
   // @todo: Traverse AST to check whether used expressions are allowed for the
   //        enabled extensions.
