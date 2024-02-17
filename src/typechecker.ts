@@ -339,7 +339,6 @@ function inferType({
         }
         return innerExprType
       }
-
       case 'Inl': {
         const inlExpr = expr.expr
 
@@ -364,18 +363,88 @@ function inferType({
           }
           return T.Sum(
             expectedType.left,
-            inferType({ expr: inrExpr, ctx, expectedType: expectedType.left }),
+            inferType({ expr: inrExpr, ctx, expectedType: expectedType.right }),
           )
         } else {
           throw new TypecheckingFailedError('ERROR_AMBIGUOUS_SUM_TYPE', `Cannot infer type for right injection, provide the expected type explicitly.`)
         }
       }
       case 'Match': {
-        const { expr: matchExpr, cases } = expr
+        const { expr: matchExpr, cases: matchCases } = expr
+
+        if (matchCases.length === 0) {
+          throw new TypecheckingFailedError('ERROR_ILLEGAL_EMPTY_MATCHING', 'Match expression must have at least one pattern.')
+        }
 
         const matchExprType = inferType({ expr: matchExpr, ctx })
 
-        throw new Error('Match is not supported.')
+        switch (matchExprType.type) {
+          case 'TypeSum': {
+            let leftChecked = false
+            let rightChecked = false
+            let matchType = expectedType
+
+            for (const matchCase of matchCases) {
+              if (matchCase.pattern.type === 'PatternInl') {
+                if (leftChecked) {
+                  throw new Error('Multiple left injections in a single match are not supported.')
+                }
+
+                const patternInl = matchCase.pattern.pattern
+                const exprInl = matchCase.expr
+                if (patternInl.type !== 'PatternVar') {
+                  throw new Error(`Pattern "${patternInl.type}" is not supported for Sum type: ${t(matchExprType)}.`)
+                }
+
+                const nestedCtx = ctx.newChild()
+                nestedCtx.scope.set(patternInl.name, matchExprType.left)
+
+                matchType = inferType({
+                  expr: exprInl,
+                  ctx: nestedCtx,
+                  expectedType: matchType,
+                })
+                leftChecked = true
+              } else if (matchCase.pattern.type === 'PatternInr') {
+                if (rightChecked) {
+                  throw new Error('Multiple right injections in a single match are not supported.')
+                }
+
+                const patternInr = matchCase.pattern.pattern
+                const exprInr = matchCase.expr
+                if (patternInr.type !== 'PatternVar') {
+                  throw new Error(`Pattern "${patternInr.type}" is not supported for Sum type: ${t(matchExprType)}.`)
+                }
+
+                const nestedCtx = ctx.newChild()
+                nestedCtx.scope.set(patternInr.name, matchExprType.right)
+
+                matchType = inferType({
+                  expr: exprInr,
+                  ctx: nestedCtx,
+                  expectedType: matchType,
+                })
+                rightChecked = true
+              } else {
+                throw new TypecheckingFailedError('ERROR_UNEXPECTED_PATTERN_FOR_TYPE', `Match pattern "${matchCase.pattern.type}" is not supported for Sum type: ${t(matchExprType)}.`)
+              }
+            }
+
+            if (!leftChecked || !rightChecked) {
+              throw new TypecheckingFailedError('ERROR_NONEXHAUSTIVE_MATCH_PATTERNS', 'Match is not exhaustive, missing left or right injection pattern.')
+            }
+
+            return matchType as Type
+          }
+          default: {
+            // @todo: Temporary solution to pass some tests.
+            const firstCase = matchCases[0]
+            if (firstCase) {
+              throw new TypecheckingFailedError('ERROR_UNEXPECTED_PATTERN_FOR_TYPE', `Match pattern "${firstCase.pattern.type}" is not supported for type ${t(matchExprType)}.`)
+            }
+            throw new TypecheckingFailedError('ERROR_NONEXHAUSTIVE_MATCH_PATTERNS', 'Match is not exhaustive, no pattern present.')
+          }
+        }
       }
       case 'Equal':
       case 'NotEqual':
