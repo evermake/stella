@@ -2,8 +2,10 @@ import type {
   Type,
   TypeBool,
   TypeFun,
+  TypeList,
   TypeNat,
   TypeRecord,
+  TypeSum,
   TypeTuple,
   TypeUnit,
 } from './ast'
@@ -143,6 +145,17 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
       }
 
       return true
+    }
+    case 'TypeList': {
+      const t2_ = t2 as TypeList
+      if (t1.types.length !== 1 || t2_.types.length !== 1) {
+        throw new Error(`List types must have exactly one type parameter:\n${t(t1)}\n${t(t2_)}`)
+      }
+      return areTypesEqual(t1.types[0], t2_.types[0])
+    }
+    case 'TypeSum': {
+      const t2_ = t2 as TypeSum
+      return areTypesEqual(t1.left, t2_.left) && areTypesEqual(t1.right, t2_.right)
     }
     default:
       throw new Error(`Cannot compare type "${t1.type}".`)
