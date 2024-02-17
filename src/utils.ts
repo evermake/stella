@@ -30,6 +30,13 @@ export function t(type: Type): string {
       return `Rec(type=${type.recType}, var=${type.var})`
     case 'TypeRecord':
       return `{${type.fieldTypes.map(f => `${f.label} : ${t(f.fieldType)}`).join(', ')}}`
+    case 'TypeList':
+      return `[${type.types.map(typ => t(typ)).join(', ')}]`
+    case 'TypeSum': {
+      const strLeft = type.left.type === 'TypeSum' ? `(${t(type.left)})` : t(type.left)
+      const strRight = type.right.type === 'TypeSum' ? `(${t(type.right)})` : t(type.right)
+      return `${strLeft} + ${strRight}`
+    }
     default:
       return type.type
   }
