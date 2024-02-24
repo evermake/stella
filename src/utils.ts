@@ -8,6 +8,7 @@ import type {
   TypeSum,
   TypeTuple,
   TypeUnit,
+  TypeVariant,
 } from './ast'
 
 /**
@@ -38,6 +39,9 @@ export function t(type: Type): string {
       const strLeft = type.left.type === 'TypeSum' ? `(${t(type.left)})` : t(type.left)
       const strRight = type.right.type === 'TypeSum' ? `(${t(type.right)})` : t(type.right)
       return `${strLeft} + ${strRight}`
+    }
+    case 'TypeVariant': {
+      return `<| ${type.fieldTypes.map(f => `${f.label} : ${f.fieldType ? t(f.fieldType) : '—'}`).join(', ')} |>`
     }
     default:
       return type.type
@@ -165,6 +169,31 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
     case 'TypeSum': {
       const t2_ = t2 as TypeSum
       return areTypesEqual(t1.left, t2_.left) && areTypesEqual(t1.right, t2_.right)
+    }
+    case 'TypeVariant': {
+      const t2_ = t2 as TypeVariant
+      const t1Fields = Object.fromEntries(t1.fieldTypes.map(f => [f.label, f.fieldType]))
+      const t2Fields = Object.fromEntries(t2_.fieldTypes.map(f => [f.label, f.fieldType]))
+      const t1Labels = new Set(Object.keys(t1Fields))
+      const t2Labels = new Set(Object.keys(t2Fields))
+
+      if (t1Labels.size !== t2Labels.size) {
+        return false
+      }
+      for (const label of t1Labels.values()) {
+        if (!t2Labels.has(label)) {
+          return false
+        }
+        const field1Type = t1Fields[label]
+        const field2Type = t2Fields[label]
+        if (!field1Type || !field2Type) {
+          throw new Error('Variant field type is undefined.')
+        }
+        if (!areTypesEqual(field1Type, field2Type)) {
+          return false
+        }
+      }
+      return true
     }
     default:
       throw new Error(`Comparison of types "${t1.type}" is not implemented.`)

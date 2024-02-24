@@ -1,4 +1,4 @@
-import type { Decl, DeclFun, Expr, Program, Type } from './ast'
+import type { Decl, DeclFun, Expr, Pattern, Program, Type } from './ast'
 import { TypecheckingFailedError } from './errors'
 import type { Extension } from './types'
 import { T, areTypesEqual, t } from './utils'
@@ -407,75 +407,30 @@ function inferType({
           throw new TypecheckingFailedError('ERROR_ILLEGAL_EMPTY_MATCHING', 'Match expression must have at least one pattern.')
         }
 
-        const matchExprType = inferType({ expr: matchExpr, ctx })
+        const matchExprType = inferType({ expr: matchExpr, ctx }) as Exclude<Type, { type: 'TypeVar' }>
 
-        switch (matchExprType.type) {
-          case 'TypeSum': {
-            let leftChecked = false
-            let rightChecked = false
-            let matchType = expectedType
+        let matchType: Type | undefined = expectedType
+        const exhaustivenessChecker = new MatchExhaustivenessChecker()
 
-            for (const matchCase of matchCases) {
-              if (matchCase.pattern.type === 'PatternInl') {
-                if (leftChecked) {
-                  throw new Error('Multiple left injections in a single match are not supported.')
-                }
-
-                const patternInl = matchCase.pattern.pattern
-                const exprInl = matchCase.expr
-                if (patternInl.type !== 'PatternVar') {
-                  throw new Error(`Pattern "${patternInl.type}" is not supported for Sum type: ${t(matchExprType)}.`)
-                }
-
-                const nestedCtx = ctx.newChild()
-                nestedCtx.scope.set(patternInl.name, matchExprType.left)
-
-                matchType = inferType({
-                  expr: exprInl,
-                  ctx: nestedCtx,
-                  expectedType: matchType,
-                })
-                leftChecked = true
-              } else if (matchCase.pattern.type === 'PatternInr') {
-                if (rightChecked) {
-                  throw new Error('Multiple right injections in a single match are not supported.')
-                }
-
-                const patternInr = matchCase.pattern.pattern
-                const exprInr = matchCase.expr
-                if (patternInr.type !== 'PatternVar') {
-                  throw new Error(`Pattern "${patternInr.type}" is not supported for Sum type: ${t(matchExprType)}.`)
-                }
-
-                const nestedCtx = ctx.newChild()
-                nestedCtx.scope.set(patternInr.name, matchExprType.right)
-
-                matchType = inferType({
-                  expr: exprInr,
-                  ctx: nestedCtx,
-                  expectedType: matchType,
-                })
-                rightChecked = true
-              } else {
-                throw new TypecheckingFailedError('ERROR_UNEXPECTED_PATTERN_FOR_TYPE', `Match pattern "${matchCase.pattern.type}" is not supported for Sum type: ${t(matchExprType)}.`)
-              }
-            }
-
-            if (!leftChecked || !rightChecked) {
-              throw new TypecheckingFailedError('ERROR_NONEXHAUSTIVE_MATCH_PATTERNS', 'Match is not exhaustive, missing left or right injection pattern.')
-            }
-
-            return matchType as Type
-          }
-          default: {
-            // @todo: Temporary solution to pass some tests.
-            const firstCase = matchCases[0]
-            if (firstCase) {
-              throw new TypecheckingFailedError('ERROR_UNEXPECTED_PATTERN_FOR_TYPE', `Match pattern "${firstCase.pattern.type}" is not supported for type ${t(matchExprType)}.`)
-            }
-            throw new TypecheckingFailedError('ERROR_NONEXHAUSTIVE_MATCH_PATTERNS', 'Match is not exhaustive, no pattern present.')
-          }
+        for (const matchCase of matchCases) {
+          exhaustivenessChecker.addPattern(matchCase.pattern)
+          const nestedCtx = extendContextWithPattern({
+            ctx,
+            pattern: matchCase.pattern,
+            type: matchExprType,
+          })
+          matchType = inferType({
+            ctx: nestedCtx,
+            expr: matchCase.expr,
+            expectedType: matchType,
+          })
         }
+
+        if (!matchType || !exhaustivenessChecker.isExhaustive(matchExprType)) {
+          throw new TypecheckingFailedError('ERROR_NONEXHAUSTIVE_MATCH_PATTERNS', `Match is not exhaustive for type ${t(matchExprType)}.`)
+        }
+
+        return matchType
       }
       case 'Fix': {
         const { expr: innerExpr } = expr
@@ -489,6 +444,33 @@ function inferType({
         expect(innerExprType).toBe(T.fn([fixT], fixT))
 
         return fixT
+      }
+      case 'Variant': {
+        const { label, expr: labelExrp } = expr
+        if (!labelExrp) {
+          throw new Error(`Variant has no expression for label "${label}".`)
+        }
+
+        if (!expectedType) {
+          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_VARIANT_TYPE', `Cannot infer type for variant, provide the expected type explicitly.`)
+        }
+
+        if (expectedType.type !== 'TypeVariant') {
+          throw new TypecheckingFailedError('ERROR_UNEXPECTED_VARIANT', `Expected expression of type ${t(expectedType)}, but got Variant.`)
+        }
+
+        const expectedVariantType = expectedType.fieldTypes.find(f => f.label === label)
+        if (!expectedVariantType) {
+          throw new TypecheckingFailedError('ERROR_UNEXPECTED_VARIANT_LABEL', `Label "${label}" is not present in the variant type: ${t(expectedType)}`)
+        }
+
+        inferType({
+          ctx,
+          expr: labelExrp,
+          expectedType: expectedVariantType.fieldType,
+        })
+
+        return expectedType
       }
       case 'Equal':
       case 'NotEqual':
@@ -533,5 +515,124 @@ function expect(actualType: Type) {
         throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_EXPRESSION', `Expected expression to be of type ${t(expectedType)}, but got ${t(actualType)}.`)
       }
     },
+  }
+}
+
+function extendContextWithPattern({
+  ctx,
+  pattern,
+  type,
+}: {
+  ctx: Context
+  pattern: Pattern
+  type: Type
+}): Context {
+  switch (pattern.type) {
+    case 'PatternVar': {
+      const nestedCtx = ctx.newChild()
+      nestedCtx.scope.set(pattern.name, type)
+      return nestedCtx
+    }
+    case 'PatternInl':
+      if (type.type !== 'TypeSum') {
+        throw new TypecheckingFailedError('ERROR_UNEXPECTED_INJECTION', `Left injection pattern is not supported for type ${t(type)}.`)
+      }
+      return extendContextWithPattern({
+        ctx,
+        pattern: pattern.pattern,
+        type: type.left,
+      })
+    case 'PatternInr':
+      if (type.type !== 'TypeSum') {
+        throw new TypecheckingFailedError('ERROR_UNEXPECTED_INJECTION', `Right injection pattern is not supported for type ${t(type)}.`)
+      }
+      return extendContextWithPattern({
+        ctx,
+        pattern: pattern.pattern,
+        type: type.right,
+      })
+    case 'PatternVariant': {
+      if (type.type !== 'TypeVariant') {
+        throw new TypecheckingFailedError('ERROR_UNEXPECTED_VARIANT', `Variant pattern is not supported for type ${t(type)}.`)
+      }
+      const variantType = type.fieldTypes.find(f => f.label === pattern.label)
+      if (!variantType) {
+        throw new TypecheckingFailedError('ERROR_UNEXPECTED_PATTERN_FOR_TYPE', `Label "${pattern.label}" is not present in the variant type: ${t(type)}`)
+      }
+      if (pattern.pattern) {
+        if (!variantType.fieldType) {
+          throw new Error('Pattern for a variant without a field is not supported.')
+        }
+        return extendContextWithPattern({
+          ctx,
+          pattern: pattern.pattern,
+          type: variantType.fieldType,
+        })
+      }
+      return ctx
+    }
+    default:
+      throw new TypecheckingFailedError('ERROR_UNEXPECTED_PATTERN_FOR_TYPE', `Match pattern "${pattern.type}" is not supported for type ${t(type)}.`)
+  }
+}
+
+class MatchExhaustivenessChecker {
+  private variable = false
+  private inl = false
+  private inr = false
+  private variants = new Map<string, Extract<Pattern, { type: 'PatternVariant' }>>()
+
+  addPattern(pattern: Pattern) {
+    if (pattern.type === 'PatternVar') {
+      if (this.variable) {
+        throw new Error('Multiple variable patterns are not permitted.')
+      }
+      this.variable = true
+    } else if (pattern.type === 'PatternInl') {
+      if (this.inl) {
+        throw new Error('Multiple patterns for the left injection are not permitted.')
+      }
+      this.inl = true
+    } else if (pattern.type === 'PatternInr') {
+      if (this.inr) {
+        throw new Error('Multiple patterns for the right injection are not permitted.')
+      }
+      this.inr = true
+    } else if (pattern.type === 'PatternVariant') {
+      // @todo: Make sure whether duplicates check is necessary.
+      // if (this.variants.has(pattern.label)) {
+      //   throw new Error('Multiple patterns for the same variant are not permitted.')
+      // }
+
+      this.variants.set(pattern.label, pattern)
+    } else {
+      throw new Error(`Match pattern "${pattern.type}" is not supported.`)
+    }
+  }
+
+  isExhaustive(type: Exclude<Type, { type: 'TypeVar' }>) {
+    if (this.variable) {
+      return true
+    }
+
+    switch (type.type) {
+      case 'TypeSum': {
+        if (this.inl && this.inr) {
+          return true
+        }
+        break
+      }
+      case 'TypeVariant': {
+        const variantsToCover = new Set(type.fieldTypes.map(f => f.label))
+        for (const pattern of this.variants.values()) {
+          variantsToCover.delete(pattern.label)
+        }
+        return variantsToCover.size === 0
+      }
+      default:
+        throw new Error(`Match on type ${t(type)} is not supported.`)
+    }
+
+    return false
   }
 }
