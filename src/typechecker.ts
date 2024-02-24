@@ -53,7 +53,11 @@ function typecheckDeclaration(decl: Decl, ctx: Context) {
       })
 
       if (decl.returnType) {
-        inferType({ expr: decl.returnValue, ctx: localCtx, expectedType: decl.returnType })
+        inferType({
+          ctx: localCtx,
+          expr: decl.returnValue,
+          expectedType: decl.returnType,
+        })
       }
 
       break
@@ -104,41 +108,62 @@ function inferType({
         inferType({ expr: expr.expr, ctx, expectedType: T.Nat })
         return T.Bool
       case 'NatRec': {
-        inferType({ expr: expr.n, ctx, expectedType: T.Nat })
+        const { n, initial, step } = expr
 
-        const initialType = inferType({ expr: expr.initial, ctx, expectedType })
-        const expectedStepType = T.fn([T.Nat], T.fn([initialType], initialType))
-        inferType({ expr: expr.step, ctx, expectedType: expectedStepType })
+        inferType({ ctx, expr: n, expectedType: T.Nat })
 
-        return initialType
+        const S = inferType({ ctx, expr: initial, expectedType })
+
+        inferType({
+          ctx,
+          expr: step,
+          expectedType: T.fn([T.Nat], T.fn([S], S)),
+        })
+
+        return S
       }
       case 'If': {
-        inferType({ expr: expr.condition, ctx, expectedType: T.Bool })
+        const { condition, thenExpr, elseExpr } = expr
 
-        const thenType = inferType({ expr: expr.thenExpr, ctx })
-        inferType({ expr: expr.elseExpr, ctx, expectedType: thenType })
+        inferType({ ctx, expr: condition, expectedType: T.Bool })
 
-        return thenType
+        return inferType({
+          ctx,
+          expr: elseExpr,
+          expectedType: inferType({
+            ctx,
+            expr: thenExpr,
+            expectedType,
+          }),
+        })
       }
       case 'Application': {
-        const fnType = inferType({ expr: expr.function, ctx })
+        const { function: fn, arguments: args } = expr
+
+        const fnType = inferType({ ctx, expr: fn })
         if (fnType.type !== 'TypeFun') {
           throw new TypecheckingFailedError('ERROR_NOT_A_FUNCTION', `Left side of application must be a function, but got ${t(fnType)}.`)
         }
 
         const expectedArgsCount = fnType.parametersTypes.length
-        const actualArgsCount = expr.arguments.length
+        const actualArgsCount = args.length
         if (expectedArgsCount !== actualArgsCount) {
           throw new TypecheckingFailedError('ERROR_INCORRECT_NUMBER_OF_ARGUMENTS', `Function requires ${expectedArgsCount}, but got ${actualArgsCount}.`)
         }
 
-        expr.arguments.forEach((arg, i) => {
-          inferType({ expr: arg, ctx, expectedType: fnType.parametersTypes[i] })
+        args.forEach((arg, i) => {
+          inferType({
+            ctx,
+            expr: arg,
+            expectedType: fnType.parametersTypes[i],
+          })
         })
 
         return fnType.returnType
       }
       case 'Abstraction': {
+        const { returnValue, parameters: params } = expr
+
         let expectedReturnType
         if (expectedType) {
           if (expectedType.type !== 'TypeFun') {
@@ -146,15 +171,15 @@ function inferType({
           }
 
           const expectedArity = expectedType.parametersTypes.length
-          const actualArity = expr.parameters.length
+          const actualArity = params.length
           if (actualArity !== expectedArity) {
             throw new TypecheckingFailedError('ERROR_UNEXPECTED_NUMBER_OF_PARAMETERS_IN_LAMBDA', `Expected lambda to have ${expectedArity} parameter(s), but got ${actualArity}.`)
           }
 
-          for (let i = 0; i < expectedArity; i++) {
+          for (let i = 0; i < actualArity; i++) {
             const expectedParamType = expectedType.parametersTypes[i]
             const actualParam = expr.parameters[i]
-            if (!areTypesEqual(expectedParamType, actualParam.paramType)) {
+            if (!areTypesEqual(actualParam.paramType, expectedParamType)) {
               throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_PARAMETER', `Expected lambda parameter "${actualParam.name}" to have type ${t(expectedParamType)}, but got ${t(actualParam.paramType)}`)
             }
           }
@@ -168,8 +193,12 @@ function inferType({
         })
 
         return T.fn(
-          expr.parameters.map(param => param.paramType),
-          inferType({ expr: expr.returnValue, ctx: nestedCtx, expectedType: expectedReturnType }),
+          params.map(p => p.paramType),
+          inferType({
+            ctx: nestedCtx,
+            expr: returnValue,
+            expectedType: expectedReturnType,
+          }),
         )
       }
       case 'Sequence':
@@ -318,7 +347,9 @@ function inferType({
         const innerExprType = inferType({
           expr: innerExpr,
           ctx,
-          expectedType: expectedType ? T.ListOf(expectedType) : undefined,
+          expectedType: expectedType
+            ? T.ListOf(expectedType)
+            : undefined,
         })
         if (innerExprType.type !== 'TypeList') {
           throw new TypecheckingFailedError('ERROR_NOT_A_LIST', `List::head expects a list as an argument, but got ${t(innerExprType)}.`)

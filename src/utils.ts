@@ -167,6 +167,6 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
       return areTypesEqual(t1.left, t2_.left) && areTypesEqual(t1.right, t2_.right)
     }
     default:
-      throw new Error(`Cannot compare type "${t1.type}".`)
+      throw new Error(`Comparison of types "${t1.type}" is not implemented.`)
   }
 }
