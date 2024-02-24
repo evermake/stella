@@ -1066,7 +1066,7 @@ export class AstTransformer extends StellaVisitor<Node> {
     return {
       type: 'Variant',
       label: ctx._label.text,
-      expr: this.visitExpr(ctx._rhs),
+      expr: ctx._rhs && this.visitExpr(ctx._rhs),
     }
   }
 

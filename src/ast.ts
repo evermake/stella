@@ -235,7 +235,7 @@ export interface Record {
 export interface Variant {
   type: 'Variant'
   label: Identifier
-  expr: Expr
+  expr?: Expr
 }
 export interface MatchCase {
   type: 'MatchCase'
