@@ -81,6 +81,15 @@ export type TypeErrorTag =
   // When a pattern in a match-expression does not correspond to the type of matched expression.
   | 'ERROR_UNEXPECTED_PATTERN_FOR_TYPE'
 
+  // when type of a variant cannot be inferred (needs a type ascription)
+  | 'ERROR_AMBIGUOUS_VARIANT_TYPE'
+
+  // when a variant is encountered where an expression of a non-variant type is expected
+  | 'ERROR_UNEXPECTED_VARIANT'
+
+  // when a variant contains a label that does not match any of the labels in the expected varian type
+  | 'ERROR_UNEXPECTED_VARIANT_LABEL'
+
 export class TypecheckingFailedError extends Error {
   #tag: TypeErrorTag
 
