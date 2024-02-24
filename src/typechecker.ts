@@ -477,6 +477,19 @@ function inferType({
           }
         }
       }
+      case 'Fix': {
+        const { expr: innerExpr } = expr
+        const innerExprType = inferType({ ctx, expr: innerExpr })
+
+        if (innerExprType.type !== 'TypeFun') {
+          throw new TypecheckingFailedError('ERROR_NOT_A_FUNCTION', `Fix expects a function, but got ${t(innerExprType)}.`)
+        }
+
+        const fixT = innerExprType.parametersTypes[0] ?? innerExprType.returnType
+        expect(innerExprType).toBe(T.fn([fixT], fixT))
+
+        return fixT
+      }
       case 'Equal':
       case 'NotEqual':
       case 'GreaterThan':
