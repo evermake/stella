@@ -7,14 +7,14 @@ export class Context {
   #extensions: Set<Extension>
 
   readonly scope: {
-    get(name: string): Type | undefined
-    set(name: string, type: Type): void
-    has(name: string): boolean
+    get: (name: string) => Type | undefined
+    set: (name: string, type: Type) => void
+    has: (name: string) => boolean
   }
 
   readonly extensions: {
-    has(ext: Extension): boolean
-    add(ext: Extension): void
+    has: (ext: Extension) => boolean
+    add: (ext: Extension) => void
   }
 
   constructor(parent: Context | null = null) {
@@ -24,17 +24,13 @@ export class Context {
 
     this.scope = {
       get: name => (this.#symbols.get(name) ?? this.#parent?.scope.get(name)),
-      set: (name, type) => {
-        this.#symbols.set(name, type)
-      },
+      set: (name, type) => void this.#symbols.set(name, type),
       has: name => this.#symbols.has(name) || (this.#parent?.scope.has(name) ?? false),
     }
 
     this.extensions = {
       has: ext => this.#extensions.has(ext) || (this.#parent?.extensions.has(ext) ?? false),
-      add: (ext) => {
-        this.#extensions.add(ext)
-      },
+      add: ext => void this.#extensions.add(ext),
     }
   }
 
