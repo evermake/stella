@@ -44,6 +44,9 @@ export function t(type: Type): string {
     case 'TypeVariant': {
       return `<| ${type.fieldTypes.map(f => `${f.label} : ${f.fieldType ? t(f.fieldType) : '—'}`).join(', ')} |>`
     }
+    case 'TypeRef': {
+      return `&${t(type.referredType)}`
+    }
     default:
       return type.type
   }
