@@ -524,6 +524,12 @@ function inferType({
         }
         return expectedType
       }
+      case 'Panic': {
+        if (!expectedType) {
+          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_PANIC_TYPE', `Cannot infer type for panic, provide the expected type explicitly.`)
+        }
+        return expectedType
+      }
       case 'Equal':
       case 'NotEqual':
       case 'GreaterThan':
