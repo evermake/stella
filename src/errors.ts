@@ -90,6 +90,24 @@ export type TypeErrorTag =
   // when a variant contains a label that does not match any of the labels in the expected varian type
   | 'ERROR_UNEXPECTED_VARIANT_LABEL'
 
+  // if an exception mechanism (Throw, TryCatch) is used without a globally declared exception type
+  | 'ERROR_EXCEPTION_TYPE_NOT_DECLARED'
+
+  // if the type of throw-expression cannot be inferred (not the type of of the exception, but the type of throw-expression itself!)
+  | 'ERROR_AMBIGUOUS_THROW_TYPE'
+
+  // if a bare memory address is found without an expected type for it
+  | 'ERROR_AMBIGUOUS_REFERENCE_TYPE'
+
+  // if a panic expression is found without an expected type for it
+  | 'ERROR_AMBIGUOUS_PANIC_TYPE'
+
+  // when to assign to or dereference an expression that does not have a reference type
+  | 'ERROR_NOT_A_REFERENCE'
+
+  // if a memory address literal is found when not expecting a reference
+  | 'ERROR_UNEXPECTED_MEMORY_ADDRESS'
+
 export class TypecheckingFailedError extends Error {
   #tag: TypeErrorTag
 
