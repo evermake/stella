@@ -562,6 +562,24 @@ function inferType({
           }),
         })
       }
+      case 'TryCatch': {
+        if (!ctx.exceptionType) {
+          throw new TypecheckingFailedError('ERROR_EXCEPTION_TYPE_NOT_DECLARED', `Cannot catch exceptions without exception type declaration.`)
+        }
+
+        const { tryExpr, fallbackExpr, pattern: fallbackPattern } = expr
+        const tryExprType = inferType({ ctx, expr: tryExpr, expectedType })
+
+        return inferType({
+          ctx: extendContextWithPattern({
+            ctx,
+            pattern: fallbackPattern,
+            type: ctx.exceptionType ?? T.Unit,
+          }),
+          expr: fallbackExpr,
+          expectedType: tryExprType,
+        })
+      }
       case 'Equal':
       case 'NotEqual':
       case 'GreaterThan':
