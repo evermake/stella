@@ -69,6 +69,10 @@ function typecheckDeclaration(decl: Decl, ctx: Context) {
       ctx.exceptionType = decl.exceptionType
       break
     }
+    case 'DeclExceptionVariant': {
+      ctx.addOpenVariant(decl.name, decl.variantType)
+      break
+    }
     default:
       throw new Error(`Unsupported declaration type: "${decl.type}".`)
   }

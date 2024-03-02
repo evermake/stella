@@ -6,6 +6,7 @@ export class Context {
   #symbols: Map<string, Type>
   #extensions: Set<Extension>
   #exceptionType: Type | null = null
+  #exceptionOpenVariants: Map<string, Type> = new Map()
 
   readonly scope: {
     get: (name: string) => Type | undefined
@@ -40,12 +41,41 @@ export class Context {
   }
 
   get exceptionType(): Type | null {
-    return this.#exceptionType
+    const type = this.#exceptionType
       ?? this.#parent?.exceptionType
       ?? null
+
+    if (type) {
+      return type
+    }
+
+    const variants = Object.entries(this.getExceptionOpenVariants())
+    if (variants.length > 0) {
+      return {
+        type: 'TypeVariant',
+        fieldTypes: variants.map(([label, type]) => ({
+          type: 'VariantFieldType',
+          label,
+          fieldType: type,
+        })),
+      }
+    }
+
+    return null
   }
 
   set exceptionType(type: Type) {
     this.#exceptionType = type
+  }
+
+  addOpenVariant(label: string, type: Type): void {
+    this.#exceptionOpenVariants.set(label, type)
+  }
+
+  protected getExceptionOpenVariants(): { [label in string]: Type } {
+    return {
+      ...(this.#parent?.getExceptionOpenVariants() ?? {}),
+      ...(Object.fromEntries(this.#exceptionOpenVariants)),
+    }
   }
 }
