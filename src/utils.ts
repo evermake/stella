@@ -5,6 +5,7 @@ import type {
   TypeList,
   TypeNat,
   TypeRecord,
+  TypeRef,
   TypeSum,
   TypeTuple,
   TypeUnit,
@@ -194,6 +195,10 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
         }
       }
       return true
+    }
+    case 'TypeRef': {
+      const t2_ = t2 as TypeRef
+      return areTypesEqual(t1.referredType, t2_.referredType)
     }
     default:
       throw new Error(`Comparison of types "${t1.type}" is not implemented.`)
