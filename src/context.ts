@@ -5,6 +5,7 @@ export class Context {
   #parent: Context | null
   #symbols: Map<string, Type>
   #extensions: Set<Extension>
+  #exceptionType: Type | null = null
 
   readonly scope: {
     get: (name: string) => Type | undefined
@@ -36,5 +37,15 @@ export class Context {
 
   newChild(): Context {
     return new Context(this)
+  }
+
+  get exceptionType(): Type | null {
+    return this.#exceptionType
+      ?? this.#parent?.exceptionType
+      ?? null
+  }
+
+  set exceptionType(type: Type) {
+    this.#exceptionType = type
   }
 }

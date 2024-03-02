@@ -62,6 +62,13 @@ function typecheckDeclaration(decl: Decl, ctx: Context) {
 
       break
     }
+    case 'DeclExceptionType': {
+      if (ctx.exceptionType) {
+        throw new Error('Multiple exception types are not supported.')
+      }
+      ctx.exceptionType = decl.exceptionType
+      break
+    }
     default:
       throw new Error(`Unsupported declaration type: "${decl.type}".`)
   }
@@ -529,6 +536,31 @@ function inferType({
           throw new TypecheckingFailedError('ERROR_AMBIGUOUS_PANIC_TYPE', `Cannot infer type for panic, provide the expected type explicitly.`)
         }
         return expectedType
+      }
+      case 'Throw': {
+        if (!expectedType) {
+          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_THROW_TYPE', `Cannot infer type for throw, provide the expected type explicitly.`)
+        }
+        if (!ctx.exceptionType) {
+          throw new TypecheckingFailedError('ERROR_EXCEPTION_TYPE_NOT_DECLARED', `Cannot throw exceptions without exception type declaration.`)
+        }
+        inferType({
+          ctx,
+          expr: expr.expr,
+          expectedType: ctx.exceptionType,
+        })
+        return expectedType
+      }
+      case 'TryWith': {
+        return inferType({
+          ctx,
+          expr: expr.fallbackExpr,
+          expectedType: inferType({
+            ctx,
+            expr: expr.tryExpr,
+            expectedType,
+          }),
+        })
       }
       case 'Equal':
       case 'NotEqual':
