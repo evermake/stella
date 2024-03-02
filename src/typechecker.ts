@@ -1,7 +1,7 @@
 import type { Decl, DeclFun, Expr, Pattern, Program, Type } from './ast'
 import { TypecheckingFailedError } from './errors'
 import type { Extension } from './types'
-import { T, areTypesEqual, t } from './utils'
+import { DEBUG, T, areTypesEqual, t } from './utils'
 import { Context } from './context'
 
 export function typecheckProgram(ast: Program) {
@@ -74,6 +74,8 @@ function addFunctionDeclarationToContext(decl: DeclFun, ctx: Context) {
   ctx.scope.set(decl.name, T.fn(decl.parameters.map(p => p.paramType), decl.returnType))
 }
 
+let _depth = 0
+
 function inferType({
   expr,
   ctx,
@@ -83,6 +85,11 @@ function inferType({
   ctx: Context
   expectedType?: Type
 }): Type {
+  if (DEBUG) {
+    console.debug('• '.repeat(_depth), expr.type, expectedType ? `(${t(expectedType)})` : '')
+    _depth++
+  }
+
   const inferredType = (() => {
     switch (expr.type) {
       case 'ConstBool':
@@ -471,6 +478,52 @@ function inferType({
 
         return expectedType
       }
+      case 'Assignment': {
+        const { lhs, rhs } = expr
+
+        if (lhs.type !== 'Var') {
+          throw new Error('Assignment to a non-variable expression is not supported.')
+        }
+
+        const varType = ctx.scope.get(lhs.name)
+        if (!varType) {
+          throw new TypecheckingFailedError('ERROR_UNDEFINED_VARIABLE', `Variable "${lhs.name}" is not defined.`)
+        }
+
+        if (varType.type !== 'TypeRef') {
+          throw new TypecheckingFailedError('ERROR_NOT_A_REFERENCE', `Cannot assign to expression of type ${t(varType)}.`)
+        }
+
+        inferType({ ctx, expr: rhs, expectedType: varType.referredType })
+        return T.Unit
+      }
+      case 'Reference':
+        return T.RefTo(inferType({ ctx, expr: expr.expr }))
+      case 'Dereference': {
+        if (expectedType) {
+          inferType({
+            ctx,
+            expr: expr.expr,
+            expectedType: T.RefTo(expectedType),
+          })
+          return expectedType
+        } else {
+          const exprType = inferType({ ctx, expr: expr.expr })
+          if (exprType.type !== 'TypeRef') {
+            throw new TypecheckingFailedError('ERROR_NOT_A_REFERENCE', `Cannot dereference expression of type ${t(exprType)}.`)
+          }
+          return exprType.referredType
+        }
+      }
+      case 'ConstMemory': {
+        if (!expectedType) {
+          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_REFERENCE_TYPE', `Cannot infer type for bare memory address, provide the expected type explicitly.`)
+        }
+        if (expectedType.type !== 'TypeRef') {
+          throw new TypecheckingFailedError('ERROR_UNEXPECTED_MEMORY_ADDRESS', `Expected expression of type ${t(expectedType)}, but got bare memory address.`)
+        }
+        return expectedType
+      }
       case 'Equal':
       case 'NotEqual':
       case 'GreaterThan':
@@ -502,6 +555,10 @@ function inferType({
 
   if (expectedType) {
     expect(inferredType).toBe(expectedType)
+  }
+
+  if (DEBUG) {
+    _depth--
   }
 
   return inferredType

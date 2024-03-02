@@ -1,3 +1,4 @@
+import process from 'node:process'
 import type {
   Type,
   TypeBool,
@@ -11,6 +12,8 @@ import type {
   TypeUnit,
   TypeVariant,
 } from './ast'
+
+export const DEBUG = Boolean(process.env.DEBUG)
 
 /**
  * Stringifies a type.
@@ -101,6 +104,13 @@ export class _T {
 
   ListOf(elementType: Type): TypeList {
     return { type: 'TypeList', elementType }
+  }
+
+  RefTo(type: Type): TypeRef {
+    return {
+      type: 'TypeRef',
+      referredType: type,
+    }
   }
 }
 
