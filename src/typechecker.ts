@@ -574,7 +574,7 @@ function inferType({
           ctx: extendContextWithPattern({
             ctx,
             pattern: fallbackPattern,
-            type: ctx.exceptionType ?? T.Unit,
+            type: ctx.exceptionType,
           }),
           expr: fallbackExpr,
           expectedType: tryExprType,
