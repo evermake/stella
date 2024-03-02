@@ -87,6 +87,8 @@ export type TypeErrorTag =
   // when a variant is encountered where an expression of a non-variant type is expected
   | 'ERROR_UNEXPECTED_VARIANT'
 
+  | 'ERROR_MISSING_DATA_FOR_LABEL'
+
   // when a variant contains a label that does not match any of the labels in the expected varian type
   | 'ERROR_UNEXPECTED_VARIANT_LABEL'
 

@@ -447,8 +447,9 @@ function inferType({
       }
       case 'Variant': {
         const { label, expr: labelExrp } = expr
+
         if (!labelExrp) {
-          throw new Error(`Variant has no expression for label "${label}".`)
+          throw new TypecheckingFailedError('ERROR_MISSING_DATA_FOR_LABEL', `Variant has no expression for label "${label}".`)
         }
 
         if (!expectedType) {
