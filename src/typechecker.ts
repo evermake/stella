@@ -202,10 +202,8 @@ function inferType({
         )
       }
       case 'Sequence':
-        if (expr.expr2) {
-          throw new Error('Sequences are not supported.')
-        }
-        return inferType({ expr: expr.expr1, ctx, expectedType })
+        inferType({ ctx, expr: expr.expr1, expectedType: T.Unit })
+        return inferType({ ctx, expr: expr.expr2, expectedType })
       case 'Tuple': {
         if (expectedType) {
           if (expectedType.type !== 'TypeTuple') {
