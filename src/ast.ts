@@ -309,7 +309,7 @@ export interface LetRec {
 export interface Sequence {
   type: 'Sequence'
   expr1: Expr
-  expr2?: Expr
+  expr2: Expr
 }
 
 export type Expr =

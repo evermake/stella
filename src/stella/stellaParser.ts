@@ -1565,7 +1565,7 @@ export default class stellaParser extends Parser {
 				this.state = 404;
 				this.match(stellaParser.Surrogate_id_SYMB_46);
 				this.state = 405;
-				(localctx as LetContext)._body = this.expr(6);
+				(localctx as LetContext)._body = this.expr(5);
 				}
 				break;
 			case 35:
@@ -1598,7 +1598,7 @@ export default class stellaParser extends Parser {
 				this.state = 416;
 				this.match(stellaParser.Surrogate_id_SYMB_46);
 				this.state = 417;
-				(localctx as LetRecContext)._body = this.expr(5);
+				(localctx as LetRecContext)._body = this.expr(4);
 				}
 				break;
 			case 36:
@@ -1633,7 +1633,7 @@ export default class stellaParser extends Parser {
 				this.state = 429;
 				this.match(stellaParser.Surrogate_id_SYMB_14);
 				this.state = 430;
-				(localctx as TypeAbstractionContext)._expr_ = this.expr(4);
+				(localctx as TypeAbstractionContext)._expr_ = this.expr(3);
 				}
 				break;
 			case 37:
@@ -1865,13 +1865,13 @@ export default class stellaParser extends Parser {
 						(localctx as SequenceContext)._expr1 = _prevctx;
 						this.pushNewRecursionContext(localctx, _startState, stellaParser.RULE_expr);
 						this.state = 476;
-						if (!(this.precpred(this._ctx, 2))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 2)");
+						if (!(this.precpred(this._ctx, 6))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 6)");
 						}
 						this.state = 477;
 						this.match(stellaParser.Surrogate_id_SYMB_1);
 						this.state = 478;
-						(localctx as SequenceContext)._expr2 = this.expr(3);
+						(localctx as SequenceContext)._expr2 = this.expr(7);
 						}
 						break;
 					case 15:
@@ -2908,7 +2908,7 @@ export default class stellaParser extends Parser {
 		case 12:
 			return this.precpred(this._ctx, 8);
 		case 13:
-			return this.precpred(this._ctx, 2);
+			return this.precpred(this._ctx, 6);
 		case 14:
 			return this.precpred(this._ctx, 58);
 		case 15:
@@ -3077,13 +3077,13 @@ export default class stellaParser extends Parser {
 	392,393,5,40,0,0,393,394,3,18,9,7,394,436,1,0,0,0,395,396,5,52,0,0,396,
 	401,3,20,10,0,397,398,5,1,0,0,398,400,3,20,10,0,399,397,1,0,0,0,400,403,
 	1,0,0,0,401,399,1,0,0,0,401,402,1,0,0,0,402,404,1,0,0,0,403,401,1,0,0,0,
-	404,405,5,47,0,0,405,406,3,18,9,6,406,436,1,0,0,0,407,408,5,53,0,0,408,
+	404,405,5,47,0,0,405,406,3,18,9,5,406,436,1,0,0,0,407,408,5,53,0,0,408,
 	413,3,20,10,0,409,410,5,1,0,0,410,412,3,20,10,0,411,409,1,0,0,0,412,415,
 	1,0,0,0,413,411,1,0,0,0,413,414,1,0,0,0,414,416,1,0,0,0,415,413,1,0,0,0,
-	416,417,5,47,0,0,417,418,3,18,9,5,418,436,1,0,0,0,419,420,5,79,0,0,420,
+	416,417,5,47,0,0,417,418,3,18,9,4,418,436,1,0,0,0,419,420,5,79,0,0,420,
 	421,5,14,0,0,421,426,5,83,0,0,422,423,5,1,0,0,423,425,5,83,0,0,424,422,
 	1,0,0,0,425,428,1,0,0,0,426,424,1,0,0,0,426,427,1,0,0,0,427,429,1,0,0,0,
-	428,426,1,0,0,0,429,430,5,15,0,0,430,436,3,18,9,4,431,432,5,3,0,0,432,433,
+	428,426,1,0,0,0,429,430,5,15,0,0,430,436,3,18,9,3,431,432,5,3,0,0,432,433,
 	3,18,9,0,433,434,5,4,0,0,434,436,1,0,0,0,435,198,1,0,0,0,435,200,1,0,0,
 	0,435,201,1,0,0,0,435,202,1,0,0,0,435,203,1,0,0,0,435,204,1,0,0,0,435,205,
 	1,0,0,0,435,206,1,0,0,0,435,211,1,0,0,0,435,222,1,0,0,0,435,231,1,0,0,0,
@@ -3102,8 +3102,8 @@ export default class stellaParser extends Parser {
 	10,12,0,0,462,463,5,18,0,0,463,520,3,18,9,13,464,465,10,11,0,0,465,466,
 	5,19,0,0,466,520,3,18,9,12,467,468,10,10,0,0,468,469,5,20,0,0,469,520,3,
 	18,9,11,470,471,10,9,0,0,471,472,5,21,0,0,472,520,3,18,9,10,473,474,10,
-	8,0,0,474,475,5,70,0,0,475,520,3,18,9,9,476,477,10,2,0,0,477,478,5,2,0,
-	0,478,520,3,18,9,3,479,480,10,58,0,0,480,481,5,26,0,0,481,520,5,83,0,0,
+	8,0,0,474,475,5,70,0,0,475,520,3,18,9,9,476,477,10,6,0,0,477,478,5,2,0,
+	0,478,520,3,18,9,7,479,480,10,58,0,0,480,481,5,26,0,0,481,520,5,83,0,0,
 	482,483,10,57,0,0,483,484,5,26,0,0,484,520,5,86,0,0,485,486,10,32,0,0,486,
 	495,5,3,0,0,487,492,3,18,9,0,488,489,5,1,0,0,489,491,3,18,9,0,490,488,1,
 	0,0,0,491,494,1,0,0,0,492,490,1,0,0,0,492,493,1,0,0,0,493,496,1,0,0,0,494,
