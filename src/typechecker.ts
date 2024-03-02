@@ -536,7 +536,7 @@ function extendContextWithPattern({
     }
     case 'PatternInl':
       if (type.type !== 'TypeSum') {
-        throw new TypecheckingFailedError('ERROR_UNEXPECTED_INJECTION', `Left injection pattern is not supported for type ${t(type)}.`)
+        throw new TypecheckingFailedError('ERROR_UNEXPECTED_PATTERN_FOR_TYPE', `Left injection pattern is not supported for type ${t(type)}.`)
       }
       return extendContextWithPattern({
         ctx,
@@ -545,7 +545,7 @@ function extendContextWithPattern({
       })
     case 'PatternInr':
       if (type.type !== 'TypeSum') {
-        throw new TypecheckingFailedError('ERROR_UNEXPECTED_INJECTION', `Right injection pattern is not supported for type ${t(type)}.`)
+        throw new TypecheckingFailedError('ERROR_UNEXPECTED_PATTERN_FOR_TYPE', `Right injection pattern is not supported for type ${t(type)}.`)
       }
       return extendContextWithPattern({
         ctx,
