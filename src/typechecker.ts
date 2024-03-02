@@ -437,7 +437,7 @@ function inferType({
         const innerExprType = inferType({ ctx, expr: innerExpr })
 
         if (innerExprType.type !== 'TypeFun') {
-          throw new TypecheckingFailedError('ERROR_NOT_A_FUNCTION', `Fix expects a function, but got ${t(innerExprType)}.`)
+          throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_EXPRESSION', `Fix expects a function, but got ${t(innerExprType)}.`)
         }
 
         const fixT = innerExprType.parametersTypes[0] ?? innerExprType.returnType
