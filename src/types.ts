@@ -66,6 +66,10 @@ export type Extension =
   | '#source-and-sink-references'
   | '#intersection-types'
   | '#union-types'
+  | '#ambiguous-type-as-bottom'
+  | '#try-cast-as'
+  | '#type-cast'
+  | '#type-cast-patterns'
 
   // Objects
   | '#imperative-objects'

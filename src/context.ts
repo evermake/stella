@@ -1,5 +1,7 @@
-import type { Type } from './ast'
+import type { Type, TypeBottom } from './ast'
+import { TypecheckingFailedError } from './errors'
 import type { Extension } from './types'
+import { T, expect } from './utils'
 
 export class Context {
   #parent: Context | null
@@ -77,5 +79,28 @@ export class Context {
       ...(this.#parent?.getExceptionOpenVariants() ?? {}),
       ...(Object.fromEntries(this.#exceptionOpenVariants)),
     }
+  }
+
+  isTypeAssignableTo(t1: Type, t2: Type, doThrow: boolean = true) {
+    try {
+      if (this.extensions.has('#structural-subtyping')) {
+        expect(t1).toBeSubtypeOf(t2)
+      } else {
+        expect(t1).toEqual(t2)
+      }
+      return true
+    } catch (err) {
+      if (!doThrow && err instanceof TypecheckingFailedError) {
+        return false
+      }
+      throw err
+    }
+  }
+
+  returnBotOrThrowAmbiguousError(error: TypecheckingFailedError): TypeBottom | never {
+    if (this.extensions.has('#ambiguous-type-as-bottom')) {
+      return T.Bot
+    }
+    throw error
   }
 }

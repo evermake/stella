@@ -1,7 +1,7 @@
 import type { Decl, DeclFun, Expr, Pattern, Program, Type } from './ast'
 import { TypecheckingFailedError } from './errors'
 import type { Extension } from './types'
-import { DEBUG, T, areTypesEqual, t } from './utils'
+import { DEBUG, T, t } from './utils'
 import { Context } from './context'
 
 export function typecheckProgram(ast: Program) {
@@ -196,9 +196,11 @@ function inferType({
 
           for (let i = 0; i < actualArity; i++) {
             const expectedParamType = expectedType.parametersTypes[i]
-            const actualParam = expr.parameters[i]
-            if (!areTypesEqual(actualParam.paramType, expectedParamType)) {
-              throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_PARAMETER', `Expected lambda parameter "${actualParam.name}" to have type ${t(expectedParamType)}, but got ${t(actualParam.paramType)}`)
+            const actualParam = params[i]
+
+            // Need to swap the order, since function parameter subsumption is contravariant.
+            if (!ctx.isTypeAssignableTo(expectedParamType, actualParam.paramType, false)) {
+              throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_PARAMETER', `Expected lambda parameter "${actualParam.name}" to have type ${t(expectedParamType)}, but got ${t(actualParam.paramType)}.`)
             }
           }
 
@@ -315,7 +317,7 @@ function inferType({
         const { expr: innerExpr, ascribedType } = expr
 
         if (expectedType) {
-          expect(ascribedType).toBe(expectedType)
+          ctx.isTypeAssignableTo(ascribedType, expectedType)
         }
 
         return inferType({ expr: innerExpr, ctx, expectedType: ascribedType })
@@ -353,7 +355,7 @@ function inferType({
         }
 
         if (!itemsType) {
-          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_LIST_TYPE', `Cannot infer type for an empty list, provide the expected type explicitly.`)
+          return ctx.returnBotOrThrowAmbiguousError(new TypecheckingFailedError('ERROR_AMBIGUOUS_LIST_TYPE', `Cannot infer type for an empty list, provide the expected type explicitly.`))
         }
 
         return T.ListOf(itemsType)
@@ -398,7 +400,7 @@ function inferType({
             expectedType.right,
           )
         } else {
-          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_SUM_TYPE', `Cannot infer type for left injection, provide the expected type explicitly.`)
+          return ctx.returnBotOrThrowAmbiguousError(new TypecheckingFailedError('ERROR_AMBIGUOUS_SUM_TYPE', `Cannot infer type for left injection, provide the expected type explicitly.`))
         }
       }
       case 'Inr': {
@@ -413,7 +415,7 @@ function inferType({
             inferType({ expr: inrExpr, ctx, expectedType: expectedType.right }),
           )
         } else {
-          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_SUM_TYPE', `Cannot infer type for right injection, provide the expected type explicitly.`)
+          return ctx.returnBotOrThrowAmbiguousError(new TypecheckingFailedError('ERROR_AMBIGUOUS_SUM_TYPE', `Cannot infer type for right injection, provide the expected type explicitly.`))
         }
       }
       case 'Match': {
@@ -457,7 +459,7 @@ function inferType({
         }
 
         const fixT = innerExprType.parametersTypes[0] ?? innerExprType.returnType
-        expect(innerExprType).toBe(T.fn([fixT], fixT))
+        ctx.isTypeAssignableTo(innerExprType, T.fn([fixT], fixT))
 
         return fixT
       }
@@ -533,7 +535,7 @@ function inferType({
       }
       case 'ConstMemory': {
         if (!expectedType) {
-          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_REFERENCE_TYPE', `Cannot infer type for bare memory address, provide the expected type explicitly.`)
+          return ctx.returnBotOrThrowAmbiguousError(new TypecheckingFailedError('ERROR_AMBIGUOUS_REFERENCE_TYPE', `Cannot infer type for bare memory address, provide the expected type explicitly.`))
         }
         if (expectedType.type !== 'TypeRef') {
           throw new TypecheckingFailedError('ERROR_UNEXPECTED_MEMORY_ADDRESS', `Expected expression of type ${t(expectedType)}, but got bare memory address.`)
@@ -542,13 +544,13 @@ function inferType({
       }
       case 'Panic': {
         if (!expectedType) {
-          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_PANIC_TYPE', `Cannot infer type for panic, provide the expected type explicitly.`)
+          return ctx.returnBotOrThrowAmbiguousError(new TypecheckingFailedError('ERROR_AMBIGUOUS_PANIC_TYPE', `Cannot infer type for panic, provide the expected type explicitly.`))
         }
         return expectedType
       }
       case 'Throw': {
         if (!expectedType) {
-          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_THROW_TYPE', `Cannot infer type for throw, provide the expected type explicitly.`)
+          return ctx.returnBotOrThrowAmbiguousError(new TypecheckingFailedError('ERROR_AMBIGUOUS_THROW_TYPE', `Cannot infer type for throw, provide the expected type explicitly.`))
         }
         if (!ctx.exceptionType) {
           throw new TypecheckingFailedError('ERROR_EXCEPTION_TYPE_NOT_DECLARED', `Cannot throw exceptions without exception type declaration.`)
@@ -613,13 +615,18 @@ function inferType({
       case 'LogicalNot':
         inferType({ expr: expr.expr, ctx, expectedType: T.Bool })
         return T.Bool
+      case 'TypeCast': {
+        const { expr: innerExpr, castType } = expr
+        inferType({ ctx, expr: innerExpr })
+        return castType
+      }
       default:
         throw new Error(`Cannot infer type for expression "${expr.type}".`)
     }
   })()
 
   if (expectedType) {
-    expect(inferredType).toBe(expectedType)
+    ctx.isTypeAssignableTo(inferredType, expectedType)
   }
 
   if (DEBUG) {
@@ -627,16 +634,6 @@ function inferType({
   }
 
   return inferredType
-}
-
-function expect(actualType: Type) {
-  return {
-    toBe: (expectedType: Type) => {
-      if (!areTypesEqual(actualType, expectedType)) {
-        throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_EXPRESSION', `Expected expression to be of type ${t(expectedType)}, but got ${t(actualType)}.`)
-      }
-    },
-  }
 }
 
 function extendContextWithPattern({

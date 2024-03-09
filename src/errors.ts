@@ -112,6 +112,9 @@ export type TypeErrorTag =
 
   | 'ERROR_UNEXPECTED_REFERENCE'
 
+  // when during subtype checking, a an actual (part of a) type does not match with an expected (part of a) type
+  | 'ERROR_UNEXPECTED_SUBTYPE'
+
 export class TypecheckingFailedError extends Error {
   #tag: TypeErrorTag
 

@@ -2,16 +2,19 @@ import process from 'node:process'
 import type {
   Type,
   TypeBool,
+  TypeBottom,
   TypeFun,
   TypeList,
   TypeNat,
   TypeRecord,
   TypeRef,
   TypeSum,
+  TypeTop,
   TypeTuple,
   TypeUnit,
   TypeVariant,
 } from './ast'
+import { TypecheckingFailedError } from './errors'
 
 export const DEBUG = Boolean(process.env.DEBUG)
 
@@ -38,18 +41,20 @@ export function t(type: Type): string {
     case 'TypeRecord':
       return `{${type.fieldTypes.map(f => `${f.label} : ${t(f.fieldType)}`).join(', ')}}`
     case 'TypeList':
-      return `[${type.elementType}]`
+      return `[${t(type.elementType)}]`
     case 'TypeSum': {
       const strLeft = type.left.type === 'TypeSum' ? `(${t(type.left)})` : t(type.left)
       const strRight = type.right.type === 'TypeSum' ? `(${t(type.right)})` : t(type.right)
       return `${strLeft} + ${strRight}`
     }
-    case 'TypeVariant': {
+    case 'TypeVariant':
       return `<| ${type.fieldTypes.map(f => `${f.label} : ${f.fieldType ? t(f.fieldType) : '—'}`).join(', ')} |>`
-    }
-    case 'TypeRef': {
+    case 'TypeRef':
       return `&${t(type.referredType)}`
-    }
+    case 'TypeTop':
+      return 'Top'
+    case 'TypeBottom':
+      return 'Bot'
     default:
       return type.type
   }
@@ -69,6 +74,14 @@ export class _T {
 
   get Unit(): TypeUnit {
     return { type: 'TypeUnit' }
+  }
+
+  get Top(): TypeTop {
+    return { type: 'TypeTop' }
+  }
+
+  get Bot(): TypeBottom {
+    return { type: 'TypeBottom' }
   }
 
   Tuple(types: Type[]): TypeTuple {
@@ -128,6 +141,8 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
     case 'TypeNat':
     case 'TypeBool':
     case 'TypeUnit':
+    case 'TypeTop':
+    case 'TypeBottom':
       return true
     case 'TypeFun': {
       const t2_ = t2 as TypeFun
@@ -215,5 +230,111 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
     }
     default:
       throw new Error(`Comparison of types "${t1.type}" is not implemented.`)
+  }
+}
+
+export function isSubtypeOf(
+  subtype: Type,
+  supertype: Type,
+): boolean {
+  if (supertype.type === 'TypeTop') {
+    return true
+  } else if (subtype.type === 'TypeTop') {
+    return false
+  } else if (subtype.type === 'TypeBottom') {
+    return true
+  } else if (supertype.type === 'TypeBottom') {
+    return false
+  }
+
+  // subtype and supertype are neither top nor bottom here
+
+  if (subtype.type !== supertype.type) {
+    // In Stella all the types are disjoint, so if the types are different,
+    // they are not assignable.
+    return false
+  }
+
+  switch (subtype.type) {
+    case 'TypeNat':
+    case 'TypeBool':
+    case 'TypeUnit':
+      return true
+    case 'TypeRecord': {
+      const supertype_ = supertype as TypeRecord
+      for (const superFieldType of supertype_.fieldTypes) {
+        const subFieldType = subtype.fieldTypes.find(f => f.label === superFieldType.label)
+        if (!subFieldType) {
+          return false
+        }
+        if (!isSubtypeOf(subFieldType.fieldType, superFieldType.fieldType)) {
+          return false
+        }
+      }
+      return true
+    }
+    case 'TypeFun': {
+      const supertype_ = supertype as TypeFun
+      const subParams = subtype.parametersTypes // S1
+      const subReturn = subtype.returnType // S2
+      const superParams = supertype_.parametersTypes // T1
+      const superReturn = supertype_.returnType // T2
+
+      if (subParams.length !== superParams.length) {
+        return false
+      }
+
+      if (!subParams.every((subParam, i) => isSubtypeOf(superParams[i], subParam))) {
+        return false
+      }
+
+      return isSubtypeOf(subReturn, superReturn)
+    }
+    case 'TypeSum': {
+      const supertype_ = supertype as TypeSum
+      return (
+        isSubtypeOf(subtype.left, supertype_.left)
+        && isSubtypeOf(subtype.right, supertype_.right)
+      )
+    }
+    // case 'TypeVariant':
+    //   throw 'todo'
+    case 'TypeTuple': {
+      const supertype_ = supertype as TypeTuple
+      const subTypes = subtype.types
+      const superTypes = supertype_.types
+      if (subTypes.length !== superTypes.length) {
+        return false
+      }
+      return subTypes.every((subType, i) => isSubtypeOf(subType, superTypes[i]))
+    }
+    case 'TypeList': {
+      const supertype_ = supertype as TypeList
+      return isSubtypeOf(subtype.elementType, supertype_.elementType)
+    }
+    case 'TypeRef': {
+      const supertype_ = supertype as TypeRef
+      return (
+        isSubtypeOf(subtype.referredType, supertype_.referredType)
+        && isSubtypeOf(supertype_.referredType, subtype.referredType)
+      )
+    }
+    default:
+      throw new Error(`Comparison of subtype checking for "${subtype.type}" is not implemented.`)
+  }
+}
+
+export function expect(actualType: Type) {
+  return {
+    toEqual: (expectedType: Type) => {
+      if (!areTypesEqual(actualType, expectedType)) {
+        throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_EXPRESSION', `Expected expression to be of type ${t(expectedType)}, but got ${t(actualType)}.`)
+      }
+    },
+    toBeSubtypeOf: (superType: Type) => {
+      if (!isSubtypeOf(actualType, superType)) {
+        throw new TypecheckingFailedError('ERROR_UNEXPECTED_SUBTYPE', `Expected expression to be of type ${t(superType)} or a subtype, but got ${t(actualType)}.`)
+      }
+    },
   }
 }
