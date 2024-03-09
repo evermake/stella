@@ -508,8 +508,13 @@ function inferType({
         inferType({ ctx, expr: rhs, expectedType: varType.referredType })
         return T.Unit
       }
-      case 'Reference':
-        return T.RefTo(inferType({ ctx, expr: expr.expr }))
+      case 'Reference': {
+        const refType = T.RefTo(inferType({ ctx, expr: expr.expr }))
+        if (expectedType && expectedType.type !== 'TypeRef') {
+          throw new TypecheckingFailedError('ERROR_UNEXPECTED_REFERENCE', `Expected expression of non-reference type ${t(expectedType)}, but got a reference ${t(refType)}.`)
+        }
+        return refType
+      }
       case 'Dereference': {
         if (expectedType) {
           inferType({

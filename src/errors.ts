@@ -110,6 +110,8 @@ export type TypeErrorTag =
   // if a memory address literal is found when not expecting a reference
   | 'ERROR_UNEXPECTED_MEMORY_ADDRESS'
 
+  | 'ERROR_UNEXPECTED_REFERENCE'
+
 export class TypecheckingFailedError extends Error {
   #tag: TypeErrorTag
 
