@@ -31,6 +31,7 @@ import { MultiplyContext } from "./stellaParser";
 import { ConstMemoryContext } from "./stellaParser";
 import { ListContext } from "./stellaParser";
 import { TryCatchContext } from "./stellaParser";
+import { TryCastAsContext } from "./stellaParser";
 import { HeadContext } from "./stellaParser";
 import { TerminatingSemicolonContext } from "./stellaParser";
 import { NotEqualContext } from "./stellaParser";
@@ -77,20 +78,22 @@ import { ConsListContext } from "./stellaParser";
 import { PatternBindingContext } from "./stellaParser";
 import { BindingContext } from "./stellaParser";
 import { MatchCaseContext } from "./stellaParser";
-import { PatternVariantContext } from "./stellaParser";
-import { PatternInlContext } from "./stellaParser";
-import { PatternInrContext } from "./stellaParser";
-import { PatternTupleContext } from "./stellaParser";
-import { PatternRecordContext } from "./stellaParser";
-import { PatternListContext } from "./stellaParser";
 import { PatternConsContext } from "./stellaParser";
-import { PatternFalseContext } from "./stellaParser";
-import { PatternTrueContext } from "./stellaParser";
-import { PatternUnitContext } from "./stellaParser";
+import { PatternTupleContext } from "./stellaParser";
+import { PatternListContext } from "./stellaParser";
+import { PatternRecordContext } from "./stellaParser";
+import { PatternVariantContext } from "./stellaParser";
+import { PatternAscContext } from "./stellaParser";
 import { PatternIntContext } from "./stellaParser";
-import { PatternSuccContext } from "./stellaParser";
+import { PatternInrContext } from "./stellaParser";
+import { PatternTrueContext } from "./stellaParser";
+import { PatternInlContext } from "./stellaParser";
 import { PatternVarContext } from "./stellaParser";
 import { ParenthesisedPatternContext } from "./stellaParser";
+import { PatternSuccContext } from "./stellaParser";
+import { PatternFalseContext } from "./stellaParser";
+import { PatternUnitContext } from "./stellaParser";
+import { PatternCastAsContext } from "./stellaParser";
 import { LabelledPatternContext } from "./stellaParser";
 import { TypeTupleContext } from "./stellaParser";
 import { TypeTopContext } from "./stellaParser";
@@ -443,6 +446,18 @@ export default class stellaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTryCatch?: (ctx: TryCatchContext) => void;
+	/**
+	 * Enter a parse tree produced by the `TryCastAs`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	enterTryCastAs?: (ctx: TryCastAsContext) => void;
+	/**
+	 * Exit a parse tree produced by the `TryCastAs`
+	 * labeled alternative in `stellaParser.expr`.
+	 * @param ctx the parse tree
+	 */
+	exitTryCastAs?: (ctx: TryCastAsContext) => void;
 	/**
 	 * Enter a parse tree produced by the `Head`
 	 * labeled alternative in `stellaParser.expr`.
@@ -990,41 +1005,17 @@ export default class stellaParserListener extends ParseTreeListener {
 	 */
 	exitMatchCase?: (ctx: MatchCaseContext) => void;
 	/**
-	 * Enter a parse tree produced by the `PatternVariant`
+	 * Enter a parse tree produced by the `PatternCons`
 	 * labeled alternative in `stellaParser.pattern`.
 	 * @param ctx the parse tree
 	 */
-	enterPatternVariant?: (ctx: PatternVariantContext) => void;
+	enterPatternCons?: (ctx: PatternConsContext) => void;
 	/**
-	 * Exit a parse tree produced by the `PatternVariant`
+	 * Exit a parse tree produced by the `PatternCons`
 	 * labeled alternative in `stellaParser.pattern`.
 	 * @param ctx the parse tree
 	 */
-	exitPatternVariant?: (ctx: PatternVariantContext) => void;
-	/**
-	 * Enter a parse tree produced by the `PatternInl`
-	 * labeled alternative in `stellaParser.pattern`.
-	 * @param ctx the parse tree
-	 */
-	enterPatternInl?: (ctx: PatternInlContext) => void;
-	/**
-	 * Exit a parse tree produced by the `PatternInl`
-	 * labeled alternative in `stellaParser.pattern`.
-	 * @param ctx the parse tree
-	 */
-	exitPatternInl?: (ctx: PatternInlContext) => void;
-	/**
-	 * Enter a parse tree produced by the `PatternInr`
-	 * labeled alternative in `stellaParser.pattern`.
-	 * @param ctx the parse tree
-	 */
-	enterPatternInr?: (ctx: PatternInrContext) => void;
-	/**
-	 * Exit a parse tree produced by the `PatternInr`
-	 * labeled alternative in `stellaParser.pattern`.
-	 * @param ctx the parse tree
-	 */
-	exitPatternInr?: (ctx: PatternInrContext) => void;
+	exitPatternCons?: (ctx: PatternConsContext) => void;
 	/**
 	 * Enter a parse tree produced by the `PatternTuple`
 	 * labeled alternative in `stellaParser.pattern`.
@@ -1038,18 +1029,6 @@ export default class stellaParserListener extends ParseTreeListener {
 	 */
 	exitPatternTuple?: (ctx: PatternTupleContext) => void;
 	/**
-	 * Enter a parse tree produced by the `PatternRecord`
-	 * labeled alternative in `stellaParser.pattern`.
-	 * @param ctx the parse tree
-	 */
-	enterPatternRecord?: (ctx: PatternRecordContext) => void;
-	/**
-	 * Exit a parse tree produced by the `PatternRecord`
-	 * labeled alternative in `stellaParser.pattern`.
-	 * @param ctx the parse tree
-	 */
-	exitPatternRecord?: (ctx: PatternRecordContext) => void;
-	/**
 	 * Enter a parse tree produced by the `PatternList`
 	 * labeled alternative in `stellaParser.pattern`.
 	 * @param ctx the parse tree
@@ -1062,53 +1041,41 @@ export default class stellaParserListener extends ParseTreeListener {
 	 */
 	exitPatternList?: (ctx: PatternListContext) => void;
 	/**
-	 * Enter a parse tree produced by the `PatternCons`
+	 * Enter a parse tree produced by the `PatternRecord`
 	 * labeled alternative in `stellaParser.pattern`.
 	 * @param ctx the parse tree
 	 */
-	enterPatternCons?: (ctx: PatternConsContext) => void;
+	enterPatternRecord?: (ctx: PatternRecordContext) => void;
 	/**
-	 * Exit a parse tree produced by the `PatternCons`
+	 * Exit a parse tree produced by the `PatternRecord`
 	 * labeled alternative in `stellaParser.pattern`.
 	 * @param ctx the parse tree
 	 */
-	exitPatternCons?: (ctx: PatternConsContext) => void;
+	exitPatternRecord?: (ctx: PatternRecordContext) => void;
 	/**
-	 * Enter a parse tree produced by the `PatternFalse`
+	 * Enter a parse tree produced by the `PatternVariant`
 	 * labeled alternative in `stellaParser.pattern`.
 	 * @param ctx the parse tree
 	 */
-	enterPatternFalse?: (ctx: PatternFalseContext) => void;
+	enterPatternVariant?: (ctx: PatternVariantContext) => void;
 	/**
-	 * Exit a parse tree produced by the `PatternFalse`
+	 * Exit a parse tree produced by the `PatternVariant`
 	 * labeled alternative in `stellaParser.pattern`.
 	 * @param ctx the parse tree
 	 */
-	exitPatternFalse?: (ctx: PatternFalseContext) => void;
+	exitPatternVariant?: (ctx: PatternVariantContext) => void;
 	/**
-	 * Enter a parse tree produced by the `PatternTrue`
+	 * Enter a parse tree produced by the `PatternAsc`
 	 * labeled alternative in `stellaParser.pattern`.
 	 * @param ctx the parse tree
 	 */
-	enterPatternTrue?: (ctx: PatternTrueContext) => void;
+	enterPatternAsc?: (ctx: PatternAscContext) => void;
 	/**
-	 * Exit a parse tree produced by the `PatternTrue`
+	 * Exit a parse tree produced by the `PatternAsc`
 	 * labeled alternative in `stellaParser.pattern`.
 	 * @param ctx the parse tree
 	 */
-	exitPatternTrue?: (ctx: PatternTrueContext) => void;
-	/**
-	 * Enter a parse tree produced by the `PatternUnit`
-	 * labeled alternative in `stellaParser.pattern`.
-	 * @param ctx the parse tree
-	 */
-	enterPatternUnit?: (ctx: PatternUnitContext) => void;
-	/**
-	 * Exit a parse tree produced by the `PatternUnit`
-	 * labeled alternative in `stellaParser.pattern`.
-	 * @param ctx the parse tree
-	 */
-	exitPatternUnit?: (ctx: PatternUnitContext) => void;
+	exitPatternAsc?: (ctx: PatternAscContext) => void;
 	/**
 	 * Enter a parse tree produced by the `PatternInt`
 	 * labeled alternative in `stellaParser.pattern`.
@@ -1122,17 +1089,41 @@ export default class stellaParserListener extends ParseTreeListener {
 	 */
 	exitPatternInt?: (ctx: PatternIntContext) => void;
 	/**
-	 * Enter a parse tree produced by the `PatternSucc`
+	 * Enter a parse tree produced by the `PatternInr`
 	 * labeled alternative in `stellaParser.pattern`.
 	 * @param ctx the parse tree
 	 */
-	enterPatternSucc?: (ctx: PatternSuccContext) => void;
+	enterPatternInr?: (ctx: PatternInrContext) => void;
 	/**
-	 * Exit a parse tree produced by the `PatternSucc`
+	 * Exit a parse tree produced by the `PatternInr`
 	 * labeled alternative in `stellaParser.pattern`.
 	 * @param ctx the parse tree
 	 */
-	exitPatternSucc?: (ctx: PatternSuccContext) => void;
+	exitPatternInr?: (ctx: PatternInrContext) => void;
+	/**
+	 * Enter a parse tree produced by the `PatternTrue`
+	 * labeled alternative in `stellaParser.pattern`.
+	 * @param ctx the parse tree
+	 */
+	enterPatternTrue?: (ctx: PatternTrueContext) => void;
+	/**
+	 * Exit a parse tree produced by the `PatternTrue`
+	 * labeled alternative in `stellaParser.pattern`.
+	 * @param ctx the parse tree
+	 */
+	exitPatternTrue?: (ctx: PatternTrueContext) => void;
+	/**
+	 * Enter a parse tree produced by the `PatternInl`
+	 * labeled alternative in `stellaParser.pattern`.
+	 * @param ctx the parse tree
+	 */
+	enterPatternInl?: (ctx: PatternInlContext) => void;
+	/**
+	 * Exit a parse tree produced by the `PatternInl`
+	 * labeled alternative in `stellaParser.pattern`.
+	 * @param ctx the parse tree
+	 */
+	exitPatternInl?: (ctx: PatternInlContext) => void;
 	/**
 	 * Enter a parse tree produced by the `PatternVar`
 	 * labeled alternative in `stellaParser.pattern`.
@@ -1157,6 +1148,54 @@ export default class stellaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitParenthesisedPattern?: (ctx: ParenthesisedPatternContext) => void;
+	/**
+	 * Enter a parse tree produced by the `PatternSucc`
+	 * labeled alternative in `stellaParser.pattern`.
+	 * @param ctx the parse tree
+	 */
+	enterPatternSucc?: (ctx: PatternSuccContext) => void;
+	/**
+	 * Exit a parse tree produced by the `PatternSucc`
+	 * labeled alternative in `stellaParser.pattern`.
+	 * @param ctx the parse tree
+	 */
+	exitPatternSucc?: (ctx: PatternSuccContext) => void;
+	/**
+	 * Enter a parse tree produced by the `PatternFalse`
+	 * labeled alternative in `stellaParser.pattern`.
+	 * @param ctx the parse tree
+	 */
+	enterPatternFalse?: (ctx: PatternFalseContext) => void;
+	/**
+	 * Exit a parse tree produced by the `PatternFalse`
+	 * labeled alternative in `stellaParser.pattern`.
+	 * @param ctx the parse tree
+	 */
+	exitPatternFalse?: (ctx: PatternFalseContext) => void;
+	/**
+	 * Enter a parse tree produced by the `PatternUnit`
+	 * labeled alternative in `stellaParser.pattern`.
+	 * @param ctx the parse tree
+	 */
+	enterPatternUnit?: (ctx: PatternUnitContext) => void;
+	/**
+	 * Exit a parse tree produced by the `PatternUnit`
+	 * labeled alternative in `stellaParser.pattern`.
+	 * @param ctx the parse tree
+	 */
+	exitPatternUnit?: (ctx: PatternUnitContext) => void;
+	/**
+	 * Enter a parse tree produced by the `PatternCastAs`
+	 * labeled alternative in `stellaParser.pattern`.
+	 * @param ctx the parse tree
+	 */
+	enterPatternCastAs?: (ctx: PatternCastAsContext) => void;
+	/**
+	 * Exit a parse tree produced by the `PatternCastAs`
+	 * labeled alternative in `stellaParser.pattern`.
+	 * @param ctx the parse tree
+	 */
+	exitPatternCastAs?: (ctx: PatternCastAsContext) => void;
 	/**
 	 * Enter a parse tree produced by `stellaParser.labelledPattern`.
 	 * @param ctx the parse tree

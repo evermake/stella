@@ -7,6 +7,11 @@ export default antfu(
       quotes: 'single',
       semi: false,
     },
+    ignores: [
+      'src/ast.ts',
+      'src/visitors.ts',
+      'src/stella/**',
+    ],
   },
   {
     rules: {
@@ -15,10 +20,5 @@ export default antfu(
       'style/brace-style': ['error', '1tbs'],
       'no-console': 'off',
     },
-  },
-  {
-    ignores: [
-      'src/stella/**/*',
-    ],
   },
 )

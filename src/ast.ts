@@ -1,13 +1,13 @@
 // ---- Basic tokens
 
 /** A Stella identifier satisfying the RegEx `[_a-zA-Z][\w!\-:?]*` */
-export type Identifier = string
+export type Identifier = string;
 
-export type Extension = `#${string}`
+export type Extension = `#${string}`;
 
 /** It is currently not possible in TypeScript to represent "hexadecimal string" as a type */
-type Hex = string
-export type MemoryAddress = `<0x${Hex}>`
+type Hex = string;
+export type MemoryAddress = `<0x${Hex}>`;
 
 // TODO: document all nodes with JSDoc
 
@@ -30,67 +30,67 @@ type Param = ParamType<NullaryFunctionExtension>;
 // ---- Types
 
 type SimpleType<T extends Exclude<string, T>> = {
-  type: T
-}
-export type TypeNat = SimpleType<'TypeNat'>
-export type TypeBool = SimpleType<'TypeBool'>
-export type TypeUnit = SimpleType<'TypeUnit'>
-export type TypeTop = SimpleType<'TypeTop'>
-export type TypeBottom = SimpleType<'TypeBottom'>
+  type: T;
+};
+export type TypeNat = SimpleType<'TypeNat'>;
+export type TypeBool = SimpleType<'TypeBool'>;
+export type TypeUnit = SimpleType<'TypeUnit'>;
+export type TypeTop = SimpleType<'TypeTop'>;
+export type TypeBottom = SimpleType<'TypeBottom'>;
 export interface TypeFun {
-  type: 'TypeFun'
+  type: 'TypeFun';
   // TODO: handle multi-param and nullary extensions being enabled, and make [Type] (tuple type with 1 element) the default
-  parametersTypes: Type[]
-  returnType: Type
+  parametersTypes: Type[];
+  returnType: Type;
 }
 export interface TypeRec {
-  type: 'TypeRec'
-  var: Identifier
-  recType: Type
+  type: 'TypeRec';
+  var: Identifier;
+  recType: Type;
 }
 export interface TypeSum {
-  type: 'TypeSum'
-  left: Type
-  right: Type
+  type: 'TypeSum';
+  left: Type;
+  right: Type;
 }
 export interface TypeTuple {
-  type: 'TypeTuple'
-  types: Type[]
+  type: 'TypeTuple';
+  types: Type[];
 }
 export interface RecordFieldType {
-  type: 'RecordFieldType'
-  label: Identifier
-  fieldType: Type
+  type: 'RecordFieldType';
+  label: Identifier;
+  fieldType: Type;
 }
 export interface TypeRecord {
-  type: 'TypeRecord'
-  fieldTypes: RecordFieldType[]
+  type: 'TypeRecord';
+  fieldTypes: RecordFieldType[];
 }
 export interface VariantFieldType {
-  type: 'VariantFieldType'
-  label: Identifier
-  fieldType?: Type
+  type: 'VariantFieldType';
+  label: Identifier;
+  fieldType?: Type;
 }
 export interface TypeVariant {
-  type: 'TypeVariant'
-  fieldTypes: VariantFieldType[]
+  type: 'TypeVariant';
+  fieldTypes: VariantFieldType[];
 }
 export interface TypeList {
-  type: 'TypeList'
-  elementType: Type
+  type: 'TypeList';
+  elementType: Type;
 }
 export interface TypeVar {
-  type: 'TypeVar'
-  name: Identifier
+  type: 'TypeVar';
+  name: Identifier;
 }
 export interface TypeRef {
-  type: 'TypeRef'
-  referredType: Type
+  type: 'TypeRef';
+  referredType: Type;
 }
 export interface TypeForAll {
-  type: 'TypeForAll'
-  typeVars: Identifier[]
-  body: Type
+  type: 'TypeForAll';
+  typeVars: Identifier[];
+  body: Type;
 }
 
 export type Type =
@@ -110,206 +110,214 @@ export type Type =
   | TypeRef
   | TypeForAll
   | RecordFieldType
-  | VariantFieldType
+  | VariantFieldType;
 
 // ---- Expressions
 
 export interface Cons {
-  type: 'Cons'
-  head: Expr
-  tail: Expr
+  type: 'Cons';
+  head: Expr;
+  tail: Expr;
 }
 type UnaryFunction<T extends Exclude<string, T>> = {
-  type: T
-  expr: Expr
-}
-export type Succ = UnaryFunction<'Succ'>
-export type ListHead = UnaryFunction<'ListHead'>
-export type ListTail = UnaryFunction<'ListTail'>
-export type ListIsEmpty = UnaryFunction<'ListIsEmpty'>
-export type LogicalNot = UnaryFunction<'LogicalNot'>
-export type NatPred = UnaryFunction<'NatPred'>
-export type NatIsZero = UnaryFunction<'NatIsZero'>
-export type Fix = UnaryFunction<'Fix'>
+  type: T;
+  expr: Expr;
+};
+export type Succ = UnaryFunction<'Succ'>;
+export type ListHead = UnaryFunction<'ListHead'>;
+export type ListTail = UnaryFunction<'ListTail'>;
+export type ListIsEmpty = UnaryFunction<'ListIsEmpty'>;
+export type LogicalNot = UnaryFunction<'LogicalNot'>;
+export type NatPred = UnaryFunction<'NatPred'>;
+export type NatIsZero = UnaryFunction<'NatIsZero'>;
+export type Fix = UnaryFunction<'Fix'>;
 export interface ConstInt {
-  type: 'ConstInt'
-  value: number
+  type: 'ConstInt';
+  value: number;
 }
 export interface ConstBool {
-  type: 'ConstBool'
-  value: boolean
+  type: 'ConstBool';
+  value: boolean;
 }
 export interface ConstUnit {
-  type: 'Unit'
+  type: 'Unit';
 }
 export interface ConstMemory {
-  type: 'ConstMemory'
-  value: string
+  type: 'ConstMemory';
+  value: string;
 }
 export interface DotRecord {
-  type: 'DotRecord'
-  expr: Expr
-  label: Identifier
+  type: 'DotRecord';
+  expr: Expr;
+  label: Identifier;
 }
 export interface DotTuple {
-  type: 'DotTuple'
-  expr: Expr
-  index: number
+  type: 'DotTuple';
+  expr: Expr;
+  index: number;
 }
 export interface NatRec {
-  type: 'NatRec'
-  n: Expr
-  initial: Expr
-  step: Expr
+  type: 'NatRec';
+  n: Expr;
+  initial: Expr;
+  step: Expr;
 }
 export interface Var {
-  type: 'Var'
-  name: Identifier
+  type: 'Var';
+  name: Identifier;
 }
-export type Inl = UnaryFunction<'Inl'>
-export type Inr = UnaryFunction<'Inr'>
+export type Inl = UnaryFunction<'Inl'>;
+export type Inr = UnaryFunction<'Inr'>;
 export interface Fold {
-  type: 'Fold'
-  foldedType: Type
-  expr: Expr
+  type: 'Fold';
+  foldedType: Type;
+  expr: Expr;
 }
 export interface Unfold {
-  type: 'Unfold'
-  unfoldedType: Type
-  expr: Expr
+  type: 'Unfold';
+  unfoldedType: Type;
+  expr: Expr;
 }
 export interface Application {
-  type: 'Application'
-  function: Expr
+  type: 'Application';
+  function: Expr;
   // TODO: handle type without unary/multi-param extensions enabled
-  arguments: Expr[]
+  arguments: Expr[];
 }
 export interface TypeApplication {
-  type: 'TypeApplication'
-  function: Expr
-  typeArguments: Type[]
+  type: 'TypeApplication';
+  function: Expr;
+  typeArguments: Type[];
 }
 
 export interface TypeAscription {
-  type: 'TypeAscription'
-  expr: Expr
-  ascribedType: Type
+  type: 'TypeAscription';
+  expr: Expr;
+  ascribedType: Type;
 }
 type BinaryOp<T extends Exclude<string, T>> = {
-  type: T
-  left: Expr
-  right: Expr
-}
-export type Multiply = BinaryOp<'Multiply'>
-export type Divide = BinaryOp<'Divide'>
-export type LogicalAnd = BinaryOp<'LogicalAnd'>
-export type Add = BinaryOp<'Add'>
-export type Subtract = BinaryOp<'Subtract'>
-export type LogicalOr = BinaryOp<'LogicalOr'>
+  type: T;
+  left: Expr;
+  right: Expr;
+};
+export type Multiply = BinaryOp<'Multiply'>;
+export type Divide = BinaryOp<'Divide'>;
+export type LogicalAnd = BinaryOp<'LogicalAnd'>;
+export type Add = BinaryOp<'Add'>;
+export type Subtract = BinaryOp<'Subtract'>;
+export type LogicalOr = BinaryOp<'LogicalOr'>;
 
 export interface Abstraction {
-  type: 'Abstraction'
+  type: 'Abstraction';
   // TODO: handle type without unary/multi-param extensions enabled
-  parameters: ParamDecl[]
-  returnValue: Expr
+  parameters: ParamDecl[];
+  returnValue: Expr;
 }
 export interface TypeAbstraction {
-  type: 'TypeAbstraction'
-  typeParams: Identifier[]
-  expr: Expr
+  type: 'TypeAbstraction';
+  typeParams: Identifier[];
+  expr: Expr;
 }
 
 export interface Tuple {
-  type: 'Tuple'
-  exprs: Expr[]
+  type: 'Tuple';
+  exprs: Expr[];
 }
 export interface Binding {
-  type: 'Binding'
-  name: Identifier
-  expr: Expr
+  type: 'Binding';
+  name: Identifier;
+  expr: Expr;
 }
 export interface Record {
-  type: 'Record'
-  bindings: Binding[]
+  type: 'Record';
+  bindings: Binding[];
 }
 export interface Variant {
-  type: 'Variant'
-  label: Identifier
-  expr?: Expr
+  type: 'Variant';
+  label: Identifier;
+  expr?: Expr;
 }
 export interface MatchCase {
-  type: 'MatchCase'
-  pattern: Pattern
-  expr: Expr
+  type: 'MatchCase';
+  pattern: Pattern;
+  expr: Expr;
 }
 export interface Match {
-  type: 'Match'
-  expr: Expr
-  cases: MatchCase[]
+  type: 'Match';
+  expr: Expr;
+  cases: MatchCase[];
 }
 export interface List {
-  type: 'List'
-  exprs: Expr[]
+  type: 'List';
+  exprs: Expr[];
 }
-export type LessThan = BinaryOp<'LessThan'>
-export type LessThanOrEqual = BinaryOp<'LessThanOrEqual'>
-export type GreaterThan = BinaryOp<'GreaterThan'>
-export type GreaterThanOrEqual = BinaryOp<'GreaterThanOrEqual'>
-export type Equal = BinaryOp<'Equal'>
-export type NotEqual = BinaryOp<'NotEqual'>
+export type LessThan = BinaryOp<'LessThan'>;
+export type LessThanOrEqual = BinaryOp<'LessThanOrEqual'>;
+export type GreaterThan = BinaryOp<'GreaterThan'>;
+export type GreaterThanOrEqual = BinaryOp<'GreaterThanOrEqual'>;
+export type Equal = BinaryOp<'Equal'>;
+export type NotEqual = BinaryOp<'NotEqual'>;
 export interface Assignment {
-  type: 'Assignment'
-  lhs: Expr
-  rhs: Expr
+  type: 'Assignment';
+  lhs: Expr;
+  rhs: Expr;
 }
 export interface TypeCast {
-  type: 'TypeCast'
-  expr: Expr
-  castType: Type
+  type: 'TypeCast';
+  expr: Expr;
+  castType: Type;
 }
 export interface Reference {
-  type: 'Reference'
-  expr: Expr
+  type: 'Reference';
+  expr: Expr;
 }
 export interface Dereference {
-  type: 'Dereference'
-  expr: Expr
+  type: 'Dereference';
+  expr: Expr;
 }
 export interface Panic {
-  type: 'Panic'
+  type: 'Panic';
 }
-export type Throw = UnaryFunction<'Throw'>
+export type Throw = UnaryFunction<'Throw'>;
 export interface TryCatch {
-  type: 'TryCatch'
-  tryExpr: Expr
-  pattern: Pattern
-  fallbackExpr: Expr
+  type: 'TryCatch';
+  tryExpr: Expr;
+  pattern: Pattern;
+  fallbackExpr: Expr;
 }
 export interface TryWith {
-  type: 'TryWith'
-  tryExpr: Expr
-  fallbackExpr: Expr
+  type: 'TryWith';
+  tryExpr: Expr;
+  fallbackExpr: Expr;
+}
+export interface TryCastAs {
+  type: 'TryCastAs';
+  tryExpr: Expr;
+  castType: Type;
+  pattern: Pattern;
+  successExpr: Expr;
+  fallbackExpr: Expr;
 }
 export interface If {
-  type: 'If'
-  condition: Expr
-  thenExpr: Expr
-  elseExpr: Expr
+  type: 'If';
+  condition: Expr;
+  thenExpr: Expr;
+  elseExpr: Expr;
 }
 export interface Let {
-  type: 'Let'
-  patternBindings: PatternBinding[]
-  body: Expr
+  type: 'Let';
+  patternBindings: PatternBinding[];
+  body: Expr;
 }
 export interface LetRec {
-  type: 'LetRec'
-  patternBindings: PatternBinding[]
-  body: Expr
+  type: 'LetRec';
+  patternBindings: PatternBinding[];
+  body: Expr;
 }
 export interface Sequence {
-  type: 'Sequence'
-  expr1: Expr
-  expr2: Expr
+  type: 'Sequence';
+  expr1: Expr;
+  expr2: Expr;
 }
 
 export type Expr =
@@ -364,78 +372,93 @@ export type Expr =
   | Throw
   | TryCatch
   | TryWith
+  | TryCastAs
   | If
   | Let
   | LetRec
-  | Sequence
+  | Sequence;
 
 // ---- Patterns
 
 export interface PatternBinding {
-  type: 'PatternBinding'
-  pattern: Pattern
-  rhs: Expr
+  type: 'PatternBinding';
+  pattern: Pattern;
+  rhs: Expr;
+}
+
+export interface PatternAsc {
+  type: 'PatternAsc';
+  pattern: Pattern;
+  ascribedType: Type;
+}
+
+export interface PatternCastAs {
+  type: 'PatternCastAs';
+  pattern: Pattern;
+  castType: Type;
 }
 
 export interface PatternVariant {
-  type: 'PatternVariant'
-  label: Identifier
-  pattern?: Pattern
+  type: 'PatternVariant';
+  label: Identifier;
+  pattern?: Pattern;
 }
 export interface PatternInl {
-  type: 'PatternInl'
-  pattern: Pattern
+  type: 'PatternInl';
+  pattern: Pattern;
 }
 export interface PatternInr {
-  type: 'PatternInr'
-  pattern: Pattern
+  type: 'PatternInr';
+  pattern: Pattern;
 }
 export interface PatternTuple {
-  type: 'PatternTuple'
-  patterns: Pattern[]
+  type: 'PatternTuple';
+  patterns: Pattern[];
 }
 export interface LabelledPattern {
-  type: 'LabelledPattern'
-  label: Identifier
-  pattern: Pattern
+  type: 'LabelledPattern';
+  label: Identifier;
+  pattern: Pattern;
 }
 export interface PatternRecord {
-  type: 'PatternRecord'
-  patterns: LabelledPattern[]
+  type: 'PatternRecord';
+  patterns: LabelledPattern[];
 }
 export interface PatternList {
-  type: 'PatternList'
-  patterns: Pattern[]
+  type: 'PatternList';
+  patterns: Pattern[];
 }
 export interface PatternCons {
-  type: 'PatternCons'
-  head: Pattern
-  tail: Pattern
+  type: 'PatternCons';
+  head: Pattern;
+  tail: Pattern;
 }
 export interface PatternFalse {
-  type: 'PatternFalse'
+  type: 'PatternFalse';
 }
 export interface PatternTrue {
-  type: 'PatternTrue'
+  type: 'PatternTrue';
 }
 export interface PatternUnit {
-  type: 'PatternUnit'
+  type: 'PatternUnit';
 }
 export interface PatternInt {
-  type: 'PatternInt'
-  value: number
+  type: 'PatternInt';
+  value: number;
 }
 export interface PatternSucc {
-  type: 'PatternSucc'
-  value: Pattern
+  type: 'PatternSucc';
+  value: Pattern;
 }
 export interface PatternVar {
-  type: 'PatternVar'
-  name: Identifier
+  type: 'PatternVar';
+  name: Identifier;
 }
 
 export type Pattern =
   | PatternVariant
+  | PatternAsc
+  | PatternCastAs
   | PatternInl
   | PatternInr
   | PatternTuple
@@ -448,52 +471,52 @@ export type Pattern =
   | PatternUnit
   | PatternInt
   | PatternSucc
-  | PatternVar
+  | PatternVar;
 
 // ---- Declarations
 
 export interface ParamDecl {
-  type: 'ParamDecl'
-  name: Identifier
-  paramType: Type
+  type: 'ParamDecl';
+  name: Identifier;
+  paramType: Type;
 }
 
-type Annotation = string
+type Annotation = string;
 
 export interface DeclFun {
-  type: 'DeclFun'
-  annotations: Annotation[]
-  name: Identifier
-  returnType?: Type
+  type: 'DeclFun';
+  annotations: Annotation[];
+  name: Identifier;
+  returnType?: Type;
   /** Only present if the `#exceptions` extension is enabled */
-  throwTypes: Type[]
+  throwTypes: Type[];
   /** Only present if the `#nested-function-declarations` extension is enabled */
-  nestedDeclarations: Decl[]
+  nestedDeclarations: Decl[];
   // TODO: handle multi-param and nullary extensions being enabled, and make [ParamDecl] (tuple type with 1 element) the default
-  parameters: ParamDecl[]
-  returnValue: Expr
+  parameters: ParamDecl[];
+  returnValue: Expr;
 }
 
 export interface DeclFunGeneric extends Omit<DeclFun, 'type'> {
-  type: 'DeclFunGeneric'
-  typeParams: Identifier[]
+  type: 'DeclFunGeneric';
+  typeParams: Identifier[];
 }
 
 export interface DeclTypeAlias {
-  type: 'DeclTypeAlias'
-  alias: Identifier
-  aliasedType: Type
+  type: 'DeclTypeAlias';
+  alias: Identifier;
+  aliasedType: Type;
 }
 
 export interface DeclExceptionType {
-  type: 'DeclExceptionType'
-  exceptionType: Type
+  type: 'DeclExceptionType';
+  exceptionType: Type;
 }
 
 export interface DeclExceptionVariant {
-  type: 'DeclExceptionVariant'
-  name: Identifier
-  variantType: Type
+  type: 'DeclExceptionVariant';
+  name: Identifier;
+  variantType: Type;
 }
 
 export type Decl =
@@ -501,14 +524,14 @@ export type Decl =
   | DeclFunGeneric
   | DeclTypeAlias
   | DeclExceptionType
-  | DeclExceptionVariant
+  | DeclExceptionVariant;
 
 // ----- Program
 
 export interface Program {
-  type: 'Program'
-  extensions: Extension[]
-  declarations: Decl[]
+  type: 'Program';
+  extensions: Extension[];
+  declarations: Decl[];
 }
 
 export type Node =
@@ -520,4 +543,4 @@ export type Node =
   | Binding
   | PatternBinding
   | MatchCase
-  | Pattern
+  | Pattern;
