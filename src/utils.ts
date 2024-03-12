@@ -297,8 +297,35 @@ export function isSubtypeOf(
         && isSubtypeOf(subtype.right, supertype_.right)
       )
     }
-    // case 'TypeVariant':
-    //   throw 'todo'
+    case 'TypeVariant': {
+      // (TaPL) The subtyping rules for variants are nearly identical to the ones for
+      // records; the only difference is that the width rule S-VariantWidth
+      // allows new variants to be added, not dropped, when moving from a
+      // subtype to a supertype.
+
+      const supertype_ = supertype as TypeVariant
+      const subFields = subtype.fieldTypes
+      const superFields = supertype_.fieldTypes
+
+      // Supertype must include all the fields of the subtype
+      for (const subField of subFields) {
+        const superField = superFields.find(f => f.label === subField.label)
+
+        if (!superField) {
+          return false
+        }
+
+        if (!subField.fieldType || !superField.fieldType) {
+          // @todo What to do in this case?
+          throw new Error(`Undefined field type in variant for ${subField.label}.`)
+        }
+        if (!isSubtypeOf(subField.fieldType, superField.fieldType)) {
+          return false
+        }
+      }
+
+      return true
+    }
     case 'TypeTuple': {
       const supertype_ = supertype as TypeTuple
       const subTypes = subtype.types
