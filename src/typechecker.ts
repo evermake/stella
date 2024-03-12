@@ -438,11 +438,12 @@ function inferType({
             pattern: matchCase.pattern,
             type: matchExprType,
           })
-          matchType = inferType({
+          const caseType = inferType({
             ctx: nestedCtx,
             expr: matchCase.expr,
             expectedType: matchType,
           })
+          matchType ??= caseType
         }
 
         if (!matchType || !exhaustivenessChecker.isExhaustive(matchExprType)) {
