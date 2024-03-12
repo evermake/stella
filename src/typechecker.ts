@@ -471,26 +471,39 @@ function inferType({
           throw new TypecheckingFailedError('ERROR_MISSING_DATA_FOR_LABEL', `Variant has no expression for label "${label}".`)
         }
 
-        if (!expectedType) {
-          throw new TypecheckingFailedError('ERROR_AMBIGUOUS_VARIANT_TYPE', `Cannot infer type for variant, provide the expected type explicitly.`)
+        if (expectedType) {
+          if (expectedType.type !== 'TypeVariant') {
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_VARIANT', `Expected expression of type ${t(expectedType)}, but got Variant.`)
+          }
+
+          const expectedVariantType = expectedType.fieldTypes.find(f => f.label === label)
+          if (!expectedVariantType) {
+            throw new TypecheckingFailedError('ERROR_UNEXPECTED_VARIANT_LABEL', `Label "${label}" is not present in the variant type: ${t(expectedType)}`)
+          }
+
+          inferType({
+            ctx,
+            expr: labelExrp,
+            expectedType: expectedVariantType.fieldType,
+          })
+
+          return expectedType
+        } else {
+          if (!ctx.subtypingEnabled) {
+            throw new TypecheckingFailedError('ERROR_AMBIGUOUS_VARIANT_TYPE', `Cannot infer type for variant, provide the expected type explicitly.`)
+          }
+
+          const resultType: Type = {
+            type: 'TypeVariant',
+            fieldTypes: [{
+              type: 'VariantFieldType',
+              label,
+              fieldType: inferType({ ctx, expr: labelExrp }),
+            }],
+          }
+
+          return resultType
         }
-
-        if (expectedType.type !== 'TypeVariant') {
-          throw new TypecheckingFailedError('ERROR_UNEXPECTED_VARIANT', `Expected expression of type ${t(expectedType)}, but got Variant.`)
-        }
-
-        const expectedVariantType = expectedType.fieldTypes.find(f => f.label === label)
-        if (!expectedVariantType) {
-          throw new TypecheckingFailedError('ERROR_UNEXPECTED_VARIANT_LABEL', `Label "${label}" is not present in the variant type: ${t(expectedType)}`)
-        }
-
-        inferType({
-          ctx,
-          expr: labelExrp,
-          expectedType: expectedVariantType.fieldType,
-        })
-
-        return expectedType
       }
       case 'Assignment': {
         const { lhs, rhs } = expr

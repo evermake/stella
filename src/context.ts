@@ -81,9 +81,13 @@ export class Context {
     }
   }
 
+  public get subtypingEnabled(): boolean {
+    return this.extensions.has('#structural-subtyping')
+  }
+
   isTypeAssignableTo(t1: Type, t2: Type, doThrow: boolean = true) {
     try {
-      if (this.extensions.has('#structural-subtyping')) {
+      if (this.subtypingEnabled) {
         expect(t1).toBeSubtypeOf(t2)
       } else {
         expect(t1).toEqual(t2)
