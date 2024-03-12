@@ -265,7 +265,7 @@ export function isSubtypeOf(
       for (const superFieldType of supertype_.fieldTypes) {
         const subFieldType = subtype.fieldTypes.find(f => f.label === superFieldType.label)
         if (!subFieldType) {
-          return false
+          throw new TypecheckingFailedError('ERROR_MISSING_RECORD_FIELDS', `Missing field "${superFieldType.label}" in record type ${t(subtype)}.`)
         }
         if (!isSubtypeOf(subFieldType.fieldType, superFieldType.fieldType)) {
           return false
@@ -312,7 +312,7 @@ export function isSubtypeOf(
         const superField = superFields.find(f => f.label === subField.label)
 
         if (!superField) {
-          return false
+          throw new TypecheckingFailedError('ERROR_UNEXPECTED_VARIANT_LABEL', `Unexpected label "${subField.label}" in variant type ${t(subtype)}.`)
         }
 
         if (!subField.fieldType || !superField.fieldType) {
