@@ -1,4 +1,4 @@
-import type { Type, TypeBottom } from './ast'
+import type { Type } from './ast'
 import { TypecheckingFailedError } from './errors'
 import type { Extension } from './types'
 import { expect } from './utils'
