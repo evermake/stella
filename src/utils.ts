@@ -176,15 +176,30 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
         t2_.fieldTypes.map(f => [f.label, f.fieldType]),
       )
 
-      const labels = new Set([...(Object.keys(fields1)), ...(Object.keys(fields2))])
+      const presentLables = Object.keys(fields1)
+      const expectedLabels = Object.keys(fields2)
 
-      for (const label of labels.values()) {
+      const missingLabels = expectedLabels.filter(l => !presentLables.includes(l))
+      if (missingLabels.length > 0) {
+        throw new TypecheckingFailedError('ERROR_MISSING_RECORD_FIELDS', `Record doesn't have required field(s): ${missingLabels.join(', ')}.`)
+      }
+
+      const unexpectedLabels = presentLables.filter(l => !expectedLabels.includes(l))
+      if (unexpectedLabels.length > 0) {
+        throw new TypecheckingFailedError('ERROR_UNEXPECTED_RECORD_FIELDS', `Record has unexpected field(s): ${unexpectedLabels.join(', ')}.`)
+      }
+
+      const allLabels = new Set([
+        ...(presentLables),
+        ...(expectedLabels),
+      ])
+
+      for (const label of allLabels) {
         const t1 = fields1[label]
         const t2 = fields2[label]
         if (!t1 || !t2) {
           return false
-        }
-        if (!areTypesEqual(t1, t2)) {
+        } else if (!areTypesEqual(t1, t2)) {
           return false
         }
       }

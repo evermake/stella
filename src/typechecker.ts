@@ -255,37 +255,20 @@ function inferType({
         return tupleType.types[expr.index - 1]
       }
       case 'Record': {
-        let expectedFieldTypes: Record<string, Type>
-        if (expectedType) {
-          if (expectedType.type !== 'TypeRecord') {
-            throw new TypecheckingFailedError('ERROR_UNEXPECTED_RECORD', `Expected expression of type ${t(expectedType)}, but got Record.`)
-          }
-
-          const expectedLabels = expectedType.fieldTypes.map(f => f.label)
-          const presentLables = expr.bindings.map(b => b.name)
-
-          const missingLabels = expectedLabels.filter(l => !presentLables.includes(l))
-          if (missingLabels.length > 0) {
-            throw new TypecheckingFailedError('ERROR_MISSING_RECORD_FIELDS', `Record doesn't have required field(s): ${missingLabels.join(', ')}.`)
-          }
-
-          const unexpectedLabels = presentLables.filter(l => !expectedLabels.includes(l))
-          if (unexpectedLabels.length > 0) {
-            throw new TypecheckingFailedError('ERROR_UNEXPECTED_RECORD_FIELDS', `Record has unexpected field(s): ${unexpectedLabels.join(', ')}.`)
-          }
-
-          expectedFieldTypes = Object.fromEntries(
-            expectedType.fieldTypes.map(field => (
-              [field.label, field.fieldType]
-            )),
-          )
+        if (expectedType && expectedType.type !== 'TypeRecord') {
+          throw new TypecheckingFailedError('ERROR_UNEXPECTED_RECORD', `Expected expression of type ${t(expectedType)}, but got Record.`)
         }
 
         return T.Record(
           Object.fromEntries(
-            expr.bindings.map(binding => (
-              [binding.name, inferType({ expr: binding.expr, ctx, expectedType: expectedFieldTypes?.[binding.name] })]
-            )),
+            expr.bindings.map(binding => [
+              binding.name,
+              inferType({
+                ctx,
+                expr: binding.expr,
+                expectedType: expectedType?.fieldTypes.find(f => f.label === binding.name)?.fieldType,
+              }),
+            ]),
           ),
         )
       }
