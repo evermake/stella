@@ -1,7 +1,7 @@
 import type { Type, TypeBottom } from './ast'
 import { TypecheckingFailedError } from './errors'
 import type { Extension } from './types'
-import { T, expect } from './utils'
+import { expect } from './utils'
 
 export class Context {
   #parent: Context | null
@@ -97,10 +97,9 @@ export class Context {
     }
   }
 
-  returnBotOrThrowAmbiguousError(error: TypecheckingFailedError): TypeBottom | never {
-    if (this.extensions.has('#ambiguous-type-as-bottom')) {
-      return T.Bot
+  throwAmbiguousErrorIfNoExtension(error: TypecheckingFailedError) {
+    if (!this.extensions.has('#ambiguous-type-as-bottom')) {
+      throw error
     }
-    throw error
   }
 }

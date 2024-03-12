@@ -344,18 +344,21 @@ function inferType({
       }
       case 'List': {
         let itemsType
+
         if (expectedType) {
           if (expectedType.type !== 'TypeList') {
             throw new TypecheckingFailedError('ERROR_UNEXPECTED_LIST', `Expected expression of type ${t(expectedType)}, but got List.`)
           }
           itemsType = expectedType.elementType
         }
+
         for (const item of expr.exprs) {
           itemsType = inferType({ expr: item, ctx, expectedType: itemsType })
         }
 
         if (!itemsType) {
-          return ctx.returnBotOrThrowAmbiguousError(new TypecheckingFailedError('ERROR_AMBIGUOUS_LIST_TYPE', `Cannot infer type for an empty list, provide the expected type explicitly.`))
+          ctx.throwAmbiguousErrorIfNoExtension(new TypecheckingFailedError('ERROR_AMBIGUOUS_LIST_TYPE', `Cannot infer type for an empty list, provide the expected type explicitly.`))
+          return T.ListOf(T.Bot)
         }
 
         return T.ListOf(itemsType)
@@ -400,7 +403,11 @@ function inferType({
             expectedType.right,
           )
         } else {
-          return ctx.returnBotOrThrowAmbiguousError(new TypecheckingFailedError('ERROR_AMBIGUOUS_SUM_TYPE', `Cannot infer type for left injection, provide the expected type explicitly.`))
+          ctx.throwAmbiguousErrorIfNoExtension(new TypecheckingFailedError('ERROR_AMBIGUOUS_SUM_TYPE', `Cannot infer type for left injection, provide the expected type explicitly.`))
+          return T.Sum(
+            inferType({ ctx, expr: inlExpr }),
+            T.Bot,
+          )
         }
       }
       case 'Inr': {
@@ -415,7 +422,11 @@ function inferType({
             inferType({ expr: inrExpr, ctx, expectedType: expectedType.right }),
           )
         } else {
-          return ctx.returnBotOrThrowAmbiguousError(new TypecheckingFailedError('ERROR_AMBIGUOUS_SUM_TYPE', `Cannot infer type for right injection, provide the expected type explicitly.`))
+          ctx.throwAmbiguousErrorIfNoExtension(new TypecheckingFailedError('ERROR_AMBIGUOUS_SUM_TYPE', `Cannot infer type for right injection, provide the expected type explicitly.`))
+          return T.Sum(
+            T.Bot,
+            inferType({ ctx, expr: inrExpr }),
+          )
         }
       }
       case 'Match': {
@@ -535,7 +546,8 @@ function inferType({
       }
       case 'ConstMemory': {
         if (!expectedType) {
-          return ctx.returnBotOrThrowAmbiguousError(new TypecheckingFailedError('ERROR_AMBIGUOUS_REFERENCE_TYPE', `Cannot infer type for bare memory address, provide the expected type explicitly.`))
+          ctx.throwAmbiguousErrorIfNoExtension(new TypecheckingFailedError('ERROR_AMBIGUOUS_REFERENCE_TYPE', `Cannot infer type for bare memory address, provide the expected type explicitly.`))
+          return T.Bot
         }
         if (expectedType.type !== 'TypeRef') {
           throw new TypecheckingFailedError('ERROR_UNEXPECTED_MEMORY_ADDRESS', `Expected expression of type ${t(expectedType)}, but got bare memory address.`)
@@ -544,13 +556,15 @@ function inferType({
       }
       case 'Panic': {
         if (!expectedType) {
-          return ctx.returnBotOrThrowAmbiguousError(new TypecheckingFailedError('ERROR_AMBIGUOUS_PANIC_TYPE', `Cannot infer type for panic, provide the expected type explicitly.`))
+          ctx.throwAmbiguousErrorIfNoExtension(new TypecheckingFailedError('ERROR_AMBIGUOUS_PANIC_TYPE', `Cannot infer type for panic, provide the expected type explicitly.`))
+          return T.Bot
         }
         return expectedType
       }
       case 'Throw': {
         if (!expectedType) {
-          return ctx.returnBotOrThrowAmbiguousError(new TypecheckingFailedError('ERROR_AMBIGUOUS_THROW_TYPE', `Cannot infer type for throw, provide the expected type explicitly.`))
+          ctx.throwAmbiguousErrorIfNoExtension(new TypecheckingFailedError('ERROR_AMBIGUOUS_THROW_TYPE', `Cannot infer type for throw, provide the expected type explicitly.`))
+          return T.Bot
         }
         if (!ctx.exceptionType) {
           throw new TypecheckingFailedError('ERROR_EXCEPTION_TYPE_NOT_DECLARED', `Cannot throw exceptions without exception type declaration.`)
