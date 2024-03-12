@@ -343,7 +343,7 @@ function inferType({
         return inferType({ expr: tail, ctx, expectedType: T.ListOf(itemsType) })
       }
       case 'List': {
-        let itemsType
+        let itemsType: Type | undefined
 
         if (expectedType) {
           if (expectedType.type !== 'TypeList') {
@@ -353,7 +353,14 @@ function inferType({
         }
 
         for (const item of expr.exprs) {
-          itemsType = inferType({ expr: item, ctx, expectedType: itemsType })
+          const inferredItemType = inferType({
+            ctx,
+            expr: item,
+            expectedType: itemsType,
+          })
+          if (!itemsType) {
+            itemsType = inferredItemType
+          }
         }
 
         if (!itemsType) {
