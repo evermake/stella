@@ -1,6 +1,5 @@
-import type { Decl, DeclFun, Expr, Pattern, Program, Type } from './ast'
+import type { Decl, DeclFun, Expr, Extension, Pattern, Program, Type } from './types'
 import { TypecheckingFailedError } from './errors'
-import type { Extension } from './types'
 import { DEBUG, T, t } from './utils'
 import { Context } from './context'
 

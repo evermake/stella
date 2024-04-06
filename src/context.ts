@@ -1,6 +1,5 @@
-import type { Type } from './ast'
+import type { Extension, Type } from './types'
 import { TypecheckingFailedError } from './errors'
-import type { Extension } from './types'
 import { expect } from './utils'
 
 export class Context {
@@ -83,6 +82,10 @@ export class Context {
 
   public get subtypingEnabled(): boolean {
     return this.extensions.has('#structural-subtyping')
+  }
+
+  public get typeReconstructionEnabled(): boolean {
+    return this.extensions.has('#type-reconstruction')
   }
 
   isTypeAssignableTo(t1: Type, t2: Type, doThrow: boolean = true) {

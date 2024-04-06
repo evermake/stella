@@ -8,8 +8,6 @@ export default antfu(
       semi: false,
     },
     ignores: [
-      'src/ast.ts',
-      'src/visitors.ts',
       'src/stella/**',
     ],
   },

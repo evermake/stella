@@ -13,7 +13,7 @@ import type {
   TypeTuple,
   TypeUnit,
   TypeVariant,
-} from './ast'
+} from './types'
 import { TypecheckingFailedError } from './errors'
 
 export const DEBUG = Boolean(process.env.DEBUG)
