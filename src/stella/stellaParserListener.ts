@@ -100,6 +100,7 @@ import { TypeTopContext } from "./stellaParser";
 import { TypeBoolContext } from "./stellaParser";
 import { TypeRefContext } from "./stellaParser";
 import { TypeRecContext } from "./stellaParser";
+import { TypeAutoContext } from "./stellaParser";
 import { TypeSumContext } from "./stellaParser";
 import { TypeVarContext } from "./stellaParser";
 import { TypeVariantContext } from "./stellaParser";
@@ -1266,6 +1267,18 @@ export default class stellaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTypeRec?: (ctx: TypeRecContext) => void;
+	/**
+	 * Enter a parse tree produced by the `TypeAuto`
+	 * labeled alternative in `stellaParser.stellatype`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeAuto?: (ctx: TypeAutoContext) => void;
+	/**
+	 * Exit a parse tree produced by the `TypeAuto`
+	 * labeled alternative in `stellaParser.stellatype`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeAuto?: (ctx: TypeAutoContext) => void;
 	/**
 	 * Enter a parse tree produced by the `TypeSum`
 	 * labeled alternative in `stellaParser.stellatype`.

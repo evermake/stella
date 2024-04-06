@@ -110,6 +110,7 @@ import {
   PatternAscContext,
   PatternCastAsContext,
   TryCastAsContext,
+  TypeAutoContext,
 } from './stella/stellaParser';
 import type {
   Abstraction,
@@ -217,6 +218,7 @@ import type {
   PatternAsc,
   PatternCastAs,
   TryCastAs,
+  TypeAuto,
 } from './ast';
 
 export class AstPrinter extends StellaVisitor<void> {
@@ -842,6 +844,9 @@ export class AstTransformer extends StellaVisitor<Node> {
   };
 
   visitType: (ctx: StellatypeContext) => Type = (ctx) => {
+    if (ctx instanceof TypeAutoContext) {
+      return this.visitTypeAuto(ctx);
+    }
     if (ctx instanceof TypeNatContext) {
       return this.visitTypeNat(ctx);
     }
@@ -899,6 +904,7 @@ export class AstTransformer extends StellaVisitor<Node> {
     throw new Error('Unknown type: ' + ctx.getText());
   };
 
+  visitTypeAuto = (ctx: TypeAutoContext) => ({ type: 'TypeAuto' } as TypeAuto);
   visitTypeNat = (ctx: TypeNatContext) => ({ type: 'TypeNat' } as TypeNat);
   visitTypeBool = (ctx: TypeBoolContext) => ({ type: 'TypeBool' } as TypeBool);
   visitTypeTop: (ctx: TypeTopContext) => TypeTop = (ctx) => {

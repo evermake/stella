@@ -32,6 +32,7 @@ type Param = ParamType<NullaryFunctionExtension>;
 type SimpleType<T extends Exclude<string, T>> = {
   type: T;
 };
+export type TypeAuto = SimpleType<'TypeAuto'>;
 export type TypeNat = SimpleType<'TypeNat'>;
 export type TypeBool = SimpleType<'TypeBool'>;
 export type TypeUnit = SimpleType<'TypeUnit'>;
@@ -94,6 +95,7 @@ export interface TypeForAll {
 }
 
 export type Type =
+  | TypeAuto
   | TypeNat
   | TypeBool
   | TypeUnit
