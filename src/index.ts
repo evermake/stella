@@ -7,6 +7,7 @@ import StellaParser from './stella/stellaParser'
 import { AstTransformer } from './visitors'
 import { typecheckProgram } from './typechecker'
 import { TypecheckingFailedError } from './errors'
+import { Context } from './context'
 
 enum ErrorCode {
   TypecheckingError = 2,
@@ -36,7 +37,8 @@ function main() {
     ),
   )
   const stellaProgram = parser.program()
-  const ast = new AstTransformer().visitProgram(stellaProgram)
+  const ctx = new Context()
+  const ast = new AstTransformer(ctx).visitProgram(stellaProgram)
 
   if (printOnly) {
     console.log(JSON.stringify(ast, (_, v) => v ?? null, 2))
@@ -47,7 +49,7 @@ function main() {
   //        enabled extensions.
 
   try {
-    typecheckProgram(ast)
+    typecheckProgram(ctx, ast)
   } catch (err) {
     if (err instanceof TypecheckingFailedError) {
       console.error(err.message)

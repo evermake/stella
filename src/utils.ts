@@ -11,6 +11,7 @@ import type {
   TypeSum,
   TypeTop,
   TypeTuple,
+  TypeTypeVar,
   TypeUnit,
   TypeVariant,
 } from './types'
@@ -55,6 +56,8 @@ export function t(type: Type): string {
       return 'Top'
     case 'TypeBottom':
       return 'Bot'
+    case 'TypeTypeVar':
+      return `T${type.id}`
     default:
       return type.type
   }
@@ -132,7 +135,10 @@ export class _T {
  */
 export const T = new _T()
 
-export function areTypesEqual(t1: Type, t2: Type): boolean {
+/**
+ * Returns true if the given types are equal, false otherwise.
+ */
+export function typesEqual(t1: Type, t2: Type): boolean {
   if (t1.type !== t2.type) {
     return false
   }
@@ -147,7 +153,7 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
     case 'TypeFun': {
       const t2_ = t2 as TypeFun
 
-      if (!areTypesEqual(t1.returnType, t2_.returnType)) {
+      if (!typesEqual(t1.returnType, t2_.returnType)) {
         return false
       }
 
@@ -157,14 +163,14 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
         return false
       }
 
-      return params1.every((p, i) => areTypesEqual(p, params2[i]))
+      return params1.every((p, i) => typesEqual(p, params2[i]))
     }
     case 'TypeTuple': {
       const t2_ = t2 as TypeTuple
       if (t1.types.length !== t2_.types.length) {
         return false
       }
-      return t1.types.every((t, i) => areTypesEqual(t, t2_.types[i]))
+      return t1.types.every((t, i) => typesEqual(t, t2_.types[i]))
     }
     case 'TypeRecord': {
       const t2_ = t2 as TypeRecord
@@ -199,7 +205,7 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
         const t2 = fields2[label]
         if (!t1 || !t2) {
           return false
-        } else if (!areTypesEqual(t1, t2)) {
+        } else if (!typesEqual(t1, t2)) {
           return false
         }
       }
@@ -208,11 +214,11 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
     }
     case 'TypeList': {
       const t2_ = t2 as TypeList
-      return areTypesEqual(t1.elementType, t2_.elementType)
+      return typesEqual(t1.elementType, t2_.elementType)
     }
     case 'TypeSum': {
       const t2_ = t2 as TypeSum
-      return areTypesEqual(t1.left, t2_.left) && areTypesEqual(t1.right, t2_.right)
+      return typesEqual(t1.left, t2_.left) && typesEqual(t1.right, t2_.right)
     }
     case 'TypeVariant': {
       const t2_ = t2 as TypeVariant
@@ -233,7 +239,7 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
         if (!field1Type || !field2Type) {
           throw new Error('Variant field type is undefined.')
         }
-        if (!areTypesEqual(field1Type, field2Type)) {
+        if (!typesEqual(field1Type, field2Type)) {
           return false
         }
       }
@@ -241,7 +247,11 @@ export function areTypesEqual(t1: Type, t2: Type): boolean {
     }
     case 'TypeRef': {
       const t2_ = t2 as TypeRef
-      return areTypesEqual(t1.referredType, t2_.referredType)
+      return typesEqual(t1.referredType, t2_.referredType)
+    }
+    case 'TypeTypeVar': {
+      const t2_ = t2 as TypeTypeVar
+      return t1.id === t2_.id
     }
     default:
       throw new Error(`Comparison of types "${t1.type}" is not implemented.`)
@@ -369,7 +379,7 @@ export function isSubtypeOf(
 export function expect(actualType: Type) {
   return {
     toEqual: (expectedType: Type) => {
-      if (!areTypesEqual(actualType, expectedType)) {
+      if (!typesEqual(actualType, expectedType)) {
         throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_EXPRESSION', `Expected expression to be of type ${t(expectedType)}, but got ${t(actualType)}.`)
       }
     },

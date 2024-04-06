@@ -1,8 +1,9 @@
-import type { Extension, Type } from './types'
+import type { Extension, Type, TypeTypeVar } from './types'
 import { TypecheckingFailedError } from './errors'
 import { expect } from './utils'
 
 export class Context {
+  #freshTypeVarId: number
   #parent: Context | null
   #symbols: Map<string, Type>
   #extensions: Set<Extension>
@@ -21,6 +22,7 @@ export class Context {
   }
 
   constructor(parent: Context | null = null) {
+    this.#freshTypeVarId = 1
     this.#parent = parent
     this.#symbols = new Map()
     this.#extensions = new Set()
@@ -108,5 +110,12 @@ export class Context {
     if (!this.extensions.has('#ambiguous-type-as-bottom')) {
       throw error
     }
+  }
+
+  public freshTypeVar(): TypeTypeVar {
+    if (this.#parent) {
+      return this.#parent.freshTypeVar()
+    }
+    return { type: 'TypeTypeVar', id: this.#freshTypeVarId++ }
   }
 }

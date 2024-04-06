@@ -1,11 +1,10 @@
 import type { Decl, DeclFun, Expr, Extension, Pattern, Program, Type } from './types'
 import { TypecheckingFailedError } from './errors'
 import { DEBUG, T, t } from './utils'
-import { Context } from './context'
+import type { Context } from './context'
+import { type Constraint, RecursiveTypeError, UnificationFailedError, unify } from './type-reconstruction'
 
-export function typecheckProgram(ast: Program) {
-  const ctx = new Context()
-
+export function typecheckProgram(ctx: Context, ast: Program) {
   // Add all extensions to the context.
   ast.extensions.forEach(ext => ctx.extensions.add(ext as Extension))
 
@@ -17,8 +16,23 @@ export function typecheckProgram(ast: Program) {
     }
   })
 
-  // Typecheck all declarations.
-  ast.declarations.forEach(decl => typecheckDeclaration(decl, ctx))
+  if (ctx.typeReconstructionEnabled) {
+    const constraints: Constraint[] = []
+    ast.declarations.forEach(decl => collectConstraintsFromDeclaration(ctx, decl, constraints))
+    try {
+      unify(constraints)
+    } catch (err) {
+      if (err instanceof RecursiveTypeError) {
+        throw new TypecheckingFailedError('ERROR_OCCURS_CHECK_INFINITE_TYPE', err.message)
+      } else if (err instanceof UnificationFailedError) {
+        throw new TypecheckingFailedError('ERROR_UNEXPECTED_TYPE_FOR_EXPRESSION', err.message)
+      }
+      throw err
+    }
+  } else {
+    // Typecheck all declarations.
+    ast.declarations.forEach(decl => typecheckDeclaration(ctx, decl))
+  }
 
   // Check for a valid main in the program.
   const main = ctx.scope.get('main')
@@ -33,7 +47,54 @@ export function typecheckProgram(ast: Program) {
   }
 }
 
-function typecheckDeclaration(decl: Decl, ctx: Context) {
+function collectConstraintsFromDeclaration(
+  ctx: Context,
+  decl: Decl,
+  constraints: Constraint[],
+) {
+  switch (decl.type) {
+    case 'DeclFun': {
+      const localCtx = ctx.newChild()
+
+      decl.parameters.forEach((param) => {
+        localCtx.scope.set(param.name, param.paramType)
+      })
+
+      decl.nestedDeclarations.forEach((decl) => {
+        collectConstraintsFromDeclaration(localCtx, decl, constraints)
+        if (decl.type === 'DeclFun') {
+          addFunctionDeclarationToContext(decl, localCtx)
+        }
+      })
+
+      const actualType = reconstructType(localCtx, decl.returnValue, constraints)
+
+      if (decl.returnType) {
+        constraints.push({
+          lhs: actualType,
+          rhs: decl.returnType,
+        })
+      }
+
+      break
+    }
+    case 'DeclExceptionType': {
+      if (ctx.exceptionType) {
+        throw new Error('Multiple exception types are not supported.')
+      }
+      ctx.exceptionType = decl.exceptionType
+      break
+    }
+    case 'DeclExceptionVariant': {
+      ctx.addOpenVariant(decl.name, decl.variantType)
+      break
+    }
+    default:
+      throw new Error(`Unsupported declaration type: "${decl.type}".`)
+  }
+}
+
+function typecheckDeclaration(ctx: Context, decl: Decl) {
   switch (decl.type) {
     case 'DeclFun': {
       // @todo: decl.annations, decl.throwTypes
@@ -45,7 +106,7 @@ function typecheckDeclaration(decl: Decl, ctx: Context) {
       })
 
       decl.nestedDeclarations.forEach((decl) => {
-        typecheckDeclaration(decl, localCtx)
+        typecheckDeclaration(localCtx, decl)
         if (decl.type === 'DeclFun') {
           addFunctionDeclarationToContext(decl, localCtx)
         }
@@ -82,6 +143,241 @@ function addFunctionDeclarationToContext(decl: DeclFun, ctx: Context) {
     throw new TypecheckingFailedError('ERROR_MISSING_EXPLICIT_RETURN_TYPE', `Function "${decl.name}" is missing an explicit return type.`)
   }
   ctx.scope.set(decl.name, T.fn(decl.parameters.map(p => p.paramType), decl.returnType))
+}
+
+function reconstructType(ctx: Context, expr: Expr, constraints: Constraint[]): Type {
+  switch (expr.type) {
+    case 'ConstBool':
+      return T.Bool
+    case 'ConstInt':
+      if (expr.value < 0) {
+        throw new TypecheckingFailedError('ERROR_ILLEGAL_NEGATIVE_LITERAL', `Illegal negative literal: ${expr.value}.`)
+      }
+      return T.Nat
+    case 'Var': {
+      const varType = ctx.scope.get(expr.name)
+      if (!varType) {
+        throw new TypecheckingFailedError('ERROR_UNDEFINED_VARIABLE', `Variable "${expr.name}" is not defined.`)
+      }
+      return varType
+    }
+    case 'Succ':
+      constraints.push({
+        lhs: reconstructType(ctx, expr.expr, constraints),
+        rhs: T.Nat,
+      })
+      return T.Nat
+    case 'NatIsZero':
+      constraints.push({
+        lhs: reconstructType(ctx, expr.expr, constraints),
+        rhs: T.Nat,
+      })
+      return T.Bool
+    case 'Abstraction': {
+      const fresh = ctx.freshTypeVar()
+
+      const localCtx = ctx.newChild()
+      const paramTypes = expr.parameters.map((param) => {
+        localCtx.scope.set(param.name, param.paramType)
+        return param.paramType
+      })
+
+      constraints.push({
+        lhs: fresh,
+        rhs: T.fn(
+          paramTypes,
+          reconstructType(localCtx, expr.returnValue, constraints),
+        ),
+      })
+
+      return fresh
+    }
+    case 'Application': {
+      const fresh = ctx.freshTypeVar()
+
+      const fnType = reconstructType(ctx, expr.function, constraints)
+      const argsTypes = expr.arguments.map(arg => reconstructType(ctx, arg, constraints))
+      constraints.push({
+        lhs: fnType,
+        rhs: T.fn(argsTypes, fresh),
+      })
+
+      return fresh
+    }
+    case 'If': {
+      const conditionType = reconstructType(ctx, expr.condition, constraints)
+      const thenType = reconstructType(ctx, expr.thenExpr, constraints)
+      const elseType = reconstructType(ctx, expr.elseExpr, constraints)
+
+      constraints.push({
+        lhs: conditionType,
+        rhs: T.Bool,
+      })
+
+      constraints.push({
+        lhs: thenType,
+        rhs: elseType,
+      })
+
+      return thenType
+    }
+    case 'Cons': {
+      const headType = reconstructType(ctx, expr.head, constraints)
+      const tailType = reconstructType(ctx, expr.tail, constraints)
+
+      constraints.push({
+        lhs: tailType,
+        rhs: T.ListOf(headType),
+      })
+
+      return T.ListOf(headType)
+    }
+    case 'List': {
+      const itemsType = ctx.freshTypeVar()
+      expr.exprs.forEach((expr) => {
+        constraints.push({
+          lhs: reconstructType(ctx, expr, constraints),
+          rhs: itemsType,
+        })
+      })
+
+      return T.ListOf(itemsType)
+    }
+    case 'ListHead': {
+      const listType = reconstructType(ctx, expr.expr, constraints)
+      const itemsType = ctx.freshTypeVar()
+
+      constraints.push({
+        lhs: listType,
+        rhs: T.ListOf(itemsType),
+      })
+
+      return itemsType
+    }
+    case 'ListTail': {
+      const listType = reconstructType(ctx, expr.expr, constraints)
+      constraints.push({
+        lhs: listType,
+        rhs: T.ListOf(ctx.freshTypeVar()),
+      })
+      return listType
+    }
+    case 'ListIsEmpty': {
+      const listType = reconstructType(ctx, expr.expr, constraints)
+      constraints.push({
+        lhs: listType,
+        rhs: T.ListOf(ctx.freshTypeVar()),
+      })
+      return T.Bool
+    }
+    case 'Inl':
+      return T.Sum(reconstructType(ctx, expr.expr, constraints), ctx.freshTypeVar())
+    case 'Inr':
+      return T.Sum(ctx.freshTypeVar(), reconstructType(ctx, expr.expr, constraints))
+    case 'Tuple':
+      return T.Tuple(expr.exprs.map(expr => reconstructType(ctx, expr, constraints)))
+    case 'DotTuple': {
+      // @todo For now we only support pairs (i.e. tuples of length 2).
+
+      const tupleType = reconstructType(ctx, expr.expr, constraints)
+      if (!(expr.index >= 1 && expr.index <= 2)) {
+        throw new TypecheckingFailedError('ERROR_TUPLE_INDEX_OUT_OF_BOUNDS', `Cannot access member with index ${expr.index} of type ${t(tupleType)}.`)
+      }
+      const fresh1 = ctx.freshTypeVar()
+      const fresh2 = ctx.freshTypeVar()
+      constraints.push({
+        lhs: tupleType,
+        rhs: T.Tuple([fresh1, fresh2]),
+      })
+      return expr.index === 1 ? fresh1 : fresh2
+    }
+    case 'Record':
+      return T.Record(Object.fromEntries(expr.bindings.map(binding => [
+        binding.name,
+        reconstructType(ctx, binding.expr, constraints),
+      ])))
+    case 'DotRecord': {
+      const recordType = reconstructType(ctx, expr.expr, constraints)
+      if (recordType.type === 'TypeRecord') {
+        const field = recordType.fieldTypes.find(field => field.label === expr.label)
+        if (!field) {
+          throw new TypecheckingFailedError('ERROR_MISSING_RECORD_FIELDS', `Field with label "${expr.label}" is not present in the ${t(recordType)}.`)
+        }
+        return field.fieldType
+      } else {
+        const fresh = ctx.freshTypeVar()
+        constraints.push({
+          lhs: recordType,
+          rhs: T.Record({ [expr.label]: fresh }),
+        })
+        return fresh
+      }
+    }
+    case 'Assignment': {
+      const lhs = reconstructType(ctx, expr.lhs, constraints)
+      const rhs = reconstructType(ctx, expr.rhs, constraints)
+      constraints.push({
+        lhs,
+        rhs: T.RefTo(rhs),
+      })
+      return T.Unit
+    }
+    case 'ConstMemory':
+      return T.RefTo(ctx.freshTypeVar())
+    case 'Reference':
+      return T.RefTo(reconstructType(ctx, expr.expr, constraints))
+    case 'Dereference': {
+      const fresh = ctx.freshTypeVar()
+      constraints.push({
+        lhs: reconstructType(ctx, expr.expr, constraints),
+        rhs: T.RefTo(fresh),
+      })
+      return fresh
+    }
+    case 'Sequence': {
+      const expr1Type = reconstructType(ctx, expr.expr1, constraints)
+      constraints.push({
+        lhs: expr1Type,
+        rhs: T.Unit,
+      })
+      return reconstructType(ctx, expr.expr2, constraints)
+    }
+    case 'Let': {
+      const nestedCtx = ctx.newChild()
+      expr.patternBindings.forEach((binding) => {
+        if (binding.pattern.type !== 'PatternVar') {
+          throw new Error(`Let with binding patterns of type ${binding.pattern.type} are not supported.`)
+        }
+        nestedCtx.scope.set(binding.pattern.name, reconstructType(ctx, binding.rhs, constraints))
+      })
+      return reconstructType(nestedCtx, expr.body, constraints)
+    }
+    case 'Throw': {
+      const throwType = reconstructType(ctx, expr.expr, constraints)
+      if (!ctx.exceptionType) {
+        throw new TypecheckingFailedError('ERROR_EXCEPTION_TYPE_NOT_DECLARED', `Cannot throw exceptions without exception type declaration.`)
+      }
+      constraints.push({
+        lhs: throwType,
+        rhs: ctx.exceptionType,
+      })
+      return ctx.freshTypeVar()
+    }
+    case 'TryWith': {
+      const tryType = reconstructType(ctx, expr.tryExpr, constraints)
+      const fallbackType = reconstructType(ctx, expr.fallbackExpr, constraints)
+      constraints.push({
+        lhs: tryType,
+        rhs: fallbackType,
+      })
+      return tryType
+    }
+    case 'Panic': {
+      return ctx.freshTypeVar()
+    }
+    default:
+      throw new Error(`Unsupported expression type for type reconstruction: "${expr.type}".`)
+  }
 }
 
 let _depth = 0

@@ -115,6 +115,9 @@ export type TypeErrorTag =
   // when during subtype checking, a an actual (part of a) type does not match with an expected (part of a) type
   | 'ERROR_UNEXPECTED_SUBTYPE'
 
+  // when during unification a type constraint cannot be resolved because an infinite type would be required
+  | 'ERROR_OCCURS_CHECK_INFINITE_TYPE'
+
 export class TypecheckingFailedError extends Error {
   #tag: TypeErrorTag
 
